@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/default}">
+<head>
+    <!--css,JS 추가영역-->
+    <title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">에러 발생</title>
+</head>
+<div layout:fragment="content">
+    <h1>에러</h1>
+    <p>요청 처리 중 오류가 발생했습니다.</p>
+    <p>에러 상세 정보:</p>
+    <ul>
+        <li>에러 코드: <span th:text="${status}"></span></li>
+        <li>에러 메시지: <span th:text="${message}"></span></li>
+    </ul>
+</div>
+</html>

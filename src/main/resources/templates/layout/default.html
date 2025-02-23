@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns="http://www.w3.org/1999/html">
+
+<!-- [head] 영역 시작 -->
+<head>
+    <meta charset="UTF-8" />
+    <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
+    <title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">CMS</title>
+    <!-- jQuery 추가 -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<!-- [head] 영역 끝 -->
+
+<body>
+
+<!-- [header] 영역 시작 -->
+<header th:replace="~{fragments/header :: headerFragment}"></header>
+<!-- [header] 영역 끝 -->
+<!-- [content] 영역 시작 -->
+<div layout:fragment="content"></div>
+<!-- [content] 영역 끝 -->
+
+<!-- [footer] 영역 시작 -->
+<footer th:replace="~{fragments/footer :: footerFragment}"></footer>
+<!-- [footer] 영역 끝 -->
+
+</body>
+</html>
