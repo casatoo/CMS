@@ -16,6 +16,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addViewController("/login").setViewName("loginView");
         registry.addViewController("/join").setViewName("joinView");
         registry.addViewController("/main").setViewName("domain/mainView");
+        registry.addViewController("/").setViewName("domain/mainView");
     }
 
     // 정적 리소스 핸들링 (CSS, JS, 이미지 서빙)
