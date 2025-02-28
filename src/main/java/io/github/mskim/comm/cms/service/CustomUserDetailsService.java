@@ -20,9 +20,9 @@ public class CustomUserDetailsService implements UserDetailsService {
     public CustomUserDetails loadUserByUsername(String loginId) throws UsernameNotFoundException {
         Optional<UserEntity> optionalUser = userRepository.findByLoginId(loginId);
         // 사용자 정보가 존재하지 않을 경우 예외 발생
-        UserEntity userEntity = optionalUser.orElseThrow(() -> new UsernameNotFoundException("User not found with loginId: " + loginId));
+        UserEntity userEntity = optionalUser.orElseThrow(() -> new UsernameNotFoundException("사용자 정보가 존재하지 않습니다."));
 
-        return new CustomUserDetails(userEntity); // CustomUserDetails 반환
+        return new CustomUserDetails(userEntity);
     }
 }
 

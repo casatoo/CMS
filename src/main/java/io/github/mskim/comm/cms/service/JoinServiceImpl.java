@@ -1,5 +1,6 @@
 package io.github.mskim.comm.cms.service;
 
+import io.github.mskim.comm.cms.config.Role;
 import io.github.mskim.comm.cms.dto.JoinDTO;
 import io.github.mskim.comm.cms.entity.UserEntity;
 import io.github.mskim.comm.cms.repo.UserRepository;
@@ -29,7 +30,7 @@ public class JoinServiceImpl implements JoinService {
 
         data.setLoginId(joinDTO.getLoginId());
         data.setPassword(bCryptPasswordEncoder.encode(joinDTO.getPassword()));
-        data.setRole("ROLE_USER"); // ROLE_ 이 접두사로 필요함
+        data.setRole(Role.ROLE_USER.getCode());
 
         userRepository.save(data);
 

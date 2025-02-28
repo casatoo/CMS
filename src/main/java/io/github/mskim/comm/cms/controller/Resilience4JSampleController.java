@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class Resilience4JSample {
+public class Resilience4JSampleController {
 
     @CircuitBreaker(name = "MainController_Method1", fallbackMethod = "fallBackMethod") // 이 서킷 브레이커의 명칭, 실패 시 실행할 메서드명
     @GetMapping("/method1")

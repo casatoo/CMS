@@ -18,6 +18,6 @@ public class JoinController {
     @PostMapping("/joinProc")
     public String joinProcess(JoinDTO joinDTO) {
         joinService.joinProcess(joinDTO);
-        return "redirect:/login"; // /login URL로 리디렉션
+        return "redirect:/login";
     }
 }

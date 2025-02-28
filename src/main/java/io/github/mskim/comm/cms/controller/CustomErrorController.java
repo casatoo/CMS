@@ -17,11 +17,9 @@ public class CustomErrorController implements ErrorController {
         Object status = request.getAttribute("javax.servlet.error.status_code");
         Object message = request.getAttribute("javax.servlet.error.message");
 
-        // 모델에 에러 정보 추가
         model.addAttribute("status", status);
         model.addAttribute("message", message);
 
-        // error.html로 이동
-        return "error"; // error.html을 반환
+        return "error";
     }
 }

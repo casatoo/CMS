@@ -54,14 +54,12 @@ public class JWTFilter extends OncePerRequestFilter {
 
         // Authorization 헤더가 없고 쿠키도 없는 경우
         if (token == null) {
-            System.out.println("token null");
             filterChain.doFilter(request, response);
             return;
         }
 
         // 토큰 소멸 시간 검증
         if (jwtUtil.isExpired(token)) {
-            System.out.println("token expired");
             filterChain.doFilter(request, response);
             return;
         }
@@ -84,6 +82,17 @@ public class JWTFilter extends OncePerRequestFilter {
 
         // 세션에 사용자 등록
         SecurityContextHolder.getContext().setAuthentication(authToken);
+
+        // 새로운 토큰 발행
+        String newToken = jwtUtil.createJwt(customUserDetails.getUsername(), customUserDetails.getUserEntity().getRole(), 60*60*10L);
+
+        // JWT를 쿠키에 저장
+        Cookie cookie = new Cookie("Authorization", token);
+        cookie.setHttpOnly(true); // 클라이언트 측 JavaScript에서 접근 불가
+        cookie.setSecure(true);  // HTTPS 환경에서만 작동 (보안 강화)
+        cookie.setPath("/"); // 모든 경로에서 유효
+        cookie.setMaxAge(60 * 60); // 쿠키 유효 시간 (초)
+        response.addCookie(cookie);
 
         filterChain.doFilter(request, response);
     }

@@ -3,9 +3,8 @@ package io.github.mskim.comm.cms.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
-@Entity
-@Data
-@Table(name = "users") // 테이블 이름 확인
+@Entity @Data
+@Table(name = "users")
 public class UserEntity {
 
     @Id
