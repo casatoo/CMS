@@ -4,11 +4,20 @@
 <!-- [head] 영역 시작 -->
 <head>
     <meta charset="UTF-8" />
-    <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon">
-    <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/img/favicon.png" type="image/x-icon">
+    <link rel="icon" href="/img/logo.png" type="image/x-icon">
     <title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">CMS</title>
+    <!-- CSS -->
+    <th:block layout:fragment="css">
+        <link rel="stylesheet" href="css/login.css" />
+        <link rel="stylesheet" href="css/components.css" />
+        <link rel="stylesheet" href="css/base.css" />
+        <link rel="stylesheet" href="css/custom.css" />
+    </th:block>
     <!-- jQuery 추가 -->
+    <th:block layout:fragment="js">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    </th:block>
 </head>
 <!-- [head] 영역 끝 -->
 
@@ -20,7 +29,6 @@
 <!-- [content] 영역 시작 -->
 <div layout:fragment="content"></div>
 <!-- [content] 영역 끝 -->
-
 <!-- [footer] 영역 시작 -->
 <footer th:replace="~{fragments/footer :: footerFragment}"></footer>
 <!-- [footer] 영역 끝 -->

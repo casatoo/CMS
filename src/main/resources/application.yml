@@ -9,6 +9,8 @@ server:
     path: /error
 
 spring:
+  banner:
+    location: classpath:/custom-banner.txt
   application:
     name: CMS
   datasource:
@@ -91,3 +93,10 @@ management:
   health:
     circuitbreakers:
       enabled: true
+
+# application.yml
+cors:
+  allowed:
+    - "http://localhost"
+    - "http://127.0.0.1"
+    - "http://192.168.1.100"

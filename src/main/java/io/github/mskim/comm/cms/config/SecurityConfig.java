@@ -3,6 +3,8 @@ package io.github.mskim.comm.cms.config;
 import io.github.mskim.comm.cms.jwt.JWTFilter;
 import io.github.mskim.comm.cms.jwt.JWTUtil;
 import io.github.mskim.comm.cms.jwt.LoginFilter;
+import jakarta.servlet.http.Cookie;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -45,7 +47,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
+    public SecurityFilterChain filterChain(HttpSecurity http, CorsProperties corsProperties) throws Exception{
 
         http
                 .authorizeHttpRequests(auth -> auth
@@ -55,27 +57,40 @@ public class SecurityConfig {
                 )
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint(authenticationEntryPoint))
-                .logout(logout -> logout.logoutUrl("/logout").logoutSuccessUrl("/"))
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessHandler((request, response, authentication) -> {
+                            // "Authorization" 쿠키 삭제
+                            Cookie cookie = new Cookie("Authorization", null);
+                            cookie.setHttpOnly(true);
+                            cookie.setSecure(true);
+                            cookie.setPath("/");
+                            cookie.setMaxAge(0); // 즉시 삭제
+                            response.addCookie(cookie);
+
+                            // 로그아웃 후 /main으로 리다이렉션
+                            response.sendRedirect("/main");
+                        })
+                )
                 .csrf(csrf -> csrf.disable())
                 .formLogin(form -> form.disable())
                 .httpBasic(httpBasic -> httpBasic.disable())
                 .addFilterBefore(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()));
+                .cors(cors -> cors.configurationSource(corsConfigurationSource(corsProperties)));
 
         return http.build();
     }
 
     @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
+    public CorsConfigurationSource corsConfigurationSource(CorsProperties corsProperties) {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        // 내부 요청만 허용 (로컬 및 내부 IP)
-        configuration.setAllowedOrigins(List.of("http://localhost", "http://127.0.0.1", "http://192.168.1.0/24"));
+        configuration.setAllowedOrigins(corsProperties.getAllowed()); // yml에서 가져온 값 사용
         configuration.setAllowedMethods(List.of("GET", "POST"));
-        configuration.setAllowedHeaders(List.of("*")); // 모든 헤더 허용
-        configuration.setAllowCredentials(true); // 인증 정보 포함 가능
+        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

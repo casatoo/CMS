@@ -1,0 +1,152 @@
+/* components.css */
+
+/* ------------------------------ */
+/* 1. 버튼 스타일 */
+/* ------------------------------ */
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.btn:hover {
+    transform: scale(1.05);
+}
+
+/* 기본 버튼 */
+.btn-primary { background: #007bff; color: white; }
+.btn-secondary { background: #6c757d; color: white; }
+.btn-success { background: #28a745; color: white; }
+.btn-danger { background: #dc3545; color: white; }
+.btn-warning { background: #ffc107; color: black; }
+.btn-info { background: #17a2b8; color: white; }
+.btn-light { background: #f8f9fa; color: black; border: 1px solid #ddd; }
+.btn-dark { background: #343a40; color: white; }
+
+/* 비활성 버튼 */
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* ------------------------------ */
+/* 2. 폼 요소 스타일 */
+/* ------------------------------ */
+.input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    transition: border 0.3s ease;
+}
+
+.input:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+/* 텍스트 영역 */
+.textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: vertical;
+}
+
+.textarea:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+/* 체크박스 & 라디오 */
+.checkbox,
+.radio {
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+/* ------------------------------ */
+/* 3. 카드 스타일 */
+/* ------------------------------ */
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+.card-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.card-body {
+    font-size: 16px;
+}
+
+/* ------------------------------ */
+/* 4. 모달 스타일 */
+/* ------------------------------ */
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    display: none;
+}
+
+.modal.active {
+    display: block;
+}
+
+/* 모달 오버레이 */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    display: none;
+}
+
+.modal-overlay.active {
+    display: block;
+}
+
+/* ------------------------------ */
+/* 5. 알림 메시지 스타일 */
+/* ------------------------------ */
+.alert {
+    padding: 15px;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.alert-success { background: #28a745; color: white; }
+.alert-danger { background: #dc3545; color: white; }
+.alert-warning { background: #ffc107; color: black; }
+.alert-info { background: #17a2b8; color: white; }
+

@@ -1,0 +1,82 @@
+/* custom.css */
+
+/* ------------------------------ */
+/* 1. 커스텀 입력 박스 */
+/* ------------------------------ */
+.custom-input-box {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    border: 2px solid #007bff;
+    border-radius: 8px;
+    transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+.custom-input-box:focus {
+    border-color: #0056b3;
+    box-shadow: 0 0 5px rgba(0, 86, 179, 0.5);
+    outline: none;
+}
+
+/* ------------------------------ */
+/* 2. 둥근 박스 스타일 */
+/* ------------------------------ */
+.custom-rounded-box {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+.custom-rounded-box:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* ------------------------------ */
+/* 3. 애니메이션 버튼 */
+/* ------------------------------ */
+.custom-animated-btn {
+    background: linear-gradient(45deg, #ff6b6b, #f06595);
+    color: white;
+    padding: 12px 24px;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.3s ease;
+}
+
+.custom-animated-btn:hover {
+    background: linear-gradient(45deg, #f06595, #ff6b6b);
+    transform: scale(1.1);
+}
+
+/* ------------------------------ */
+/* 4. 글자 효과 */
+/* ------------------------------ */
+.custom-text-shadow {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.custom-glow-text {
+    font-size: 24px;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 0 0 10px #ff6b6b, 0 0 20px #ff6b6b;
+}
+
+/* ------------------------------ */
+/* 5. 배경 효과 */
+/* ------------------------------ */
+.custom-gradient-bg {
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    color: white;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+}
