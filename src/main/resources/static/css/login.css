@@ -10,7 +10,7 @@
 
 .login-body {
     font-family: Arial, sans-serif;
-    background-image: url("/img/login.jpg");
+    background-image: url("/img/join.png");
     background-repeat: no-repeat;
     background-attachment: scroll;
     background-position: center center;
@@ -20,6 +20,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    width: 100vw;
     height: 100vh;
 }
 
