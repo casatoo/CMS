@@ -15,8 +15,8 @@
     background-attachment: scroll;
     background-position: center center;
     background-size: cover;
-    margin: 0;
-    padding: 0;
+    margin: -10px;
+    padding: -10px;
     display: flex;
     justify-content: center;
     align-items: center;
