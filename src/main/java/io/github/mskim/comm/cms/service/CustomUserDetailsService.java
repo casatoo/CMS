@@ -1,7 +1,7 @@
 package io.github.mskim.comm.cms.service;
 
 import io.github.mskim.comm.cms.dto.CustomUserDetails;
-import io.github.mskim.comm.cms.entity.UserEntity;
+import io.github.mskim.comm.cms.entity.Users;
 import io.github.mskim.comm.cms.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -18,11 +18,11 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public CustomUserDetails loadUserByUsername(String loginId) throws UsernameNotFoundException {
-        Optional<UserEntity> optionalUser = userRepository.findByLoginId(loginId);
+        Optional<Users> optionalUser = userRepository.findByLoginId(loginId);
         // 사용자 정보가 존재하지 않을 경우 예외 발생
-        UserEntity userEntity = optionalUser.orElseThrow(() -> new UsernameNotFoundException("사용자 정보가 존재하지 않습니다."));
+        Users users = optionalUser.orElseThrow(() -> new UsernameNotFoundException("사용자 정보가 존재하지 않습니다."));
 
-        return new CustomUserDetails(userEntity);
+        return new CustomUserDetails(users);
     }
 }
 

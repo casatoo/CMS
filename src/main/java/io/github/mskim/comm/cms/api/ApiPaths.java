@@ -1,4 +1,4 @@
-package io.github.mskim.comm.cms.config;
+package io.github.mskim.comm.cms.api;
 
 public class ApiPaths {
     public static final String BASE_API = "/api/v1";

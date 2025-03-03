@@ -5,11 +5,7 @@ import lombok.Data;
 
 @Entity @Data
 @Table(name = "users")
-public class UserEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Users extends BaseEntity {
 
     @Column(unique = true, nullable = false)
     private String loginId;
@@ -18,9 +14,17 @@ public class UserEntity {
     private String password;
 
     @Column(nullable = false)
+    private String name;
+
+    @Column(nullable = false)
     private String role;
 
-    // 기본 생성자
-    public UserEntity() {}
+    @Column(nullable = false)
+    private String rank;
 
+    public Users() {}
+
+    public void setId(String id) {
+        // Do nothing or throw exception
+    }
 }

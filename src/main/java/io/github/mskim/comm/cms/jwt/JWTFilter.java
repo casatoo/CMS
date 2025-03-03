@@ -1,7 +1,7 @@
 package io.github.mskim.comm.cms.jwt;
 
 import io.github.mskim.comm.cms.dto.CustomUserDetails;
-import io.github.mskim.comm.cms.entity.UserEntity;
+import io.github.mskim.comm.cms.entity.Users;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -68,8 +68,7 @@ public class JWTFilter extends OncePerRequestFilter {
         String username = jwtUtil.getUsername(token);
         String role = jwtUtil.getRole(token);
 
-        // UserEntity를 생성하여 값 set
-        UserEntity user = new UserEntity();
+        Users user = new Users();
         user.setLoginId(username);
         user.setPassword(""); // 임시 비밀번호 (보안)
         user.setRole(role);

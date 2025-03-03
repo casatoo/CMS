@@ -1,6 +1,6 @@
 package io.github.mskim.comm.cms.controller;
 
-import io.github.mskim.comm.cms.config.ApiPaths;
+import io.github.mskim.comm.cms.api.ApiPaths;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 

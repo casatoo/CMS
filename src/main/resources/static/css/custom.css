@@ -304,3 +304,26 @@
         left: 0;
     }
 }
+
+.alert-btn {
+    width: 200px;
+    height: 40px;
+    background-color: #007bff;
+}
+
+.alert-btn:hover {
+    background-color: #0056b3;
+}
+
+.custom-icon {
+    font-size: 10px !important;
+}
+
+.custom-title {
+    font-size: 20px !important;
+    font-weight: bold !important;
+}
+
+.custom-content {
+    font-size: 10px !important;
+}

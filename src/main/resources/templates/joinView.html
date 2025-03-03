@@ -8,15 +8,23 @@
     <th:block layout:fragment="css">
         <link rel="stylesheet" href="css/login.css" />
     </th:block>
+    <th:block layout:fragment="js">
+        <script src="/js/lodash.js"></script>
+        <script src="/js/jquery-3.6.0.min.js"></script>
+        <script src="/js/sweetalert2.all.min.js"></script>
+        <script src="/js/join.js"></script>
+        <script src="/js/apps.js"></script>
+    </th:block>
 </head>
 <body>
     <div class="login-body">
         <div class="login-container">
             <h2>회원가입</h2>
-            <form action="/joinProc" method="post" name="joinForm">
-                <input id="loginId" type="text" name="loginId" placeholder="사용자명"/>
-                <input id="password" type="password" name="password" placeholder="비밀번호"/>
-                <input type="submit" value="회원가입"/>
+            <form id="joinForm"  name="joinForm">
+                <input id="loginId" type="text" name="loginId" placeholder="로그인 아이디" maxlength="20" />
+                <input id="password" type="password" name="password" placeholder="비밀번호" maxlength="20" />
+                <input id="name" type="text" name="name" placeholder="사용자 이름" maxlength="20" />
+                <button type="button" id="joinProc">회원가입</button>
             </form>
             <button type="button" onclick="location.href='/login'">로그인 페이지로 돌아가기</button>
         </div>

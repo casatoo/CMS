@@ -8,4 +8,10 @@ public class JoinDTO {
     private String loginId;
 
     private String password;
+
+    private String name;
+
+    private String role;
+
+    private String rank;
 }

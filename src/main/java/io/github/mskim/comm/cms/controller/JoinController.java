@@ -1,9 +1,14 @@
 package io.github.mskim.comm.cms.controller;
 
+import io.github.mskim.comm.cms.api.ApiResponse;
+import io.github.mskim.comm.cms.api.ApiStatus;
 import io.github.mskim.comm.cms.dto.JoinDTO;
 import io.github.mskim.comm.cms.service.JoinService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class JoinController {
@@ -15,9 +20,9 @@ public class JoinController {
         this.joinService = joinService;
     }
 
+    @ResponseBody
     @PostMapping("/joinProc")
-    public String joinProcess(JoinDTO joinDTO) {
-        joinService.joinProcess(joinDTO);
-        return "redirect:/login";
+    public ApiResponse joinProcess(@RequestBody JoinDTO joinDTO) {
+        return joinService.joinProcess(joinDTO);
     }
 }

@@ -71,6 +71,28 @@
     background-color: #0056b3;
 }
 
+.alert-btn {
+    width: 200px;
+    height: 40px;
+    background-color: #007bff;
+}
+
+.alert-btn:hover {
+    background-color: #0056b3;
+}
+
+.custom-icon {
+    font-size: 10px !important;
+}
+
+.custom-title {
+    font-size: 15px !important;
+}
+
+.custom-content {
+    font-size: 10px !important;
+}
+
 .loginImg {
     position: fixed;
     top: 0;

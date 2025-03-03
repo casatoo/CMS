@@ -1,6 +1,6 @@
 package io.github.mskim.comm.cms.dto;
 
-import io.github.mskim.comm.cms.entity.UserEntity;
+import io.github.mskim.comm.cms.entity.Users;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,27 +10,27 @@ import java.util.Collection;
 
 public class CustomUserDetails implements UserDetails {
 
-    private UserEntity userEntity;
+    private Users users;
 
-    public CustomUserDetails(UserEntity userEntity) {
-        this.userEntity = userEntity;
+    public CustomUserDetails(Users users) {
+        this.users = users;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(userEntity.getRole()));
+        authorities.add(new SimpleGrantedAuthority(users.getRole()));
         return authorities;
     }
 
     @Override
     public String getPassword() {
-        return userEntity.getPassword();
+        return users.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return userEntity.getLoginId();
+        return users.getLoginId();
     }
 
     @Override
@@ -53,7 +53,7 @@ public class CustomUserDetails implements UserDetails {
         return true; // 계정 활성화 여부
     }
 
-    public UserEntity getUserEntity() {
-        return userEntity;
+    public Users getUserEntity() {
+        return users;
     }
 }
