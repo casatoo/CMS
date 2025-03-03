@@ -1,5 +1,5 @@
 /***************************************/
-CMS (근태관리 프로그램) 환경
+                 환경설정
 /***************************************/
 
 - 개발환경
@@ -16,5 +16,4 @@ Enable Launch Optimization - off
 Async Stack Traces - off
 File Encoding UTF-8
 Build Tool - gradle Intellij IDEA
-
 
