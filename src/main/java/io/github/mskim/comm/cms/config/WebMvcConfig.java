@@ -15,7 +15,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addViewController("/join").setViewName("joinView");
     }
 
-    // 정적 리소스 핸들링 (CSS, JS, 이미지 서빙)
+    // 정적 리소스 핸들링
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/css/**").addResourceLocations("classpath:/static/css/");

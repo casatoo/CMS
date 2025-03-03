@@ -60,6 +60,8 @@ public class SecurityConfig {
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessHandler((request, response, authentication) -> {
+                            // 세션 무효화 (JSESSIONID 삭제)
+                            request.getSession().invalidate();
                             // "Authorization" 쿠키 삭제
                             Cookie cookie = new Cookie("Authorization", null);
                             cookie.setHttpOnly(true);
@@ -68,8 +70,7 @@ public class SecurityConfig {
                             cookie.setMaxAge(0); // 즉시 삭제
                             response.addCookie(cookie);
 
-                            // 로그아웃 후 /main으로 리다이렉션
-                            response.sendRedirect("/main");
+                            response.sendRedirect("/login");
                         })
                 )
                 .csrf(csrf -> csrf.disable())
