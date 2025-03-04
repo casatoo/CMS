@@ -1,11 +1,12 @@
-package io.github.mskim.comm.cms.service;
+package io.github.mskim.comm.cms.serviceImpl;
 
 import io.github.mskim.comm.cms.api.ApiResponse;
 import io.github.mskim.comm.cms.api.ApiStatus;
-import io.github.mskim.comm.cms.config.CodeDeclaration;
+import io.github.mskim.comm.cms.config.EnumCode;
 import io.github.mskim.comm.cms.dto.JoinDTO;
 import io.github.mskim.comm.cms.entity.Users;
 import io.github.mskim.comm.cms.repo.UserRepository;
+import io.github.mskim.comm.cms.service.JoinService;
 import jakarta.annotation.Resource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -32,8 +33,8 @@ public class JoinServiceImpl implements JoinService {
 
         data.setLoginId(joinDTO.getLoginId());
         data.setPassword(bCryptPasswordEncoder.encode(joinDTO.getPassword()));
-        data.setRole(CodeDeclaration.ROLE_USER.getCode());
-        data.setRank(CodeDeclaration.MANAGER.getCode());
+        data.setRole(EnumCode.ROLE_USER.getCode());
+        data.setRank(EnumCode.MANAGER.getCode());
         data.setName(joinDTO.getName());
 
         userRepository.save(data);

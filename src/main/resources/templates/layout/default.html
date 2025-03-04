@@ -9,18 +9,24 @@
     <title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">CMS</title>
     <!-- CSS -->
     <th:block layout:fragment="css">
-        <link rel="stylesheet" href="css/components.css" />
-        <link rel="stylesheet" href="css/base.css" />
-        <link rel="stylesheet" href="css/custom.css" />
-        <link rel="stylesheet" href="css/boxicons/boxicons.css" />
+        <link rel="stylesheet" href="/css/components.css" />
+        <link rel="stylesheet" href="/css/base.css" />
+        <link rel="stylesheet" href="/css/custom.css" />
+        <link rel="stylesheet" href="/css/boxicons/boxicons.css" />
     </th:block>
     <!-- js -->
     <th:block layout:fragment="js">
+
         <script src="/js/jquery-3.6.0.min.js"></script>
         <script src="/js/sweetalert2.all.min.js"></script>
         <script src="/js/lodash.js"></script>
         <script src="/js/header.js"></script>
         <script src="/js/apps.js"></script>
+
+        <script th:inline="javascript">
+          let loginUser = /*[[${loginUser}]]*/ '';
+          let rank = /*[[${rank}]]*/ '';
+        </script>
     </th:block>
 </head>
 <!-- [head] 영역 끝 -->

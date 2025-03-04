@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class MainController {
 
     @RequestMapping("/")
-    public String rootAccess (Model model) {
+    public String root (Model model) {
         return "redirect:/main";
     }
 

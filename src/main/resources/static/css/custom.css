@@ -327,3 +327,9 @@
 .custom-content {
     font-size: 10px !important;
 }
+
+.nav-links li a.active {
+    background-color: #1d1b31;
+    color: white;
+    font-weight: bold;
+}
