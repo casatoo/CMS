@@ -9,18 +9,21 @@
         <link rel="stylesheet" href="/css/login.css" />
     </th:block>
     <th:block layout:fragment="js">
-        <script src="/js/lodash.js"></script>
         <script src="/js/jquery-3.6.0.min.js"></script>
+        <script src="/js/sweetalert2.all.min.js"></script>
+        <script src="/js/login.js"></script>
+        <script src="/js/lodash.js"></script>
+        <script src="/js/apps.js"></script>
     </th:block>
 </head>
 <body>
     <div class="login-body">
         <div class="login-container">
             <h2>로그인</h2>
-            <form action="/loginProc" method="post" name="loginForm">
+            <form id="loginForm" method="post" name="loginForm">
                 <input id="loginId" type="text" name="loginId" placeholder="로그인 아이디" required/>
                 <input id="password" type="password" name="password" placeholder="비밀번호" required/>
-                <input type="submit" value="로그인"/>
+                <button type="button" id="loginProc">로그인</button>
             </form>
             <button type="button" onclick="location.href='/join'">회원가입</button>
         </div>

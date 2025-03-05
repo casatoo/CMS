@@ -2,6 +2,8 @@ $(document).ready(function () {
   sidebarToggle();
   profileSetting();
   menuActiveFunction();
+  onClickNavLink();
+  onClickLogoutBtn();
 });
 
 let sidebarToggle = function () {
@@ -26,5 +28,54 @@ let menuActiveFunction = function () {
     if (link.getAttribute("href") === currentPath) {
       link.classList.add("active"); // 현재 페이지와 일치하면 active 클래스 추가
     }
+  });
+}
+
+let onClickNavLink = function () {
+  $(".nav-links a").click(function (event) {
+    event.preventDefault(); // 기본 이동 막기
+
+    let url = $(this).attr("href"); // 클릭된 링크의 URL 가져오기
+    loadContent(url);
+  });
+}
+
+function loadContent(url) {
+  $.ajax({
+    url: url,
+    type: "GET",
+    dataType: "html",
+    success: function (response) {
+      let newContent = $(response).find(".home-content").html();
+      $("#content-area").html(newContent); // content 영역만 변경
+      history.pushState(null, null, url);
+    },
+    error: function () {
+      alert("페이지 로드 중 오류가 발생했습니다.");
+    }
+  });
+}
+
+// 뒤로가기 시 AJAX로 다시 로드
+window.onpopstate = function () {
+  loadContent(location.pathname);
+};
+
+let onClickLogoutBtn = function () {
+  $("#logout-btn").click(function (event) {
+    event.preventDefault(); // 기본 이동 방지
+
+    $.ajax({
+      type: "POST",
+      url: "/logout",
+      success: function () {
+        customAlert("로그아웃", "성공적으로 로그아웃되었습니다.", "success").then(() => {
+          window.location.href = "/login"; // 로그인 페이지로 이동
+        });
+      },
+      error: function () {
+        customAlert("로그아웃", "로그아웃 중 오류가 발생했습니다.", "error");
+      }
+    });
   });
 }

@@ -1,20 +1,26 @@
 package io.github.mskim.comm.cms.jwt;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.mskim.comm.cms.dto.CustomUserDetails;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationServiceException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Map;
 
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
@@ -29,11 +35,18 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-        String loginId = request.getParameter("loginId"); // loginId로 변경
-        String password = request.getParameter("password");
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            Map<String, String> loginData = objectMapper.readValue(request.getInputStream(), Map.class);
 
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(loginId, password, null);
-        return authenticationManager.authenticate(authToken);
+            String loginId = loginData.get("loginId");
+            String password = loginData.get("password");
+
+            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(loginId, password, null);
+            return authenticationManager.authenticate(authToken);
+        } catch (IOException e) {
+            throw new AuthenticationServiceException("로그인 요청 데이터를 읽을 수 없습니다.");
+        }
     }
 
     // 로그인 성공 시 실행 메서드
@@ -57,14 +70,30 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         cookie.setPath("/"); // 모든 경로에서 유효
         cookie.setMaxAge(60 * 60); // 쿠키 유효 시간 (초)
         response.addCookie(cookie);
-        // 로그인 후 /main으로 리다이렉션
-        response.sendRedirect("/main");
+
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
+        PrintWriter out = response.getWriter();
+        out.write("{\"status\":200, \"message\":\"로그인 성공\"}");
+        out.flush();
     }
 
-    // 로그인 실패 시 실행 메서드
     @Override
-    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) {
-        response.setStatus(401);
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException {
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
+        String errorMessage = "로그인에 실패하였습니다.";
+
+        if (failed instanceof UsernameNotFoundException) {
+            errorMessage = "존재하지 않는 아이디입니다.";
+        } else if (failed instanceof BadCredentialsException) {
+            errorMessage = "비밀번호가 올바르지 않습니다.";
+        }
+
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.getWriter().write("{\"status\":401, \"message\":\"" + errorMessage + "\"}");
     }
 
 }

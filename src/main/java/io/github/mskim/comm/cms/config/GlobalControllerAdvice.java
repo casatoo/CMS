@@ -7,6 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.thymeleaf.util.StringUtils;
 
 @ControllerAdvice
 public class GlobalControllerAdvice {
@@ -21,7 +22,7 @@ public class GlobalControllerAdvice {
     public void commonAttributes(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        if (auth != null && auth.isAuthenticated()) {
+        if (auth != null && auth.isAuthenticated() && !StringUtils.equals("anonymousUser", auth.getPrincipal())) {
             String loginId = auth.getName();
             UserDTO user = userService.findByLoginId(loginId);
             model.addAttribute("loginUser", user.getName());

@@ -3,7 +3,7 @@ let customAlert = function (title, text, icon) {
     title: title,
     text: text,
     icon: icon,
-    width: "300px",
+    width: "400px",
     confirmButtonText: "확인",
     customClass: {
       icon: "custom-icon",

@@ -4,6 +4,7 @@ import io.github.mskim.comm.cms.jwt.JWTFilter;
 import io.github.mskim.comm.cms.jwt.JWTUtil;
 import io.github.mskim.comm.cms.jwt.LoginFilter;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -70,7 +71,7 @@ public class SecurityConfig {
                             cookie.setMaxAge(0); // 즉시 삭제
                             response.addCookie(cookie);
 
-                            response.sendRedirect("/login");
+                            response.setStatus(HttpServletResponse.SC_OK);
                         })
                 )
                 .csrf(csrf -> csrf.disable())
