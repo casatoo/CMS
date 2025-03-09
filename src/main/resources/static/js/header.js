@@ -24,12 +24,13 @@ let profileSetting = function () {
 let menuActiveFunction = function () {
   const currentPath = window.location.pathname;
   const menuLinks = [...document.querySelectorAll(".nav-links li a")];
+  menuLinks.forEach(link => link.classList.remove("active"));
   menuLinks.forEach(link => {
     if (link.getAttribute("href") === currentPath) {
-      link.classList.add("active"); // 현재 페이지와 일치하면 active 클래스 추가
+      link.classList.add("active");
     }
   });
-}
+};
 
 let onClickNavLink = function () {
   $(".nav-links a").click(function (event) {
@@ -46,9 +47,10 @@ function loadContent(url) {
     type: "GET",
     dataType: "html",
     success: function (response) {
-      let newContent = $(response).find(".home-content").html();
+      let newContent = $(response).find(".content").html();
       $("#content-area").html(newContent); // content 영역만 변경
       history.pushState(null, null, url);
+      menuActiveFunction();
     },
     error: function () {
       alert("페이지 로드 중 오류가 발생했습니다.");
