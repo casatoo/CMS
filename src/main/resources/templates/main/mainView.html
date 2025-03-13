@@ -4,7 +4,31 @@
     <title>MAIN_PAGE</title>
 </head>
 <div layout:fragment="content">
-    <div class="content" >
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <div class="card text-white bg-primary m-b-3">
+                <div class="card-header">사용자</div>
+                <div class="card-body">
+                    <h5 class="card-title" id="userCount">1,024명</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white bg-success m-b-3">
+                <div class="card-header">매출</div>
+                <div class="card-body">
+                    <h5 class="card-title" id="salesAmount">₩5,000,000</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white bg-danger m-b-3">
+                <div class="card-header">오류 발생</div>
+                <div class="card-body">
+                    <h5 class="card-title" id="errorCount">12건</h5>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 </html>
