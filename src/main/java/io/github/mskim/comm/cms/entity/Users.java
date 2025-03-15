@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity @Data
-@Table(name = "users")
+@Table(name = "USERS")
 public class Users extends BaseEntity {
 
     @Column(unique = true, nullable = false)

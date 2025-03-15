@@ -2,6 +2,9 @@ package io.github.mskim.comm.cms.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.mskim.comm.cms.dto.CustomUserDetails;
+import io.github.mskim.comm.cms.entity.UserLoginHistory;
+import io.github.mskim.comm.cms.entity.Users;
+import io.github.mskim.comm.cms.service.UserLoginHistoryService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,6 +21,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
@@ -26,11 +30,14 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
     private final JWTUtil jwtUtil;
+    private final UserLoginHistoryService userLoginHistoryService; // UserLoginHistoryService 추가
 
-    public LoginFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil) {
+    // 생성자에 UserLoginHistoryService 추가
+    public LoginFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil, UserLoginHistoryService userLoginHistoryService) {
         setFilterProcessesUrl("/loginProc");
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
+        this.userLoginHistoryService = userLoginHistoryService; // 주입받기
     }
 
     @Override
@@ -73,6 +80,20 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
+
+        // 로그인 성공 시 로그인 이력 저장
+        Users users = customUserDetails.getUserEntity();
+        String ipAddress = request.getRemoteAddr();
+        String userAgent = request.getHeader("User-Agent");
+
+        UserLoginHistory userLoginHistory = UserLoginHistory.builder()
+                .user(users)
+                .ipAddress(ipAddress)
+                .userAgent(userAgent)
+                .loginTime(LocalDateTime.now())
+                .build();
+
+        userLoginHistoryService.save(userLoginHistory); // 로그인 이력 저장
 
         PrintWriter out = response.getWriter();
         out.write("{\"status\":200, \"message\":\"로그인 성공\"}");

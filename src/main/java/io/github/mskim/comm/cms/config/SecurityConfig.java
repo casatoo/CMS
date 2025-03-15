@@ -3,6 +3,7 @@ package io.github.mskim.comm.cms.config;
 import io.github.mskim.comm.cms.jwt.JWTFilter;
 import io.github.mskim.comm.cms.jwt.JWTUtil;
 import io.github.mskim.comm.cms.jwt.LoginFilter;
+import io.github.mskim.comm.cms.service.UserLoginHistoryService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,11 +30,13 @@ public class SecurityConfig {
     // AuthenticationManager 에서 사용할 Configuration 생성자 주입
     private final CustomAuthenticationEntryPoint authenticationEntryPoint;
     private final AuthenticationConfiguration authenticationConfiguration;
+    private final UserLoginHistoryService userLoginHistoryService;
     private final JWTUtil jwtUtil;
 
-    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, CustomAuthenticationEntryPoint authenticationEntryPoint, JWTUtil jwtUtil) {
+    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, CustomAuthenticationEntryPoint authenticationEntryPoint, UserLoginHistoryService userLoginHistoryService, JWTUtil jwtUtil) {
         this.authenticationEntryPoint = authenticationEntryPoint;
         this.authenticationConfiguration = authenticationConfiguration;
+        this.userLoginHistoryService = userLoginHistoryService;
         this.jwtUtil = jwtUtil;
     }
     // AuthenticationManager Bean 생성
@@ -77,7 +80,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .formLogin(form -> form.disable())
                 .httpBasic(httpBasic -> httpBasic.disable())
-                .addFilterBefore(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, userLoginHistoryService), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .cors(cors -> cors.configurationSource(corsConfigurationSource(corsProperties)));

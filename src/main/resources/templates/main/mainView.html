@@ -4,28 +4,33 @@
     <title>MAIN_PAGE</title>
 </head>
 <div layout:fragment="content">
-    <div class="row mt-4">
-        <div class="col-md-4">
-            <div class="card text-white bg-primary m-b-3">
-                <div class="card-header">사용자</div>
-                <div class="card-body">
-                    <h5 class="card-title" id="userCount">1,024명</h5>
+    <div class="container p-t-20">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card bg-white border-2 m-b-3">
+                    <div class="card-body text-center">
+                        <i class="bx bx-time-five bx-lg text-primary"></i>
+                        <h5 class="card-title mt-2">오늘 출근 시간</h5>
+                        <p class="card-title" id="workStartTime">오전 9:00</p>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card text-white bg-success m-b-3">
-                <div class="card-header">매출</div>
-                <div class="card-body">
-                    <h5 class="card-title" id="salesAmount">₩5,000,000</h5>
+            <div class="col-md-4">
+                <div class="card bg-white m-b-3">
+                    <div class="card-body text-center">
+                        <i class="bx bx-calendar-check bx-lg"></i>
+                        <h5 class="card-title mt-2">이번 달 근무일수</h5>
+                        <p class="card-title" id="workDaysThisMonth">15일</p>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card text-white bg-danger m-b-3">
-                <div class="card-header">오류 발생</div>
-                <div class="card-body">
-                    <h5 class="card-title" id="errorCount">12건</h5>
+            <div class="col-md-4">
+                <div class="card bg-white m-b-3">
+                    <div class="card-body text-center">
+                        <i class="bx bxs-plane-alt bx-lg"></i>
+                        <h5 class="card-title mt-2">남은 연차</h5>
+                        <p class="card-title" id="remainingLeaves">5일</p>
+                    </div>
                 </div>
             </div>
         </div>
