@@ -1,8 +1,9 @@
 package io.github.mskim.comm.cms.service;
 
-import io.github.mskim.comm.cms.dto.UserDTO;
+import io.github.mskim.comm.cms.entity.Users;
 
 public interface UserService {
 
-    UserDTO findByLoginId(String loginId);
+    Users findByLoginId(String loginId);
+
 }

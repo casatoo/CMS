@@ -19,8 +19,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO findByLoginId(String loginId) {
-        Optional<Users> userOptional = userRepository.findByLoginId(loginId);
-        return userOptional.map(user -> CustomModelMapper.getInstance().map(user, UserDTO.class)).orElse(null);
+    public Users findByLoginId(String loginId) {
+        return userRepository.findByLoginId(loginId).orElse(null);
     }
 }

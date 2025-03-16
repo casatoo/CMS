@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Entity @Builder @Data @EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor @NoArgsConstructor
 @Table(name = "USER_ATTENDANCE", uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "work_date"}))
-public class UserAttendance extends BaseEntity{
+public class UserAttendance extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)

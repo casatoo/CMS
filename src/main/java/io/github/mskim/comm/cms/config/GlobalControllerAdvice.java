@@ -1,6 +1,7 @@
 package io.github.mskim.comm.cms.config;
 
 import io.github.mskim.comm.cms.dto.UserDTO;
+import io.github.mskim.comm.cms.entity.Users;
 import io.github.mskim.comm.cms.service.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,7 +25,7 @@ public class GlobalControllerAdvice {
 
         if (auth != null && auth.isAuthenticated() && !StringUtils.equals("anonymousUser", auth.getPrincipal())) {
             String loginId = auth.getName();
-            UserDTO user = userService.findByLoginId(loginId);
+            Users user = userService.findByLoginId(loginId);
             model.addAttribute("loginUser", user.getName());
             model.addAttribute("rank", user.getRank());
         }

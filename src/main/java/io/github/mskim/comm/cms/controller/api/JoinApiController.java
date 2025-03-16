@@ -12,7 +12,6 @@ public class JoinApiController {
 
     private final JoinService joinService;
 
-    // 생성자 주입 방식
     public JoinApiController(JoinService joinService) {
         this.joinService = joinService;
     }

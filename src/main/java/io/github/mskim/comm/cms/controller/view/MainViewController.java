@@ -2,6 +2,7 @@ package io.github.mskim.comm.cms.controller.view;
 
 import io.github.mskim.comm.cms.dto.UserAttendanceDTO;
 import io.github.mskim.comm.cms.dto.UserDTO;
+import io.github.mskim.comm.cms.entity.Users;
 import io.github.mskim.comm.cms.service.UserAttendanceService;
 import io.github.mskim.comm.cms.service.UserService;
 import org.springframework.security.core.Authentication;
@@ -36,9 +37,10 @@ public class MainViewController {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String loginId = authentication.getName();
+        LocalDateTime now = LocalDateTime.now();
 
         // 연차
-        UserDTO user = userService.findByLoginId(loginId);
+        Users user = userService.findByLoginId(loginId);
         model.addAttribute("annualLeaveDays", user.getAnnualLeaveDays() + "일");
 
         // 출근시간
@@ -46,10 +48,20 @@ public class MainViewController {
         String checkInTime;
         if (ObjectUtils.isEmpty(userAttendanceDTO)) {
             checkInTime = "- - : - - : - -";
+            model.addAttribute("checkInExists", false);
+            model.addAttribute("checkOutAvailable", false);
         } else {
             LocalDateTime checkInDateTime = userAttendanceDTO.getCheckInTime();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
             checkInTime = checkInDateTime.format(formatter);
+            model.addAttribute("checkInExists", true);
+            LocalDateTime workEndTime = userAttendanceDTO.getCheckInTime().plusHours(8);
+            if (now.isAfter(workEndTime)) {
+                model.addAttribute("checkOutAvailable", true);
+            } else {
+                model.addAttribute("checkOutAvailable", false);
+            }
+
         }
         model.addAttribute("checkInTime", checkInTime);
 

@@ -8,6 +8,8 @@
       let annualLeaveDays = /*[[${annualLeaveDays}]]*/ '';
       let checkInTime = /*[[${checkInTime}]]*/ '';
       let workDayCount = /*[[${workDayCount}]]*/ '';
+      let checkInExists = /*[[${checkInExists}]]*/ '';
+      let checkOutAvailable = /*[[${checkOutAvailable}]]*/ '';
     </script>
 </head>
 <div layout:fragment="content">
@@ -17,7 +19,7 @@
                 <div class="card bg-white border-2 m-b-3">
                     <div class="card-body text-center">
                         <i class="bx bx-time-five bx-lg text-primary"></i>
-                        <h5 class="card-title mt-2">오늘 출근 시간</h5>
+                        <h5 class="card-title mt-2">금일 출근 시간</h5>
                         <p class="card-title" id="workStartTime" th:text="${checkInTime}"></p>
                     </div>
                 </div>
@@ -26,7 +28,7 @@
                 <div class="card bg-white m-b-3">
                     <div class="card-body text-center">
                         <i class="bx bx-calendar-check bx-lg"></i>
-                        <h5 class="card-title mt-2">이번 달 근무일수</h5>
+                        <h5 class="card-title mt-2">이달의 근무일</h5>
                         <p class="card-title" id="workDaysThisMonth" th:text="${workDayCount}"></p>
                     </div>
                 </div>
