@@ -1,5 +1,7 @@
 package io.github.mskim.comm.cms.serviceImpl;
 
+import io.github.mskim.comm.cms.config.CustomModelMapper;
+import io.github.mskim.comm.cms.dto.UserLoginHistoryDTO;
 import io.github.mskim.comm.cms.entity.UserLoginHistory;
 import io.github.mskim.comm.cms.mapper.UserLoginHistoryMapper;
 import io.github.mskim.comm.cms.repository.UserLoginHistoryRepository;
@@ -25,7 +27,8 @@ public class UserLoginHistoryServiceImpl implements UserLoginHistoryService {
     }
 
     @Override
-    public List<UserLoginHistory> findByUserId(String userId) {
-        return userLoginHistoryMapper.findByUserId(userId);
+    public List<UserLoginHistoryDTO> findByUserId(String userId) {
+        List<UserLoginHistory> userLoginHistory = userLoginHistoryMapper.findByUserId(userId);
+        return userLoginHistory != null ? CustomModelMapper.mapList(userLoginHistory, UserLoginHistoryDTO.class) : null;
     }
 }

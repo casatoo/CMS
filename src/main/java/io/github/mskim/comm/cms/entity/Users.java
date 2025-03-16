@@ -18,6 +18,9 @@ public class Users extends BaseEntity {
     @Column(nullable = false)
     private String name;
 
+    @Column(name = "annual_leave_days", nullable = false)
+    private int annualLeaveDays;
+
     @Column(nullable = false)
     private String role;
 

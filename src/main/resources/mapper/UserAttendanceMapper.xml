@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.github.mskim.comm.cms.mapper.UserAttendanceMapper">
+
+    <select id="findTodayCheckInTime" resultType="io.github.mskim.comm.cms.entity.UserAttendance">
+        SELECT *
+        FROM USER_ATTENDANCE
+        WHERE user_id = #{loginId}
+        AND work_date = CURDATE()
+    </select>
+
+    <select id="countWorkDaysThisMonth" resultType="int">
+        SELECT COUNT(*) AS work_days_count
+        FROM USER_ATTENDANCE
+        WHERE user_id = #{userId}
+        AND MONTH(work_date) = MONTH(CURDATE())
+        AND YEAR(work_date) = YEAR(CURDATE());
+    </select>
+
+</mapper>

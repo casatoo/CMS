@@ -3,7 +3,7 @@ package io.github.mskim.comm.cms.controller.api;
 import io.github.mskim.comm.cms.api.ApiPaths;
 import io.github.mskim.comm.cms.api.ApiResponse;
 import io.github.mskim.comm.cms.api.ApiStatus;
-import io.github.mskim.comm.cms.entity.UserLoginHistory;
+import io.github.mskim.comm.cms.dto.UserLoginHistoryDTO;
 import io.github.mskim.comm.cms.service.UserLoginHistoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,8 +21,8 @@ public class UserLoginHistoryApiController {
     private final UserLoginHistoryService userLoginHistoryService;
 
     @GetMapping("/user-id")
-    public ApiResponse<List<UserLoginHistory>> findByUserId(@RequestParam(name = "userId") String userId) {
-        List<UserLoginHistory> userLoginHistoryList = userLoginHistoryService.findByUserId(userId);
+    public ApiResponse<List<UserLoginHistoryDTO>> findByUserId(@RequestParam(name = "userId") String userId) {
+        List<UserLoginHistoryDTO> userLoginHistoryList = userLoginHistoryService.findByUserId(userId);
         if (userLoginHistoryList.size() == 0) {
             return ApiResponse.of(ApiStatus.OK, "로그인 이력이 없습니다.", userLoginHistoryList);
         } else {
