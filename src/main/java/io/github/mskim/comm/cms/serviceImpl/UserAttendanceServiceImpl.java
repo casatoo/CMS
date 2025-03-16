@@ -1,6 +1,6 @@
 package io.github.mskim.comm.cms.serviceImpl;
 
-import io.github.mskim.comm.cms.repo.UserAttendanceRepository;
+import io.github.mskim.comm.cms.repository.UserAttendanceRepository;
 import io.github.mskim.comm.cms.service.UserAttendanceService;
 import org.springframework.stereotype.Service;
 

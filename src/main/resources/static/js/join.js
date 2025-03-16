@@ -50,23 +50,14 @@ let joinProc = function () {
       name: name
     };
 
-    $.ajax({
-      type: "POST",
-      url: "/joinProc",
-      contentType: "application/json",
-      data: JSON.stringify(joinData),
-      dataType: "json",
-      success: function (res) {
-        if (res.status === 200) {
-          customAlert("회원가입", res.message, "success").then(() => {
-            window.location.href = "/login"; // 회원가입 성공 시 로그인 페이지로 이동
-          });
-        } else {
-          customAlert("회원가입", res.message, "error");
-        }
-      },
-      error: function () {
-        customAlert("회원가입", "회원가입 중 오류가 발생했습니다.", "error");
+    $.post("/joinProc", JSON.stringify(joinData), function (res) {
+      // 요청이 성공했을 때의 처리
+      if (res.status === 200) {
+        customAlert("회원가입", res.message, "success").then(() => {
+          window.location.href = "/login"; // 회원가입 성공 시 로그인 페이지로 이동
+        });
+      } else {
+        customAlert("회원가입", res.message, "error");
       }
     });
   });

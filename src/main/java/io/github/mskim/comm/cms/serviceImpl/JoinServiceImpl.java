@@ -5,7 +5,7 @@ import io.github.mskim.comm.cms.api.ApiStatus;
 import io.github.mskim.comm.cms.config.EnumCode;
 import io.github.mskim.comm.cms.dto.JoinDTO;
 import io.github.mskim.comm.cms.entity.Users;
-import io.github.mskim.comm.cms.repo.UserRepository;
+import io.github.mskim.comm.cms.repository.UserRepository;
 import io.github.mskim.comm.cms.service.JoinService;
 import jakarta.annotation.Resource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

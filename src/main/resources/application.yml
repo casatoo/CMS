@@ -29,6 +29,11 @@ spring:
   jwt:
     secret: c2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQtc2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQK
 
+mybatis:
+  mapper-locations: classpath:mapper/**/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
 resilience4j:
   bulkhead:     # 동시요청 수 제한하는 설정 - 세마포어 방식
     instances:

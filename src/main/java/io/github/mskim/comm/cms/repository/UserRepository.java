@@ -1,4 +1,4 @@
-package io.github.mskim.comm.cms.repo;
+package io.github.mskim.comm.cms.repository;
 
 import io.github.mskim.comm.cms.entity.Users;
 import org.springframework.data.jpa.repository.JpaRepository;

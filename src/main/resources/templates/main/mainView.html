@@ -2,6 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/default}">
 <head>
     <title>MAIN_PAGE</title>
+    <!-- main.js 추가 -->
+    <script src="/js/domain/main/main.js"></script>
 </head>
 <div layout:fragment="content">
     <div class="container p-t-20">
@@ -12,6 +14,7 @@
                         <i class="bx bx-time-five bx-lg text-primary"></i>
                         <h5 class="card-title mt-2">오늘 출근 시간</h5>
                         <p class="card-title" id="workStartTime">오전 9:00</p>
+                        <button class="btn btn-info" id="testBtn">조회</button>
                     </div>
                 </div>
             </div>

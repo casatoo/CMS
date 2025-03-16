@@ -2,7 +2,7 @@ package io.github.mskim.comm.cms.service;
 
 import io.github.mskim.comm.cms.config.CustomUserDetails;
 import io.github.mskim.comm.cms.entity.Users;
-import io.github.mskim.comm.cms.repo.UserRepository;
+import io.github.mskim.comm.cms.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

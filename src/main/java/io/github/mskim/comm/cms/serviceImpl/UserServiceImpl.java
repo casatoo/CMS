@@ -2,7 +2,7 @@ package io.github.mskim.comm.cms.serviceImpl;
 
 import io.github.mskim.comm.cms.dto.UserDTO;
 import io.github.mskim.comm.cms.entity.Users;
-import io.github.mskim.comm.cms.repo.UserRepository;
+import io.github.mskim.comm.cms.repository.UserRepository;
 import io.github.mskim.comm.cms.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;

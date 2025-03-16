@@ -21,6 +21,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
@@ -87,6 +88,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
                 .user(users)
                 .ipAddress(ipAddress)
                 .userAgent(userAgent)
+                .loginTime(LocalDateTime.now())
                 .build();
 
         userLoginHistory.setCreatedBy("system");
