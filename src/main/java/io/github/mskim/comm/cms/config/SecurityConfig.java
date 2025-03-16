@@ -6,7 +6,6 @@ import io.github.mskim.comm.cms.jwt.LoginFilter;
 import io.github.mskim.comm.cms.service.UserLoginHistoryService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -55,7 +54,7 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/join", "/loginProc", "/joinProc").permitAll()
+                        .requestMatchers("/", "/login", "/join", "/loginProc", "/joinProc").permitAll()
                         .requestMatchers("/css/**", "/js/**", "/img/**", "/fonts/**").permitAll()
                         .anyRequest().authenticated()
                 )

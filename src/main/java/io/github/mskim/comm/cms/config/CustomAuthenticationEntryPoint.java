@@ -10,8 +10,10 @@ import java.io.IOException;
 
 @Component
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
+
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
         response.sendRedirect("/login"); // 인증되지 않은 사용자는 로그인 페이지로 이동
     }
+
 }

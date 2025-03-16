@@ -1,7 +1,5 @@
 package io.github.mskim.comm.cms.config;
 
-import io.github.mskim.comm.cms.dto.UserAttendanceDTO;
-import io.github.mskim.comm.cms.entity.UserAttendance;
 import org.modelmapper.ModelMapper;
 
 import java.util.List;
