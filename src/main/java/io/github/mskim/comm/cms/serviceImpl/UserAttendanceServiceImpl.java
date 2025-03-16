@@ -2,7 +2,6 @@ package io.github.mskim.comm.cms.serviceImpl;
 
 import io.github.mskim.comm.cms.config.CustomModelMapper;
 import io.github.mskim.comm.cms.dto.UserAttendanceDTO;
-import io.github.mskim.comm.cms.dto.UserDTO;
 import io.github.mskim.comm.cms.entity.UserAttendance;
 import io.github.mskim.comm.cms.entity.Users;
 import io.github.mskim.comm.cms.mapper.UserAttendanceMapper;
@@ -68,7 +67,7 @@ public class UserAttendanceServiceImpl implements UserAttendanceService {
 
         if (userAttendance != null) {
             userAttendance.setCheckOutTime(LocalDateTime.now());
-            
+
             userAttendanceRepository.save(userAttendance);
         } else {
             throw new IllegalArgumentException("오늘 출근 기록이 없습니다.");

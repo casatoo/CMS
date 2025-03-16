@@ -1,7 +1,6 @@
 package io.github.mskim.comm.cms.controller.view;
 
 import io.github.mskim.comm.cms.dto.UserAttendanceDTO;
-import io.github.mskim.comm.cms.dto.UserDTO;
 import io.github.mskim.comm.cms.entity.Users;
 import io.github.mskim.comm.cms.service.UserAttendanceService;
 import io.github.mskim.comm.cms.service.UserService;

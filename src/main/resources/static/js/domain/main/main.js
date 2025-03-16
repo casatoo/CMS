@@ -2,7 +2,6 @@ const apiUri = "/api/v1"
 
 $(document).ready(function () {
   checkInTimeExists();
-  checkOut();
 });
 
 // 출근시간 데이터가 존재하지 않으면 출근 알람 팝업을 호출
