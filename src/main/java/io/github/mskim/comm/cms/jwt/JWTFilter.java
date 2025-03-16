@@ -1,6 +1,6 @@
 package io.github.mskim.comm.cms.jwt;
 
-import io.github.mskim.comm.cms.dto.CustomUserDetails;
+import io.github.mskim.comm.cms.config.CustomUserDetails;
 import io.github.mskim.comm.cms.entity.Users;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

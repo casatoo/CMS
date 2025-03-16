@@ -1,18 +1,13 @@
 package io.github.mskim.comm.cms.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Entity
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+
+@Entity @Builder @Data @EqualsAndHashCode(callSuper = true)
+@AllArgsConstructor @NoArgsConstructor
 @Table(name = "USER_LOGIN_HISTORY")
 public class UserLoginHistory extends BaseEntity {
 
@@ -23,7 +18,7 @@ public class UserLoginHistory extends BaseEntity {
     @Column(name = "login_time", nullable = false, updatable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime loginTime = LocalDateTime.now();
 
-    @Column(name = "ip_address", length = 45, nullable = false)
+    @Column(name = "ip_address", length = 45)
     private String ipAddress;
 
     @Lob

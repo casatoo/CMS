@@ -1,4 +1,4 @@
-package io.github.mskim.comm.cms.dto;
+package io.github.mskim.comm.cms.config;
 
 import io.github.mskim.comm.cms.entity.Users;
 import org.springframework.security.core.GrantedAuthority;

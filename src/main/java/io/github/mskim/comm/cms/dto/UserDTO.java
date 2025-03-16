@@ -3,15 +3,11 @@ package io.github.mskim.comm.cms.dto;
 import lombok.Data;
 
 @Data
-public class UserDTO {
+public class UserDTO extends BaseDTO{
 
-    private String loginId;
-
-    private String password;
-
-    private String name;
-
-    private String role;
-
-    private String rank;
+    private String loginId;         // 로그인 아이디
+    private String password;        // 비밀번호
+    private String name;            // 이름
+    private String role;            // 권한
+    private String rank;            // 직급
 }

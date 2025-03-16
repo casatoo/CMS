@@ -5,7 +5,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserLoginHistoryRepository extends JpaRepository<UserLoginHistory, String> {
 
-    @Override
-    <S extends UserLoginHistory> S save(S entity);
-
 }

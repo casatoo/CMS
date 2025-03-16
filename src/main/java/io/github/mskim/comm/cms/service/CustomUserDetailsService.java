@@ -1,6 +1,6 @@
 package io.github.mskim.comm.cms.service;
 
-import io.github.mskim.comm.cms.dto.CustomUserDetails;
+import io.github.mskim.comm.cms.config.CustomUserDetails;
 import io.github.mskim.comm.cms.entity.Users;
 import io.github.mskim.comm.cms.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

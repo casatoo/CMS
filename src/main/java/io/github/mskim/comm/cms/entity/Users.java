@@ -2,8 +2,10 @@ package io.github.mskim.comm.cms.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Entity @Data
+@EqualsAndHashCode(callSuper = true)
 @Table(name = "USERS")
 public class Users extends BaseEntity {
 
