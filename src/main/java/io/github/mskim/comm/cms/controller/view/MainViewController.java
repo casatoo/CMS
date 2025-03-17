@@ -53,6 +53,11 @@ public class MainViewController {
             LocalDateTime checkInDateTime = userAttendanceDTO.getCheckInTime();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
             checkInTime = checkInDateTime.format(formatter);
+            if (ObjectUtils.isEmpty(userAttendanceDTO.getCheckOutTime())) {
+                model.addAttribute("checkOutExists", false);
+            } else {
+                model.addAttribute("checkOutExists", true);
+            }
             model.addAttribute("checkInExists", true);
             LocalDateTime workEndTime = userAttendanceDTO.getCheckInTime().plusHours(8);
             if (now.isAfter(workEndTime)) {
@@ -60,7 +65,6 @@ public class MainViewController {
             } else {
                 model.addAttribute("checkOutAvailable", false);
             }
-
         }
         model.addAttribute("checkInTime", checkInTime);
 

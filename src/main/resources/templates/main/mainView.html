@@ -10,22 +10,27 @@
       let workDayCount = /*[[${workDayCount}]]*/ '';
       let checkInExists = /*[[${checkInExists}]]*/ '';
       let checkOutAvailable = /*[[${checkOutAvailable}]]*/ '';
+      let checkOutExists = /*[[${checkOutExists}]]*/ '';
     </script>
 </head>
 <div layout:fragment="content">
     <div class="container p-t-20">
         <div class="row">
             <div class="col-md-4">
-                <div class="card bg-white border-2 m-b-3">
+                <div class="card bg-white h-100p">
                     <div class="card-body text-center">
                         <i class="bx bx-time-five bx-lg text-primary"></i>
                         <h5 class="card-title mt-2">금일 출근 시간</h5>
                         <p class="card-title" id="workStartTime" th:text="${checkInTime}"></p>
+                        <div class="d-flex justify-content-end">
+                            <button class="btn btn-primary btn-sm hidden" id="checkInBtn">출근</button>
+                            <button class="btn btn-primary btn-sm hidden" id="checkOutBtn">퇴근</button>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="card bg-white m-b-3">
+                <div class="card bg-white h-100p">
                     <div class="card-body text-center">
                         <i class="bx bx-calendar-check bx-lg"></i>
                         <h5 class="card-title mt-2">이달의 근무일</h5>
@@ -34,7 +39,7 @@
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="card bg-white m-b-3">
+                <div class="card bg-white h-100p">
                     <div class="card-body text-center">
                         <i class="bx bxs-plane-alt bx-lg"></i>
                         <h5 class="card-title mt-2">남은 연차</h5>

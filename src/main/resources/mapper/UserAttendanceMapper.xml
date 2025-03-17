@@ -3,11 +3,30 @@
 
 <mapper namespace="io.github.mskim.comm.cms.mapper.UserAttendanceMapper">
 
-    <select id="findTodayCheckInTime" resultType="io.github.mskim.comm.cms.entity.UserAttendance">
-        SELECT *
-        FROM USER_ATTENDANCE
-        WHERE user_id = #{loginId}
-        AND work_date = CURDATE()
+    <resultMap id="UserAttendanceResultMap" type="io.github.mskim.comm.cms.entity.UserAttendance">
+        <id property="id" column="id"/>
+        <result property="workDate" column="work_date"/>
+        <result property="checkInTime" column="check_in_time"/>
+        <result property="checkOutTime" column="check_out_time"/>
+
+        <!-- Users 객체 매핑 -->
+        <association property="user" javaType="io.github.mskim.comm.cms.entity.Users">
+            <id property="id" column="user_id"/>
+            <result property="loginId" column="loginId"/>
+            <result property="password" column="password"/>
+            <result property="name" column="name"/>
+            <result property="role" column="role"/>
+            <result property="rank" column="rank"/>
+            <result property="annualLeaveDays" column="annual_leave_days"/>
+        </association>
+    </resultMap>
+
+    <select id="findTodayCheckInTime" resultMap="UserAttendanceResultMap">
+        SELECT ua.*, u.id AS user_id, u.loginId, u.password, u.name, u.role, u.rank, u.annual_leave_days
+        FROM USER_ATTENDANCE ua
+        JOIN USERS u ON ua.user_id = u.id
+        WHERE ua.user_id = #{userId}
+        AND ua.work_date = CURDATE();
     </select>
 
     <select id="countWorkDaysThisMonth" resultType="int">

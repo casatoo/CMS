@@ -89,7 +89,7 @@
 .h-70p { height: 70%; }
 .h-80p { height: 80%; }
 .h-90p { height: 90%; }
-.h-100p { height: 100%; }
+.h-100p { height: 100% !important;}
 
 /* Min Width */
 .min-width-10 { min-width: 10px; }
@@ -535,9 +535,9 @@
 .hover-scale:hover { transform: scale(1.05); }
 .hover-rotate:hover { transform: rotate(5deg); }
 
-.hidden { display: none; }
-.visible { visibility: visible; }
-.invisible { visibility: hidden; }
+.hidden { display: none !important;}
+.visible { visibility: visible !important;}
+.invisible { visibility: hidden !important;}
 
 .list-none { list-style: none; }
 .list-disc { list-style: disc; }

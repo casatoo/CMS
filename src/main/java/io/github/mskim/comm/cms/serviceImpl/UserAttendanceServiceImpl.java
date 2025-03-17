@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Service
 public class UserAttendanceServiceImpl implements UserAttendanceService {
@@ -66,6 +67,7 @@ public class UserAttendanceServiceImpl implements UserAttendanceService {
         UserAttendance userAttendance = userAttendanceMapper.findTodayCheckInTime(user.getId());
 
         if (userAttendance != null) {
+            userAttendance.setUser(user);
             userAttendance.setCheckOutTime(LocalDateTime.now());
 
             userAttendanceRepository.save(userAttendance);
