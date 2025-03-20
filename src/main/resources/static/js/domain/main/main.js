@@ -91,3 +91,14 @@ const onClickCheckOutBtn = () => {
     });
   });
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+  document.querySelectorAll(".card").forEach(card => {
+    card.addEventListener("click", function () {
+      const url = this.getAttribute("data-url");
+      if (url) {
+        window.location.href = url;
+      }
+    });
+  });
+});

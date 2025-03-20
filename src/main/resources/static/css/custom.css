@@ -69,6 +69,10 @@
 .sidebar.close{
     width: 78px;
 }
+.preload .sidebar,
+.preload .profile-details {
+    transition: none !important;
+}
 .sidebar .logo-details{
     height: 60px;
     width: 100%;
@@ -332,4 +336,38 @@
     background-color: #1d1b31;
     color: white;
     font-weight: bold;
+}
+
+.nav-links li.active {
+    background-color: #1d1b31;
+    color: white;
+    font-weight: bold;
+}
+.card-btn {
+    cursor: pointer;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-btn:hover {
+    background: rgba(0, 0, 0, 0.7) !important; /* 카드 배경이 어두워지는 효과 */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* 마우스 오버 시 그림자 효과 */
+}
+
+.card-body {
+    position: relative;
+}
+
+.card-btn .quick-link {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.card-btn:hover .quick-link {
+    opacity: 1;
 }

@@ -1,9 +1,23 @@
 $(document).ready(function () {
+  document.body.classList.add("preload");
+
   sidebarToggle();
   profileSetting();
   menuActiveFunction();
   onClickLogoutBtn();
+
+  let storedStatus = JSON.parse(localStorage.getItem("sidebarStatus"));
+  if (storedStatus === null) {
+    storedStatus = false;
+    localStorage.setItem("sidebarStatus", JSON.stringify(storedStatus));
+  }
+  applySideBarStatus(storedStatus);
+
+  setTimeout(() => {
+    document.body.classList.remove("preload");
+  }, 50);
 });
+
 
 let sidebarToggle = function () {
   $(".arrow").click(function () {
@@ -11,34 +25,61 @@ let sidebarToggle = function () {
   });
 
   $(".bx-menu").click(function () {
-    $(".sidebar").toggleClass("close");
+    let sideBarStatus = JSON.parse(localStorage.getItem("sidebarStatus"));
+    let newStatus = !sideBarStatus;
+    localStorage.setItem("sidebarStatus", JSON.stringify(newStatus));
+    applySideBarStatus(newStatus);
   });
-}
+};
+
+let applySideBarStatus = function (status) {
+  if (status) {
+    $(".sidebar").removeClass("close");
+  } else {
+    $(".sidebar").addClass("close");
+  }
+};
 
 let profileSetting = function () {
   $("#profileName").html(loginUser);
   $("#rank").html(rank);
-}
+};
 
 let menuActiveFunction = function () {
   const currentPath = window.location.pathname;
-  const menuLinks = [...document.querySelectorAll(".nav-links li a")];
+  const menuLinks = document.querySelectorAll(".nav-links li a");
+
   menuLinks.forEach(link => {
-    if (link.getAttribute("href") === currentPath) {
-      link.classList.add("active"); // 현재 페이지와 일치하면 active 클래스 추가
+    const linkPath = link.getAttribute("href");
+
+    if (linkPath === currentPath) {
+      let parentLi = link.closest("li"); // 현재 링크의 가장 가까운 <li> 찾기
+      if (parentLi) {
+        parentLi.classList.add("active"); // 현재 <li>에 active 추가
+
+        // 상위 메뉴 활성화 (부모의 부모 <li>에도 active 추가)
+        let parentMenu = parentLi.closest(".sub-menu");
+        if (parentMenu) {
+          let topMenu = parentMenu.closest("li");
+          if (topMenu) {
+            topMenu.classList.add("active"); // 최상위 <li>에도 active 추가
+          }
+        }
+      }
     }
   });
-}
+};
+
 let onClickLogoutBtn = function () {
   $("#logout-btn").click(function (event) {
-    event.preventDefault(); // 기본 이동 방지
+    event.preventDefault();
 
     $.ajax({
       type: "POST",
       url: "/logout",
       success: function () {
         customAlert("로그아웃", "성공적으로 로그아웃되었습니다.", "success").then(() => {
-          window.location.href = "/login"; // 로그인 페이지로 이동
+          window.location.href = "/login";
         });
       },
       error: function () {
@@ -46,4 +87,4 @@ let onClickLogoutBtn = function () {
       }
     });
   });
-}
+};

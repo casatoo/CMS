@@ -45,8 +45,10 @@ public class MainViewController {
         // 출근시간
         UserAttendanceDTO userAttendanceDTO = userAttendanceService.findTodayCheckInTime(user.getId());
         String checkInTime;
+        String checkOutTime;
         if (ObjectUtils.isEmpty(userAttendanceDTO)) {
             checkInTime = "- - : - - : - -";
+            checkOutTime = "- - : - - : - -";
             model.addAttribute("checkInExists", false);
             model.addAttribute("checkOutAvailable", false);
         } else {
@@ -54,8 +56,11 @@ public class MainViewController {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
             checkInTime = checkInDateTime.format(formatter);
             if (ObjectUtils.isEmpty(userAttendanceDTO.getCheckOutTime())) {
+                checkOutTime = "- - : - - : - -";
                 model.addAttribute("checkOutExists", false);
             } else {
+                LocalDateTime checkOutDateTime = userAttendanceDTO.getCheckOutTime();
+                checkOutTime = checkOutDateTime.format(formatter);
                 model.addAttribute("checkOutExists", true);
             }
             model.addAttribute("checkInExists", true);
@@ -67,7 +72,7 @@ public class MainViewController {
             }
         }
         model.addAttribute("checkInTime", checkInTime);
-
+        model.addAttribute("checkOutTime", checkOutTime);
         // 근무일수
         int workDayCount = userAttendanceService.countWorkDaysThisMonth(user.getId());
         model.addAttribute("workDayCount", workDayCount + "일");
