@@ -5,6 +5,7 @@ $(document).ready(function () {
   checkInOutBtnControll();
   onClickCheckInBtn();
   onClickCheckOutBtn();
+  initTable();
 });
 
 // 출근시간 데이터가 존재하지 않으면 출근 알람 팝업을 호출
@@ -102,3 +103,20 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 });
+
+let initTable = () => {
+
+  let columns = [
+    { title: "ID", data: "id"},
+    { title: "이름", data: "name"},
+    { title: "직업", data: "company.name"}
+  ];
+
+  let columnDefs = [
+    { targets: 0, className: 'text-center', width: '50px' },
+    { targets: 1, className: 'text-left', width: '150px' },
+    { targets: 2, className: 'text-left', width: '200px' }
+  ];
+
+  initializeDataTable('#example', columns, columnDefs, 'https://jsonplaceholder.typicode.com/users', '380px');
+}
