@@ -1,6 +1,7 @@
 package io.github.mskim.comm.cms.serviceImpl;
 
 import io.github.mskim.comm.cms.config.CustomModelMapper;
+import io.github.mskim.comm.cms.dto.SearchParams;
 import io.github.mskim.comm.cms.dto.UserAttendanceDTO;
 import io.github.mskim.comm.cms.entity.UserAttendance;
 import io.github.mskim.comm.cms.entity.Users;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Service
 public class UserAttendanceServiceImpl implements UserAttendanceService {
@@ -74,5 +76,19 @@ public class UserAttendanceServiceImpl implements UserAttendanceService {
         } else {
             throw new IllegalArgumentException("오늘 출근 기록이 없습니다.");
         }
+    }
+
+    @Override
+    public List<UserAttendanceDTO> findAllUserAttendanceThisMonth(SearchParams searchParams) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String loginId = authentication.getName();
+
+        Users user = userService.findByLoginId(loginId);
+        searchParams.setUserId(user.getId());
+
+        List<UserAttendance> userAttendanceList = userAttendanceMapper.findAttendanceInRange(searchParams);
+
+        return userAttendanceList != null ? CustomModelMapper.mapList(userAttendanceList, UserAttendanceDTO.class) : null;
     }
 }

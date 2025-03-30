@@ -3,11 +3,15 @@ package io.github.mskim.comm.cms.controller.api;
 import io.github.mskim.comm.cms.api.ApiPaths;
 import io.github.mskim.comm.cms.api.ApiResponse;
 import io.github.mskim.comm.cms.api.ApiStatus;
+import io.github.mskim.comm.cms.dto.SearchParams;
+import io.github.mskim.comm.cms.dto.UserAttendanceDTO;
 import io.github.mskim.comm.cms.service.UserAttendanceService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -15,6 +19,19 @@ import org.springframework.web.bind.annotation.RestController;
 public class AttendanceApiController {
 
     private final UserAttendanceService userAttendanceService;
+
+    @GetMapping("/month/all")
+    public List<UserAttendanceDTO> findAllUserAttendanceThisMonth(@RequestParam("startDate") String startDate, @RequestParam("endDate") String endDate) {
+        // 날짜 형식 정의 (예: "yyyy-MM-dd" 형태로 날짜가 오는 경우)
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate startLocalDate = LocalDate.parse(startDate, formatter);
+        LocalDate endLocalDate = LocalDate.parse(endDate, formatter);
+        SearchParams searchParams = new SearchParams();
+        searchParams.setStartDate(startLocalDate);
+        searchParams.setEndDate(endLocalDate);
+
+        return userAttendanceService.findAllUserAttendanceThisMonth(searchParams);
+    }
 
     @PostMapping("/check-in")
     public ApiResponse checkIn() {

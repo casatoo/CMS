@@ -8,8 +8,8 @@
         <result property="workDate" column="work_date"/>
         <result property="checkInTime" column="check_in_time"/>
         <result property="checkOutTime" column="check_out_time"/>
+        <result property="color" column="color"/>
 
-        <!-- Users 객체 매핑 -->
         <association property="user" javaType="io.github.mskim.comm.cms.entity.Users">
             <id property="id" column="user_id"/>
             <result property="loginId" column="loginId"/>
@@ -35,6 +35,22 @@
         WHERE user_id = #{userId}
         AND MONTH(work_date) = MONTH(CURDATE())
         AND YEAR(work_date) = YEAR(CURDATE());
+    </select>
+
+    <select id="findAttendanceByDate" resultMap="UserAttendanceResultMap">
+        SELECT ua.*, u.id AS user_id, u.loginId, u.password, u.name, u.role, u.rank, u.annual_leave_days
+        FROM USER_ATTENDANCE ua
+        JOIN USERS u ON ua.user_id = u.id
+        WHERE ua.user_id = #{userId}
+        AND ua.work_date = #{workDate};
+    </select>
+
+    <select id="findAttendanceInRange" resultMap="UserAttendanceResultMap">
+        SELECT ua.*, u.id AS user_id, u.loginId, u.password, u.name, u.role, u.rank, u.annual_leave_days
+        FROM USER_ATTENDANCE ua
+        JOIN USERS u ON ua.user_id = u.id
+        WHERE ua.user_id = #{userId}
+        AND ua.work_date BETWEEN #{startDate} AND #{endDate};
     </select>
 
 </mapper>

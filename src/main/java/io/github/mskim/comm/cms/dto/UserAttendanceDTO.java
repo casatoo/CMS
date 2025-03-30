@@ -12,5 +12,5 @@ public class UserAttendanceDTO extends BaseDTO{
     private LocalDate workDate;             // 근무일자
     private LocalDateTime checkInTime;      // 출근시간
     private LocalDateTime checkOutTime;     // 퇴근시간
-
+    private String color;                   // 색상 *(캘린더에 표시될 색상 설정을 위해 추가)
 }

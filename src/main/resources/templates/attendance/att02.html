@@ -1,9 +1,19 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/default}">
 <head>
-    <title>ATTENDANCE_PAGE</title>
+    <title>연차신청</title>
+    <!-- js -->
+    <script src="/js/domain/attendance/att02.js"></script>
 </head>
 <div layout:fragment="content">
-    <div>연차 신청</div>
+    <div class="container p-t-20">
+        <div class="row">
+            <div class="col-md-12 data-table">
+                <div id="calendar-container">
+                    <div id="calendar" class="m-t-10 m-b-10"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 </html>
