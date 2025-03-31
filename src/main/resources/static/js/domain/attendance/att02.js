@@ -10,7 +10,7 @@ var initCalendar = () => {
   var calendar = new FullCalendar.Calendar(calendarEl, {
     locale: 'ko',
     initialView: 'dayGridMonth',
-    aspectRatio: 2,
+    aspectRatio: 1.8,
     headerToolbar: {
       left: 'today',
       center: 'title',
@@ -27,27 +27,42 @@ var initCalendar = () => {
         if(res.error) {
           failureCallback();
         } else {
-          // 이벤트 형식 변환
-          const events = res.map(item => {
-            // 출근 시간과 퇴근 시간을 가져오기
-            const checkInTime = item.checkInTime ? new Date(item.checkInTime) : null;
-            const checkOutTime = item.checkOutTime ? new Date(item.checkOutTime) : null;
-
-            return {
-              id: item.id,
-              title: '',
-              start: item.checkInTime, // 시작 시간
-              end: item.checkOutTime || null, // 종료 시간이 null인 경우
-              extendedProps: {
-                checkInTime: checkInTime,
-                checkOutTime: checkOutTime
-              },
-              color: item.color || '#378006' // 원하는 색상으로 설정
-            };
+          const events = [];
+          _.forEach(res, item => {
+            let checkInItem = {
+              title: ' 출근',
+              start: item.checkInTime,
+              color: item.color || '#00e7ff'
+            }
+            events.push(checkInItem);
+            if (!_.isNull(item.checkOutTime)) {
+              let checkOutItem = {
+                title: ' 퇴근',
+                start: item.checkOutTime,
+                color: item.color || '#f7ff00'
+              }
+              events.push(checkOutItem);
+            }
           });
-
-          successCallback(events); // 변환된 이벤트 배열 전달
+          successCallback(events);
         }
+      });
+    },
+    eventDidMount: function(info) {
+      $(info.el).closest('.fc-daygrid-day').css({
+        height: '120px'
+      });
+      $(info.el).find('.fc-event-title').css('color', 'black');
+      $(info.el).find('.fc-event-time').css('color', 'black');
+    },
+    datesSet: function() {
+      $('.fc-col-header-cell a').css({
+        'color': 'black',
+        'text-decoration': 'none'
+      });
+      $('.fc-daygrid-day-number').css({
+        'color': 'black',
+        'text-decoration': 'none'
       });
     }
   });
