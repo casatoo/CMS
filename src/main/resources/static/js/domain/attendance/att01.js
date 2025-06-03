@@ -1,13 +1,15 @@
 const apiUri = "/api/v1/attendance"
-var calendar;
+let calendar;
+let selectedDate = "";
 
 $(document).ready(function() {
     initCalendar();
     initDateModal();
+    onClickAttendanceChangeRequestBtn();
 });
 
-var initCalendar = () => {
-    var calendarEl = $('#attendanceCalendar')[0];
+let initCalendar = () => {
+    let calendarEl = $('#attendanceCalendar')[0];
 
     calendar = new FullCalendar.Calendar(calendarEl, {
         locale: 'ko',
@@ -55,6 +57,8 @@ var initCalendar = () => {
             const clickedDate = info.dateStr;
             const clicked = new Date(clickedDate);
             const today = new Date();
+
+            selectedDate = clickedDate;
 
             clicked.setHours(0, 0, 0, 0);
             today.setHours(0, 0, 0, 0);

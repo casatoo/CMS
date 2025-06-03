@@ -90,3 +90,42 @@ let initTimePicker = function(id, defaultTime) {
 
   $input.timepicker('setTime', defaultTime);
 }
+
+$.fn.serializeObject = function () {
+  "use strict";
+  const result = {};
+  const now = new Date();
+
+  const pad = (n) => (n < 10 ? "0" + n : n);
+
+  const toLocalDateTime = (timeStr) => {
+    if (!timeStr || !/^\d{2}:\d{2}$/.test(timeStr)) return null;
+    const [hour, minute] = timeStr.split(":").map(Number);
+    return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}T${pad(hour)}:${pad(minute)}:00`;
+  };
+
+  this.find(':input[name]').each(function () {
+    const name = this.name;
+    let value = this.value.trim();
+    if (!value) return;
+
+    const typeHint = $(this).data("type");
+
+    if (typeHint === "datetime") {
+      value = toLocalDateTime(value);
+    }
+
+    const existing = result[name];
+    if (typeof existing !== "undefined") {
+      if (Array.isArray(existing)) {
+        existing.push(value);
+      } else {
+        result[name] = [existing, value];
+      }
+    } else {
+      result[name] = value;
+    }
+  });
+
+  return result;
+};

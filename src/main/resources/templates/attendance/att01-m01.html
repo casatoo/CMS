@@ -10,17 +10,21 @@
                 <form id="dateForm">
                     <div class="mb-3">
                         <label for="startTime" class="form-label">출근시간</label>
-                        <input type="text" class="form-control timepicker" id="startTime" placeholder="HH:mm">
+                        <input type="text" class="form-control timepicker" name="requestedCheckInTime" id="startTime" placeholder="HH:mm">
                     </div>
                     <div class="mb-3">
                         <label for="endTime" class="form-label">퇴근시간</label>
-                        <input type="text" class="form-control timepicker" id="endTime" placeholder="HH:mm">
+                        <input type="text" class="form-control timepicker" name="requestedCheckOutTime" id="endTime" placeholder="HH:mm">
+                    </div>
+                    <div class="mb-3">
+                        <label for="reason" class="form-label">신청사유</label>
+                        <textarea class="form-control" name="reason" id="reason" rows="2" style="resize: none;"></textarea>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-                <button type="button" class="btn btn-primary" id="saveEvent">신청</button>
+                <button type="button" class="btn btn-primary" id="attendanceChangeRequestBtn">신청</button>
             </div>
         </div>
     </div>

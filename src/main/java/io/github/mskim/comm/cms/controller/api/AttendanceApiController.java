@@ -4,7 +4,9 @@ import io.github.mskim.comm.cms.api.ApiPaths;
 import io.github.mskim.comm.cms.api.ApiResponse;
 import io.github.mskim.comm.cms.api.ApiStatus;
 import io.github.mskim.comm.cms.dto.SearchParams;
+import io.github.mskim.comm.cms.dto.UserAttendanceChangeRequestDTO;
 import io.github.mskim.comm.cms.dto.UserAttendanceDTO;
+import io.github.mskim.comm.cms.service.UserAttendanceChangeRequestService;
 import io.github.mskim.comm.cms.service.UserAttendanceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +21,7 @@ import java.util.List;
 public class AttendanceApiController {
 
     private final UserAttendanceService userAttendanceService;
+    private final UserAttendanceChangeRequestService userAttendanceChangeRequestService;
 
     @GetMapping("/month/all")
     public List<UserAttendanceDTO> findAllUserAttendanceThisMonth(@RequestParam("startDate") String startDate, @RequestParam("endDate") String endDate) {
@@ -51,5 +54,10 @@ public class AttendanceApiController {
         } catch (Exception e) {
             return ApiResponse.of(ApiStatus.INTERNAL_SERVER_ERROR, "퇴근 체크 중 오류가 발생했습니다.");
         }
+    }
+
+    @PostMapping("/change/request")
+    public ApiResponse attendanceChangeRequest(@RequestBody UserAttendanceChangeRequestDTO request) {
+        return userAttendanceChangeRequestService.attendanceChangeRequest(request);
     }
 }
