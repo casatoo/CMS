@@ -4,6 +4,7 @@
     <title>근태조정신청</title>
     <!-- js -->
     <script src="/js/domain/attendance/att01.js"></script>
+    <script src="/js/domain/attendance/att01-m01.js"></script>
 </head>
 <div layout:fragment="content">
     <div class="container p-t-20">
@@ -11,6 +12,7 @@
             <div class="col-md-12 data-table">
                 <div id="calendar-container">
                     <div id="attendanceCalendar" class="m-t-10 m-b-10"></div>
+                    <div th:replace="~{attendance/att01-m01.html}"></div>
                 </div>
             </div>
         </div>

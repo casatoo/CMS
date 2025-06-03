@@ -1,0 +1,27 @@
+<div class="modal fade" id="dateModal" tabindex="-1" aria-labelledby="dateModalLabel" aria-modal="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="dateModalLabel">출,퇴근 시간 조정 신청</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="dateFormTitle"></div>
+                <form id="dateForm">
+                    <div class="mb-3">
+                        <label for="startTime" class="form-label">출근시간</label>
+                        <input type="text" class="form-control timepicker" id="startTime" placeholder="HH:mm">
+                    </div>
+                    <div class="mb-3">
+                        <label for="endTime" class="form-label">퇴근시간</label>
+                        <input type="text" class="form-control timepicker" id="endTime" placeholder="HH:mm">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                <button type="button" class="btn btn-primary" id="saveEvent">신청</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -71,3 +71,22 @@ let initializeDataTable = function(tableId, columns, columnDefs, ajaxUrl, gridHe
     }
   });
 }
+
+let initTimePicker = function(id, defaultTime) {
+  let $input = $('#' + id);
+
+  if (!$input.hasClass('timepicker-initialized')) {
+    $input.timepicker({
+      timeFormat: 'HH:mm',
+      interval: 30,
+      minTime: '06:00',
+      maxTime: '22:00',
+      defaultTime: defaultTime,
+      dynamic: false,
+      dropdown: true,
+      scrollbar: true
+    }).addClass('timepicker-initialized');
+  }
+
+  $input.timepicker('setTime', defaultTime);
+}
