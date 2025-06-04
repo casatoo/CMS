@@ -1,6 +1,7 @@
 const apiUri = "/api/v1"
 
 $(document).ready(function () {
+  onClickCard();
   checkInTimeExists();
   checkInOutBtnControll();
   onClickCheckInBtn();
@@ -93,16 +94,14 @@ const onClickCheckOutBtn = () => {
   });
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-  document.querySelectorAll(".card").forEach(card => {
-    card.addEventListener("click", function () {
-      const url = this.getAttribute("data-url");
-      if (url) {
-        window.location.href = url;
-      }
-    });
+let onClickCard = function () {
+  $(".card").on("click", function () {
+    const url = $(this).data("url");
+    if (url) {
+      window.location.href = url;
+    }
   });
-});
+}
 
 let initTable = () => {
 

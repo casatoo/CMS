@@ -1,20 +1,40 @@
 let initDateModal = function () {
     $('#dateModal').on('shown.bs.modal', function () {
-        $('#startTime').focus();
+
     });
     $('#dateModal').on('hide.bs.modal', function () {
-        document.activeElement.blur(); // aria-hidden 포커싱 문제
+        $(document.activeElement).blur();
         $('#startTime').val('');
         $('#endTime').val('');
+        $('#reason').val('');
     });
 }
 
 let onClickAttendanceChangeRequestBtn = function () {
     $("#attendanceChangeRequestBtn").click(function () {
+
+        let checkInTime = $("#startTime").val();
+        let checkOutTime = $("#endTime").val();
+        let reason = $("#reason").val();
+
+        if (_.isEmpty(checkInTime)) {
+            customAlert("필수항목", "출근시간을 입력해주세요", "warning");
+            return;
+        }
+
+        if (_.isEmpty(checkOutTime)) {
+            customAlert("필수항목", "퇴근시간을 입력해주세요", "warning");
+            return;
+        }
+
+        if (_.isEmpty(reason.trim())) {
+            customAlert("필수항목", "신청사유를 입력해주세요", "warning");
+            return;
+        }
+
         checkAlert("변경신청", "변경신청 하시겠습니까?", "question", "신청").then((result) => {
             if (result.isConfirmed) {
-                let checkInTime = $("#startTime").val();
-                let checkOutTime = $("#endTime").val();
+
                 let selectedDateStr = selectedDate;
 
                 let requestedCheckInTime = selectedDateStr + "T" + checkInTime + ":00";
@@ -31,7 +51,7 @@ let onClickAttendanceChangeRequestBtn = function () {
                 let params = {
                     requestedCheckInTime: requestedCheckInTime,
                     requestedCheckOutTime: requestedCheckOutTime,
-                    reason: $("#reason").val()
+                    reason: reason
                 };
                 $.ajaxSetup({contentType:"application/json"})
                 $.post(apiUri + "/change/request", JSON.stringify(params), function (res) {
