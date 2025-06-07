@@ -3,26 +3,81 @@ package io.github.mskim.comm.cms.serviceImpl;
 import io.github.mskim.comm.cms.api.ApiResponse;
 import io.github.mskim.comm.cms.api.ApiStatus;
 import io.github.mskim.comm.cms.dto.UserAttendanceChangeRequestDTO;
+import io.github.mskim.comm.cms.entity.UserAttendance;
+import io.github.mskim.comm.cms.entity.Users;
+import io.github.mskim.comm.cms.service.UserAttendanceService;
+import io.github.mskim.comm.cms.service.UserService;
+import io.github.mskim.comm.cms.sp.UserAttendanceChangeRequestSP;
+import io.github.mskim.comm.cms.entity.UserAttendanceChangeRequest;
+import io.github.mskim.comm.cms.mapper.UserAttendanceChangeRequestMapper;
 import io.github.mskim.comm.cms.repository.UserAttendanceChangeRequestRepository;
 import io.github.mskim.comm.cms.service.UserAttendanceChangeRequestService;
+import io.github.mskim.comm.cms.sp.UserAttendanceSP;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
+
+import java.time.LocalDateTime;
 
 @Service
 public class UserAttendanceChangeRequestServiceImpl implements UserAttendanceChangeRequestService {
 
     private final UserAttendanceChangeRequestRepository userAttendanceChangeRequestRepository;
+    private final UserAttendanceChangeRequestMapper userAttendanceChangeRequestMapper;
+    private final UserAttendanceService userAttendanceService;
+    private final UserService userService;
 
-    public UserAttendanceChangeRequestServiceImpl(UserAttendanceChangeRequestRepository userAttendanceChangeRequestRepository) {
+    public UserAttendanceChangeRequestServiceImpl(UserAttendanceChangeRequestRepository userAttendanceChangeRequestRepository,
+                                                  UserAttendanceChangeRequestMapper userAttendanceChangeRequestMapper,
+                                                  UserAttendanceService userAttendanceService,
+                                                  UserService userService) {
+
         this.userAttendanceChangeRequestRepository = userAttendanceChangeRequestRepository;
+        this.userAttendanceChangeRequestMapper = userAttendanceChangeRequestMapper;
+        this.userAttendanceService = userAttendanceService;
+        this.userService = userService;
     }
 
     @Override
     public ApiResponse attendanceChangeRequest(UserAttendanceChangeRequestDTO request) {
+
         // 동일 날짜에 신청중인 건이 있는지 조회
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String loginId = authentication.getName();
+        Users user = userService.findByLoginId(loginId);
 
-        // 이미 신청중인 경우
+        UserAttendanceChangeRequestSP searchParams = new UserAttendanceChangeRequestSP();
+        searchParams.setUserId(user.getId());
+        searchParams.setWorkDate(request.getAttendance().getWorkDate());
+        searchParams.setStatus(request.getStatus());
+        UserAttendanceChangeRequest userAttendanceChangeRequest = userAttendanceChangeRequestMapper.findOneBySearchParams(searchParams);
 
-        // 신청완료
-        return ApiResponse.of(ApiStatus.OK, "이미 변경신청중입니다.", false);
+        if (!ObjectUtils.isEmpty(userAttendanceChangeRequest)) {
+            return ApiResponse.of(ApiStatus.OK, "이미 변경신청중입니다.", false);
+        }
+        UserAttendanceSP userAttendanceSP = new UserAttendanceSP();
+        userAttendanceSP.setUserId(user.getId());
+        userAttendanceSP.setWorkDate(request.getAttendance().getWorkDate());
+        UserAttendance userAttendance = userAttendanceService.findAttendanceByDate(userAttendanceSP);
+
+        // 출근 시간과 퇴근 시간이 없을 수 있으므로 null-safe 하게 처리
+        LocalDateTime originalCheckInTime = userAttendance != null ? userAttendance.getCheckInTime() : null;
+        LocalDateTime originalCheckOutTime = userAttendance != null ? userAttendance.getCheckOutTime() : null;
+
+        UserAttendanceChangeRequest data = UserAttendanceChangeRequest.builder()
+                .attendance(userAttendance) // userAttendance 자체도 null일 수 있음
+                .approvedAt(LocalDateTime.now())
+                .user(user)
+                .originalCheckInTime(originalCheckInTime)
+                .originalCheckOutTime(originalCheckOutTime)
+                .reason(request.getReason())
+                .requestedCheckInTime(request.getRequestedCheckInTime())
+                .requestedCheckOutTime(request.getRequestedCheckOutTime())
+                .status(request.getStatus())
+                .build();
+        userAttendanceChangeRequestRepository.save(data);
+
+        return ApiResponse.of(ApiStatus.OK, "신청완료", true);
     }
 }

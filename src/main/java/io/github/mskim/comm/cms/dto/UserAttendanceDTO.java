@@ -1,11 +1,12 @@
 package io.github.mskim.comm.cms.dto;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@Data
+@Data @EqualsAndHashCode(callSuper = true)
 public class UserAttendanceDTO extends BaseDTO{
 
     private UserDTO user;                   // 신청자

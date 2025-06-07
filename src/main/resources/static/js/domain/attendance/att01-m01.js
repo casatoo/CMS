@@ -49,6 +49,10 @@ let onClickAttendanceChangeRequestBtn = function () {
                 }
 
                 let params = {
+                    attendance : {
+                        workDate : selectedDateStr
+                    },
+                    status : "REQUEST",
                     requestedCheckInTime: requestedCheckInTime,
                     requestedCheckOutTime: requestedCheckOutTime,
                     reason: reason

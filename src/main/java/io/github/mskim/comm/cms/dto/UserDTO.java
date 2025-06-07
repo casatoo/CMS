@@ -1,8 +1,9 @@
 package io.github.mskim.comm.cms.dto;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-@Data
+@Data @EqualsAndHashCode(callSuper = true)
 public class UserDTO extends BaseDTO{
 
     private String loginId;         // 로그인 아이디

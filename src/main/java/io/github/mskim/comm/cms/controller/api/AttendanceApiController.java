@@ -3,8 +3,8 @@ package io.github.mskim.comm.cms.controller.api;
 import io.github.mskim.comm.cms.api.ApiPaths;
 import io.github.mskim.comm.cms.api.ApiResponse;
 import io.github.mskim.comm.cms.api.ApiStatus;
-import io.github.mskim.comm.cms.dto.SearchParams;
 import io.github.mskim.comm.cms.dto.UserAttendanceChangeRequestDTO;
+import io.github.mskim.comm.cms.sp.UserAttendanceSP;
 import io.github.mskim.comm.cms.dto.UserAttendanceDTO;
 import io.github.mskim.comm.cms.service.UserAttendanceChangeRequestService;
 import io.github.mskim.comm.cms.service.UserAttendanceService;
@@ -29,11 +29,11 @@ public class AttendanceApiController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate startLocalDate = LocalDate.parse(startDate, formatter);
         LocalDate endLocalDate = LocalDate.parse(endDate, formatter);
-        SearchParams searchParams = new SearchParams();
-        searchParams.setStartDate(startLocalDate);
-        searchParams.setEndDate(endLocalDate);
+        UserAttendanceSP userAttendanceSP = new UserAttendanceSP();
+        userAttendanceSP.setStartDate(startLocalDate);
+        userAttendanceSP.setEndDate(endLocalDate);
 
-        return userAttendanceService.findAllUserAttendanceThisMonth(searchParams);
+        return userAttendanceService.findAllUserAttendanceThisMonth(userAttendanceSP);
     }
 
     @PostMapping("/check-in")

@@ -33,7 +33,6 @@ let checkAlert = function(title, text, icon, confirmButtonText) {
 }
 
 let initializeDataTable = function(tableId, columns, columnDefs, ajaxUrl, gridHeight) {
-
   return $(tableId).DataTable({
     autoWidth: false,
     dom: '<"top d-flex justify-content-end"f>rt<"bottom d-flex justify-content-between"p l><"clear">',
@@ -74,7 +73,6 @@ let initializeDataTable = function(tableId, columns, columnDefs, ajaxUrl, gridHe
 
 let initTimePicker = function(id, defaultTime) {
   let $input = $('#' + id);
-
   if (!$input.hasClass('timepicker-initialized')) {
     $input.timepicker({
       timeFormat: 'HH:mm',

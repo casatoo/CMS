@@ -16,6 +16,7 @@ public class UserLeaveRequest extends BaseEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private Users user; // 연차 신청자
 
+    @Builder.Default
     @Column(name = "request_date", nullable = false)
     private LocalDate requestDate = LocalDate.now(); // 신청 날짜
 
@@ -28,6 +29,7 @@ public class UserLeaveRequest extends BaseEntity {
     @Column(name = "requested_hours", nullable = false)
     private int requestedHours; // 신청한 총 시간
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
     @Column(name = "STATUS", nullable = false)
     private LeaveStatus status = LeaveStatus.REQUEST; // 기본값 REQUEST

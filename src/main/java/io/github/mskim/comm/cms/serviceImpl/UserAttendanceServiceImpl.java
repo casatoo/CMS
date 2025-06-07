@@ -1,7 +1,7 @@
 package io.github.mskim.comm.cms.serviceImpl;
 
 import io.github.mskim.comm.cms.config.CustomModelMapper;
-import io.github.mskim.comm.cms.dto.SearchParams;
+import io.github.mskim.comm.cms.sp.UserAttendanceSP;
 import io.github.mskim.comm.cms.dto.UserAttendanceDTO;
 import io.github.mskim.comm.cms.entity.UserAttendance;
 import io.github.mskim.comm.cms.entity.Users;
@@ -78,16 +78,21 @@ public class UserAttendanceServiceImpl implements UserAttendanceService {
     }
 
     @Override
-    public List<UserAttendanceDTO> findAllUserAttendanceThisMonth(SearchParams searchParams) {
+    public List<UserAttendanceDTO> findAllUserAttendanceThisMonth(UserAttendanceSP userAttendanceSP) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String loginId = authentication.getName();
 
         Users user = userService.findByLoginId(loginId);
-        searchParams.setUserId(user.getId());
+        userAttendanceSP.setUserId(user.getId());
 
-        List<UserAttendance> userAttendanceList = userAttendanceMapper.findAttendanceInRange(searchParams);
+        List<UserAttendance> userAttendanceList = userAttendanceMapper.findAttendanceInRange(userAttendanceSP);
 
         return userAttendanceList != null ? CustomModelMapper.mapList(userAttendanceList, UserAttendanceDTO.class) : null;
+    }
+
+    @Override
+    public UserAttendance findAttendanceByDate(UserAttendanceSP userAttendanceSP) {
+        return userAttendanceMapper.findAttendanceByDate(userAttendanceSP);
     }
 }

@@ -15,6 +15,7 @@ public class UserLoginHistory extends BaseEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private Users user;
 
+    @Builder.Default
     @Column(name = "login_time", nullable = false, updatable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime loginTime = LocalDateTime.now();
 

@@ -11,14 +11,16 @@ import java.time.LocalDateTime;
 public class UserAttendanceChangeRequest extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "attendance_id", nullable = false)
+    @JoinColumn(name = "attendance_id")
+    @ToString.Exclude
     private UserAttendance attendance; // 대상 출퇴근 기록
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
+    @ToString.Exclude
     private Users user; // 변경 신청자
 
-    @Column(name = "original_check_in_time", nullable = false)
+    @Column(name = "original_check_in_time")
     private LocalDateTime originalCheckInTime; // 기존 출근 시간
 
     @Column(name = "original_check_out_time")
@@ -35,10 +37,11 @@ public class UserAttendanceChangeRequest extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private ChangeStatus status = ChangeStatus.REQUEST; // 기본값 REQUEST
+    private ChangeStatus status = ChangeStatus.REQUEST;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "approver_id")
+    @ToString.Exclude
     private Users approver; // 승인자
 
     @Column(name = "approved_at")

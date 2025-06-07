@@ -1,5 +1,6 @@
 package io.github.mskim.comm.cms.jwt;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.mskim.comm.cms.config.CustomUserDetails;
 import io.github.mskim.comm.cms.entity.UserLoginHistory;
@@ -43,7 +44,10 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
-            Map<String, String> loginData = objectMapper.readValue(request.getInputStream(), Map.class);
+            Map<String, String> loginData = objectMapper.readValue(
+                    request.getInputStream(),
+                    new TypeReference<Map<String, String>>() {}
+            );
 
             String loginId = loginData.get("loginId");
             String password = loginData.get("password");

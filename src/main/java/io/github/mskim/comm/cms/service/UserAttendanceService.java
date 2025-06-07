@@ -1,6 +1,7 @@
 package io.github.mskim.comm.cms.service;
 
-import io.github.mskim.comm.cms.dto.SearchParams;
+import io.github.mskim.comm.cms.entity.UserAttendance;
+import io.github.mskim.comm.cms.sp.UserAttendanceSP;
 import io.github.mskim.comm.cms.dto.UserAttendanceDTO;
 
 import java.util.List;
@@ -15,5 +16,7 @@ public interface UserAttendanceService {
 
     int countWorkDaysThisMonth(String userId);
 
-    List<UserAttendanceDTO> findAllUserAttendanceThisMonth(SearchParams searchParams);
+    List<UserAttendanceDTO> findAllUserAttendanceThisMonth(UserAttendanceSP userAttendanceSP);
+
+    UserAttendance findAttendanceByDate (UserAttendanceSP userAttendanceSP);
 }

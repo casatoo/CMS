@@ -1,7 +1,6 @@
 package io.github.mskim.comm.cms.mapper;
 
-import io.github.mskim.comm.cms.dto.SearchParams;
-import io.github.mskim.comm.cms.dto.UserAttendanceDTO;
+import io.github.mskim.comm.cms.sp.UserAttendanceSP;
 import io.github.mskim.comm.cms.entity.UserAttendance;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -14,8 +13,7 @@ public interface UserAttendanceMapper {
 
     int countWorkDaysThisMonth(String userId);
 
-    List<UserAttendance> findAttendanceByDate(SearchParams searchParams);
+    UserAttendance findAttendanceByDate(UserAttendanceSP userAttendanceSP);
 
-    List<UserAttendance> findAttendanceInRange(SearchParams searchParams);
-
+    List<UserAttendance> findAttendanceInRange(UserAttendanceSP userAttendanceSP);
 }
