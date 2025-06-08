@@ -42,7 +42,8 @@
         FROM USER_ATTENDANCE ua
         JOIN USERS u ON ua.user_id = u.id
         WHERE ua.user_id = #{userId}
-        AND ua.work_date = #{workDate};
+        AND ua.work_date = #{workDate}
+        LIMIT 1;
     </select>
 
     <select id="findAttendanceInRange" resultMap="UserAttendanceResultMap">

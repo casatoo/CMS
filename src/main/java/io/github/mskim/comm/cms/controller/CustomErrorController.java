@@ -25,7 +25,7 @@ public class CustomErrorController implements ErrorController {
     }
 
     // 매핑되지 않은 URL을 처리하기 위한 핸들러
-    @GetMapping(ApiPaths.BASE_API + "/{path}")
+    @GetMapping(ApiPaths.VIEW_API + "/{path}")
     public String handleUnknownPath(@PathVariable(name = "path") String path, Model model) {
 
         // 에러 메시지와 상태 코드를 모델에 추가

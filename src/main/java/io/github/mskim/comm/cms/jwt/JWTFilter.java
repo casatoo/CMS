@@ -60,7 +60,7 @@ public class JWTFilter extends OncePerRequestFilter {
 
         // 토큰 소멸 시간 검증
         if (jwtUtil.isExpired(token)) {
-            filterChain.doFilter(request, response);
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token expired");
             return;
         }
 

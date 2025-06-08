@@ -86,13 +86,13 @@
             u.id AS user_id,
             a.id AS approver_id
         FROM USER_ATTENDANCE_CHANGE_REQUEST uacr
-                 JOIN USER_ATTENDANCE ua ON uacr.attendance_id = ua.id
+                 LEFT JOIN USER_ATTENDANCE ua ON uacr.attendance_id = ua.id
                  JOIN USERS u ON uacr.user_id = u.id
                  LEFT JOIN USERS a ON uacr.approver_id = a.id
         WHERE uacr.user_id = #{userId}
-          AND ua.work_date = #{workDate}
+          AND (ua.work_date = #{workDate} OR ua.work_date IS NULL)
           AND uacr.status = #{status}
-            LIMIT 1
+            LIMIT 1;
     </select>
 
 </mapper>
