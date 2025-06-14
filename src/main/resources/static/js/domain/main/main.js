@@ -105,17 +105,29 @@ let onClickCard = function () {
 
 let initTable = () => {
 
-  let columns = [
-    { title: "ID", data: "id"},
-    { title: "이름", data: "name"},
-    { title: "직업", data: "company.name"}
-  ];
+  const gridOptions = {
 
-  let columnDefs = [
-    { targets: 0, className: 'text-center', width: '50px' },
-    { targets: 1, className: 'text-left', width: '150px' },
-    { targets: 2, className: 'text-left', width: '200px' }
-  ];
+    rowData: [
+      { make: "Tesla", model: "Model Y", price: 64950, electric: true },
+      { make: "Ford", model: "F-Series", price: 33850, electric: false },
+      { make: "Toyota", model: "Corolla", price: 29600, electric: false },
+    ],
 
-  initializeDataTable('#example', columns, columnDefs, 'https://jsonplaceholder.typicode.com/users', '380px');
+    columnDefs: [
+      { field: "make", headerName: "제조사" },
+      { field: "model", headerName: "모델" },
+      { field: "price", headerName: "가격", valueFormatter: p => `${p.value.toLocaleString()} 원` },
+      { field: "electric", headerName: "전기차", cellRenderer: p => p.value ? "✅" : "❌" }
+    ],
+
+    pagination: true,
+    defaultColDef: {
+      sortable: true,
+      filter: true,
+      resizable: true
+    }
+  };
+
+  const myGridElement = document.querySelector('#example');
+  agGrid.createGrid(myGridElement, gridOptions);
 }

@@ -3,11 +3,10 @@ let calendar;
 
 $(document).ready(function() {
     initCalendar();
-    initLeavesRequestModal();
 });
 
 let initCalendar = () => {
-    let calendarEl = $('#leavesCalendar')[0];
+    let calendarEl = $('#outsideWorkingCalendar')[0];
 
     calendar = new FullCalendar.Calendar(calendarEl, {
         locale: 'ko',
@@ -25,26 +24,25 @@ let initCalendar = () => {
             let startDate = fetchInfo.startStr.substring(0,10);
             let endDate = fetchInfo.endStr.substring(0,10);
 
-            $.get(apiUri + "/leave/all", { startDate: startDate, endDate: endDate }, function (res) {
+            $.get(apiUri + "/outside/working/all", { startDate: startDate, endDate: endDate }, function (res) {
                 if(res.error) {
                     failureCallback();
                 } else {
                     const events = [];
                     _.forEach(res, item => {
-                        let leaveDay = {
-                            title: '연차',
-                            start: item.leaveDay,
+                        let outsideWorkingDay = {
+                            title: '외근',
+                            start: item.outsideWorkingDay,
                             color: item.color || '#00e7ff'
                         }
-                        events.push(leaveDay);
+                        events.push(outsideWorkingDay);
                     });
                     successCallback(events);
                 }
             });
         },
         dateClick: function(info) {
-            // 연차 신청 모달 호출
-            $('#leavesRequestModal').modal('show');
+
         },
         eventDidMount: function(info) {
             $(info.el).closest('.fc-daygrid-day').css({height: '120px'});

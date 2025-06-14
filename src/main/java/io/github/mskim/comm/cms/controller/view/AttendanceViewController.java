@@ -23,4 +23,9 @@ public class AttendanceViewController {
         return "/attendance/att03";
     }
 
+    @RequestMapping(ApiPaths.VIEW_API + "/attendance04")
+    public String att04 (Model model) {
+        return "/attendance/att04";
+    }
+
 }
