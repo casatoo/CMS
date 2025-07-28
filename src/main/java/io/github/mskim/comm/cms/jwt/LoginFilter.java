@@ -99,7 +99,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         userLoginHistoryService.save(userLoginHistory);
 
         PrintWriter out = response.getWriter();
-        out.write("{\"status\":200, \"message\":\"로그인 성공\"}");
+        out.write("{\"status\":200, \"message\":\"" + username + "님, 환영합니다.\"}");
         out.flush();
     }
 
