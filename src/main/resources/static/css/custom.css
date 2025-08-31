@@ -208,7 +208,7 @@
 .sidebar .nav-links li .sub-menu.blank{
     opacity: 1;
     pointer-events: auto;
-    padding: 10px 20px 10px 16px;
+    padding: 5px 20px 10px 16px;
     opacity: 0;
     pointer-events: none;
 }

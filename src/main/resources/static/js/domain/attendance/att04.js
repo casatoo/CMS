@@ -1,24 +1,14 @@
 const apiUri = "/api/v1/attendance"
+let attendanceGrid = null;
+const searchParams = {};
 
 $(document).ready(function() {
     initAttendanceRequestGrid();
 });
 
 let initAttendanceRequestGrid = () => {
-    $.get(apiUri + "/request/all", searchParams, function (res) {
-        if (res.error) {
-            customAlert("조회 실패", res.message, "error");
-        } else {
-
-        }
-    });
     const gridOptions = {
-        rowData: [
-            { status: "REQUEST", user: "admin01", createdAt: "2025-07-09:T000000", requestedCheckInTime: "09:00", requestedCheckOutTime: "18:00"},
-            { status: "REQUEST", user: "admin01", createdAt: "2025-07-09:T000000", requestedCheckInTime: "09:00", requestedCheckOutTime: "18:00"},
-            { status: "APPROVAL", user: "admin01", createdAt: "2025-07-09:T000000", requestedCheckInTime: "09:00", requestedCheckOutTime: "18:00"},
-            { status: "REJECT", user: "admin01", createdAt: "2025-07-09:T000000", requestedCheckInTime: "09:00", requestedCheckOutTime: "18:00"}
-        ],
+        rowData: [], // 초기엔 빈 값
         columnDefs: [
             {
                 field: "status",
@@ -55,7 +45,7 @@ let initAttendanceRequestGrid = () => {
                 }
             },
             { field: "user", headerName: "신청자" },
-            { field: "createdAt", headerName: "신청일", valueFormatter: p => `${p.value.substring(0,10)}`},
+            { field: "createdAt", headerName: "신청일", valueFormatter: p => `${p.value?.substring(0,10) || ''}`},
             { field: "requestedCheckInTime", headerName: "변경출근시간" },
             { field: "requestedCheckOutTime", headerName: "변경퇴근시간" }
         ],
@@ -69,5 +59,15 @@ let initAttendanceRequestGrid = () => {
     };
 
     const myGridElement = document.querySelector('#myGrid');
-    agGrid.createGrid(myGridElement, gridOptions);
+    attendanceGrid = agGrid.createGrid(myGridElement, gridOptions);
+
+    // API 호출 후 데이터 주입
+    const searchParams = {}; // 필요시 검색 조건 추가
+    $.get(apiUri + "/request/all", searchParams, function (res) {
+        if (res.error) {
+            customAlert("조회 실패", res.message, "error");
+        } else {
+            attendanceGrid.setGridOption('rowData', res.data || []); // res.data에 리스트가 있다고 가정
+        }
+    });
 };

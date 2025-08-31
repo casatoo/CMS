@@ -90,7 +90,10 @@
                  JOIN USERS u ON uacr.user_id = u.id
                  LEFT JOIN USERS a ON uacr.approver_id = a.id
         WHERE uacr.user_id = #{userId}
-          AND (ua.work_date = #{workDate} OR ua.work_date IS NULL)
+          AND (
+            DATE(uacr.requested_check_in_time) = #{workDate}
+            OR DATE(uacr.requested_check_out_time) = #{workDate}
+            )
           AND uacr.status = #{status}
             LIMIT 1;
     </select>
