@@ -13,6 +13,7 @@ let initAttendanceRequestGrid = () => {
             {
                 field: "status",
                 headerName: "신청상태",
+                width: 120,
                 cellRenderer: params => {
                     let label = '';
                     let color = '';
@@ -20,34 +21,64 @@ let initAttendanceRequestGrid = () => {
                     switch (params.value) {
                         case 'REQUEST':
                             label = '신청';
-                            color = 'blue';
+                            color = '#0d6efd';
                             break;
-                        case 'APPROVAL':
+                        case 'APPROVE':
                             label = '승인';
-                            color = 'green';
+                            color = '#198754';
                             break;
                         case 'REJECT':
                             label = '반려';
-                            color = 'red';
+                            color = '#dc3545';
                             break;
                         default:
                             label = params.value;
-                            color = 'gray';
+                            color = '#6c757d';
                     }
 
                     return `<span style="
                         background-color: ${color};
                         color: white;
-                        padding: 2px 6px;
+                        padding: 4px 8px;
                         border-radius: 4px;
                         font-size: 12px;
+                        font-weight: 500;
                     ">${label}</span>`;
                 }
             },
-            { field: "user", headerName: "신청자" },
-            { field: "createdAt", headerName: "신청일", valueFormatter: p => `${p.value?.substring(0,10) || ''}`},
-            { field: "requestedCheckInTime", headerName: "변경출근시간" },
-            { field: "requestedCheckOutTime", headerName: "변경퇴근시간" }
+            {
+                field: "userName",
+                headerName: "신청자",
+                width: 120,
+                valueGetter: params => params.data?.userName || params.data?.userLoginId || '-'
+            },
+            {
+                field: "createdAt",
+                headerName: "신청일시",
+                width: 180,
+                valueFormatter: params => {
+                    if (!params.value) return '-';
+                    return params.value.replace('T', ' ').substring(0, 19);
+                }
+            },
+            {
+                field: "requestedCheckInTime",
+                headerName: "변경 출근시간",
+                width: 180,
+                valueFormatter: params => {
+                    if (!params.value) return '-';
+                    return params.value.replace('T', ' ').substring(0, 19);
+                }
+            },
+            {
+                field: "requestedCheckOutTime",
+                headerName: "변경 퇴근시간",
+                width: 180,
+                valueFormatter: params => {
+                    if (!params.value) return '-';
+                    return params.value.replace('T', ' ').substring(0, 19);
+                }
+            }
         ],
         pagination: true,
         paginationPageSize: 20,
@@ -62,12 +93,11 @@ let initAttendanceRequestGrid = () => {
     attendanceGrid = agGrid.createGrid(myGridElement, gridOptions);
 
     // API 호출 후 데이터 주입
-    const searchParams = {}; // 필요시 검색 조건 추가
-    $.get(apiUri + "/request/all", searchParams, function (res) {
-        if (res.error) {
-            customAlert("조회 실패", res.message, "error");
-        } else {
-            attendanceGrid.setGridOption('rowData', res.data || []); // res.data에 리스트가 있다고 가정
-        }
+    $.get(apiUri + "/request/all", function (res) {
+        console.log('API Response:', res);
+        attendanceGrid.setGridOption('rowData', res || []);
+    }).fail(function(xhr, status, error) {
+        console.error('API Error:', error);
+        customAlert("조회 실패", "근태 신청 목록을 불러오는데 실패했습니다.", "error");
     });
 };

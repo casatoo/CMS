@@ -72,11 +72,11 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         String role = auth.getAuthority();
 
-        String token = jwtUtil.createJwt(username, role, 60*60*10L);
+        String token = jwtUtil.createJwt(username, role, 60*60*1L);
         // JWT를 쿠키에 저장
         Cookie cookie = new Cookie("Authorization", token); // "Bearer " 제거
         cookie.setHttpOnly(true); // 클라이언트 측 JavaScript에서 접근 불가
-        cookie.setSecure(true);  // HTTPS 환경에서만 작동 (보안 강화)
+        cookie.setSecure(request.isSecure());  // 요청이 HTTPS인 경우에만 secure 설정
         cookie.setPath("/"); // 모든 경로에서 유효
         cookie.setMaxAge(60 * 60); // 쿠키 유효 시간 (초)
         response.addCookie(cookie);

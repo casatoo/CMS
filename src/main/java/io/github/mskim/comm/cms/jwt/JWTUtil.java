@@ -34,7 +34,7 @@ public class JWTUtil {
 
         long currentTimeMillis = System.currentTimeMillis();
         Date now = new Date(currentTimeMillis);
-        Date expiryDate = new Date(currentTimeMillis + expiredMs * 100);
+        Date expiryDate = new Date(currentTimeMillis + expiredMs);
         return Jwts.builder()
                 .claim("loginId", loginId)
                 .claim("role", role)

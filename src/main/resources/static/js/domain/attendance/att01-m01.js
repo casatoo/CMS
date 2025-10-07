@@ -73,6 +73,44 @@ let onClickAttendanceChangeRequestBtn = function () {
                         customAlert("변경신청", res.message, "error");
                         $("#dateModal").modal('hide');
                     }
+                }).fail(function(xhr, status, error) {
+                    console.error("API Error:", xhr);
+
+                    let errorMessage = "변경신청 중 오류가 발생했습니다.";
+
+                    // 400 Bad Request (Validation Error)
+                    if (xhr.status === 400 && xhr.responseJSON) {
+                        let response = xhr.responseJSON;
+
+                        // GlobalExceptionHandler에서 반환하는 형식 처리
+                        if (response.message) {
+                            errorMessage = response.message;
+                        }
+
+                        // payload에 상세 에러 정보가 있는 경우
+                        if (response.payload) {
+                            let errors = response.payload;
+                            let errorDetails = [];
+
+                            // 객체 형태의 에러 (field: message)
+                            if (typeof errors === 'object' && !Array.isArray(errors)) {
+                                for (let field in errors) {
+                                    errorDetails.push(errors[field]);
+                                }
+                                if (errorDetails.length > 0) {
+                                    errorMessage = errorDetails.join('\n');
+                                }
+                            }
+                        }
+                    } else if (xhr.status === 401) {
+                        errorMessage = "인증이 필요합니다. 다시 로그인해주세요.";
+                    } else if (xhr.status === 403) {
+                        errorMessage = "권한이 없습니다.";
+                    } else if (xhr.status === 500) {
+                        errorMessage = "서버 내부 오류가 발생했습니다.";
+                    }
+
+                    customAlert("변경신청 오류", errorMessage, "error");
                 });
             }
         });

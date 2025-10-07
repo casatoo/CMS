@@ -3,6 +3,7 @@ package io.github.mskim.comm.cms.serviceImpl;
 import io.github.mskim.comm.cms.api.ApiResponse;
 import io.github.mskim.comm.cms.api.ApiStatus;
 import io.github.mskim.comm.cms.dto.UserAttendanceChangeRequestDTO;
+import io.github.mskim.comm.cms.dto.UserAttendanceChangeRequestResponseDTO;
 import io.github.mskim.comm.cms.entity.UserAttendance;
 import io.github.mskim.comm.cms.entity.Users;
 import io.github.mskim.comm.cms.service.UserAttendanceService;
@@ -16,9 +17,12 @@ import io.github.mskim.comm.cms.sp.UserAttendanceSP;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserAttendanceChangeRequestServiceImpl implements UserAttendanceChangeRequestService {
@@ -79,5 +83,24 @@ public class UserAttendanceChangeRequestServiceImpl implements UserAttendanceCha
         userAttendanceChangeRequestRepository.save(data);
 
         return ApiResponse.of(ApiStatus.OK, "신청완료", true);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<UserAttendanceChangeRequestResponseDTO> findAllChangeRequests() {
+        List<UserAttendanceChangeRequest> requests = userAttendanceChangeRequestRepository.findAll();
+
+        return requests.stream()
+                .map(request -> {
+                    // Lazy loading 강제 초기화
+                    if (request.getUser() != null) {
+                        request.getUser().getName();
+                    }
+                    if (request.getApprover() != null) {
+                        request.getApprover().getName();
+                    }
+                    return UserAttendanceChangeRequestResponseDTO.from(request);
+                })
+                .collect(Collectors.toList());
     }
 }

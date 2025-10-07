@@ -16,18 +16,18 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/cms?useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
-    username: root
-    password:
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:}
   jpa:
     open-in-view: false
     hibernate:
-      ddl-auto: update # 생성한 엔티티 기반으로 테이블이 생성됨
+      ddl-auto: ${DDL_AUTO:update} # 생성한 엔티티 기반으로 테이블이 생성됨
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     properties:
       dialect: org.hibernate.dialect.MariaDBDialect
   jwt:
-    secret: c2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQtc2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQK
+    secret: ${JWT_SECRET:c2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQtc2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQK}
 
 mybatis:
   mapper-locations: classpath:mapper/**/*.xml
