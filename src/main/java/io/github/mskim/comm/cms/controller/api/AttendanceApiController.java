@@ -5,11 +5,14 @@ import io.github.mskim.comm.cms.api.ApiResponse;
 import io.github.mskim.comm.cms.api.ApiStatus;
 import io.github.mskim.comm.cms.dto.UserAttendanceChangeRequestDTO;
 import io.github.mskim.comm.cms.dto.UserAttendanceChangeRequestResponseDTO;
+import io.github.mskim.comm.cms.entity.UserAttendanceChangeRequest;
+import io.github.mskim.comm.cms.sp.UserAttendanceChangeRequestSP;
 import io.github.mskim.comm.cms.sp.UserAttendanceSP;
 import io.github.mskim.comm.cms.dto.UserAttendanceDTO;
 import io.github.mskim.comm.cms.service.UserAttendanceChangeRequestService;
 import io.github.mskim.comm.cms.service.UserAttendanceService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -79,5 +82,25 @@ public class AttendanceApiController {
     @GetMapping("/request/all")
     public List<UserAttendanceChangeRequestResponseDTO> findAllChangeRequests() {
         return userAttendanceChangeRequestService.findAllChangeRequests();
+    }
+
+    @GetMapping("/request/search")
+    public List<UserAttendanceChangeRequestResponseDTO> searchAttendanceChangeRequests(
+            @RequestParam(value = "status", required = false) UserAttendanceChangeRequest.ChangeStatus status,
+            @RequestParam(value = "userName", required = false) String userName,
+            @RequestParam(value = "workDateStart", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate workDateStart,
+            @RequestParam(value = "workDateEnd", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate workDateEnd,
+            @RequestParam(value = "createdAtStart", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate createdAtStart,
+            @RequestParam(value = "createdAtEnd", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate createdAtEnd
+    ) {
+        UserAttendanceChangeRequestSP sp = new UserAttendanceChangeRequestSP();
+        sp.setStatus(status);
+        sp.setUserName(userName);
+        sp.setWorkDateStart(workDateStart);
+        sp.setWorkDateEnd(workDateEnd);
+        sp.setCreatedAtStart(createdAtStart);
+        sp.setCreatedAtEnd(createdAtEnd);
+
+        return userAttendanceChangeRequestService.searchAttendanceChangeRequests(sp);
     }
 }

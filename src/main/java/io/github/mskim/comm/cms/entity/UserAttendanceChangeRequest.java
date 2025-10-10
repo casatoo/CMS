@@ -20,6 +20,9 @@ public class UserAttendanceChangeRequest extends BaseEntity {
     @ToString.Exclude
     private Users user; // 변경 신청자
 
+    @Column(name = "work_date", nullable = false)
+    private java.time.LocalDate workDate; // 근무일 (attendance가 null일 수 있으므로 별도 필드로 관리)
+
     @Column(name = "original_check_in_time")
     private LocalDateTime originalCheckInTime; // 기존 출근 시간
 

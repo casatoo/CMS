@@ -1,31 +1,30 @@
 package io.github.mskim.comm.cms.dto;
 
-import io.github.mskim.comm.cms.entity.UserAttendanceChangeRequest;
+import io.github.mskim.comm.cms.entity.UserLeaveRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserAttendanceChangeRequestResponseDTO {
+public class UserLeaveRequestResponseDTO {
 
     private String id;
     private String userId;
     private String userName;
     private String userLoginId;
-    private String attendanceId;
-    private String workDate;
-    private LocalDateTime originalCheckInTime;
-    private LocalDateTime originalCheckOutTime;
-    private LocalDateTime requestedCheckInTime;
-    private LocalDateTime requestedCheckOutTime;
+    private UserLeaveRequest.LeaveType leaveType;
+    private LocalDate requestDate;
+    private UserLeaveRequest.PeriodType periodType;
+    private String location;
     private String reason;
-    private UserAttendanceChangeRequest.ChangeStatus status;
+    private UserLeaveRequest.RequestStatus status;
     private String approverId;
     private String approverName;
     private String approverLoginId;
@@ -33,18 +32,16 @@ public class UserAttendanceChangeRequestResponseDTO {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public static UserAttendanceChangeRequestResponseDTO from(UserAttendanceChangeRequest entity) {
-        return UserAttendanceChangeRequestResponseDTO.builder()
+    public static UserLeaveRequestResponseDTO from(UserLeaveRequest entity) {
+        return UserLeaveRequestResponseDTO.builder()
                 .id(entity.getId())
                 .userId(entity.getUser() != null ? entity.getUser().getId() : null)
                 .userName(entity.getUser() != null ? entity.getUser().getName() : null)
                 .userLoginId(entity.getUser() != null ? entity.getUser().getLoginId() : null)
-                .attendanceId(entity.getAttendance() != null ? entity.getAttendance().getId() : null)
-                .workDate(entity.getWorkDate() != null ? entity.getWorkDate().toString() : null)
-                .originalCheckInTime(entity.getOriginalCheckInTime())
-                .originalCheckOutTime(entity.getOriginalCheckOutTime())
-                .requestedCheckInTime(entity.getRequestedCheckInTime())
-                .requestedCheckOutTime(entity.getRequestedCheckOutTime())
+                .leaveType(entity.getLeaveType())
+                .requestDate(entity.getRequestDate())
+                .periodType(entity.getPeriodType())
+                .location(entity.getLocation())
                 .reason(entity.getReason())
                 .status(entity.getStatus())
                 .approverId(entity.getApprover() != null ? entity.getApprover().getId() : null)

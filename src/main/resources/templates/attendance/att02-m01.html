@@ -1,19 +1,45 @@
-<div class="modal fade" id="leavesRequestModal" tabindex="-1" aria-labelledby="leavesRequestModallabel" aria-modal="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="leavesRequestModalLabel">연차신청</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form id="leaveRequestForm">
-
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-        <button type="button" class="btn btn-primary" id="leavesRequestBtn">신청</button>
-      </div>
+<div class="modal fade" id="leaveModal" tabindex="-1" aria-labelledby="leaveModalLabel" aria-modal="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="leaveModalLabel">연차/외근/출장 신청</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="leaveFormTitle"></div>
+                <form id="leaveForm">
+                    <div class="mb-3">
+                        <label for="leaveType" class="form-label">신청 유형</label>
+                        <select class="form-select" name="leaveType" id="leaveType">
+                            <option value="">선택하세요</option>
+                            <option value="ANNUAL_LEAVE">연차</option>
+                            <option value="FIELD_WORK">외근</option>
+                            <option value="BUSINESS_TRIP">출장</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="periodType" class="form-label">기간</label>
+                        <select class="form-select" name="periodType" id="periodType">
+                            <option value="">선택하세요</option>
+                            <option value="ALL_DAY">종일</option>
+                            <option value="MORNING">오전</option>
+                            <option value="AFTERNOON">오후</option>
+                        </select>
+                    </div>
+                    <div class="mb-3" id="locationGroup" style="display: none;">
+                        <label for="location" class="form-label">장소</label>
+                        <input type="text" class="form-control" name="location" id="location" placeholder="장소를 입력하세요">
+                    </div>
+                    <div class="mb-3">
+                        <label for="reason" class="form-label">신청사유</label>
+                        <textarea class="form-control" name="reason" id="reason" rows="3" style="resize: none;"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                <button type="button" class="btn btn-primary" id="leaveRequestBtn">신청</button>
+            </div>
+        </div>
     </div>
-  </div>
 </div>

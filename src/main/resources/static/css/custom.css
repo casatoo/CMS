@@ -56,6 +56,15 @@
     box-sizing: border-box;
     font-family: 'Poppins', sans-serif;
 }
+
+/* 페이지 전체 배경색 설정 */
+body {
+    background-color: #E4E9F7;
+}
+
+html {
+    background-color: #E4E9F7;
+}
 .sidebar{
     position: fixed;
     top: 0;
@@ -383,4 +392,352 @@
 
 .ui-timepicker-container {
     z-index: 1055 !important; /* Bootstrap 모달보다 높게 */
+}
+
+/* 페이지 타이틀 스타일 */
+.page-title {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 20px 30px;
+    border-radius: 8px;
+    margin-bottom: 0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-size: 24px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.page-title i {
+    font-size: 28px;
+}
+
+.page-title.dark {
+    background: linear-gradient(135deg, #1e1e2e 0%, #2d2d44 100%);
+}
+
+.page-title.blue {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+.page-title.purple {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.page-title.green {
+    background: linear-gradient(135deg, #56ab2f 0%, #a8e063 100%);
+}
+
+/* 사이드바 서브메뉴 헤더 스타일 */
+.sidebar .nav-links li .sub-menu .sub-menu-header {
+    color: #fff;
+    font-size: 13px;
+    padding: 8px 0 4px 0;
+    opacity: 0.8;
+    font-weight: 600;
+    pointer-events: none;
+    margin-top: 8px;
+}
+
+.sidebar .nav-links li .sub-menu .sub-menu-header:first-of-type {
+    margin-top: 0;
+}
+
+.sidebar.close .nav-links li .sub-menu .sub-menu-header {
+    display: none;
+}
+
+/* 서브메뉴의 link_name은 사이드바가 닫혔을 때만 표시 */
+.sidebar .nav-links li .sub-menu .link_name {
+    display: none;
+}
+
+.sidebar.close .nav-links li .sub-menu .link_name {
+    font-size: 18px;
+    opacity: 1;
+    display: block;
+    cursor: default;
+    pointer-events: none;
+}
+
+/* ===== 검색 폼 스타일 (재구성) ===== */
+.search-form {
+    margin-bottom: 20px;
+}
+
+.search-form-container {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.search-fields {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+    flex-wrap: wrap;
+}
+
+.search-field-group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.search-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: #495057;
+    margin: 0;
+    white-space: nowrap;
+    min-width: fit-content;
+}
+
+.search-input {
+    height: 32px;
+    padding: 4px 10px;
+    font-size: 13px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    outline: none;
+    transition: border-color 0.15s ease-in-out;
+    width: 140px;
+}
+
+.search-input:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.search-select {
+    width: 110px;
+    background-color: white;
+    cursor: pointer;
+}
+
+.search-buttons {
+    display: flex;
+    gap: 8px;
+    margin-left: auto;
+}
+
+.search-btn {
+    height: 32px;
+    padding: 4px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+}
+
+.search-btn i {
+    font-size: 14px;
+}
+
+.search-btn-primary {
+    background-color: #007bff;
+    color: white;
+}
+
+.search-btn-primary:hover {
+    background-color: #0056b3;
+}
+
+.search-btn-secondary {
+    background-color: #6c757d;
+    color: white;
+}
+
+.search-btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+/* 반응형 처리 */
+@media (max-width: 1200px) {
+    .search-form-container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .search-fields {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .search-field-group {
+        justify-content: space-between;
+    }
+
+    .search-input {
+        width: auto;
+        flex: 1;
+    }
+
+    .search-buttons {
+        margin-left: 0;
+        justify-content: flex-end;
+    }
+}
+
+/* ===== 프로필 모달 스타일 ===== */
+#profileModal .modal-dialog {
+    max-width: 500px;
+}
+
+#profileModal .modal-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-bottom: none;
+}
+
+#profileModal .modal-title {
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#profileModal .modal-title i {
+    font-size: 24px;
+}
+
+#profileModal .btn-close {
+    filter: brightness(0) invert(1);
+}
+
+#profileModal .modal-body {
+    padding: 30px;
+}
+
+/* 프로필 이미지 섹션 */
+.profile-image-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.profile-image-container {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+}
+
+.profile-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: all 0.3s ease;
+}
+
+.profile-image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.profile-image-container:hover .profile-image-overlay {
+    opacity: 1;
+}
+
+.btn-image-upload,
+.btn-image-delete {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid white;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.btn-image-upload:hover {
+    background: rgba(255, 255, 255, 0.4);
+    transform: scale(1.1);
+}
+
+.btn-image-delete:hover {
+    background: rgba(220, 53, 69, 0.8);
+    border-color: #dc3545;
+    transform: scale(1.1);
+}
+
+.btn-image-upload i,
+.btn-image-delete i {
+    pointer-events: none;
+}
+
+.profile-image-hint {
+    font-size: 12px;
+    color: #6c757d;
+    text-align: center;
+    margin: 0;
+}
+
+/* 프로필 정보 섹션 */
+.profile-info-section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.profile-info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.profile-info-row:last-child {
+    border-bottom: none;
+}
+
+.profile-info-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #495057;
+    min-width: 100px;
+}
+
+.profile-info-value {
+    font-size: 14px;
+    color: #212529;
+    text-align: right;
+    flex: 1;
 }

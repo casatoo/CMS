@@ -14,37 +14,53 @@ public class UserLeaveRequest extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    private Users user; // 연차 신청자
+    @ToString.Exclude
+    private Users user; // 신청자
 
-    @Builder.Default
-    @Column(name = "request_date", nullable = false)
-    private LocalDate requestDate = LocalDate.now(); // 신청 날짜
-
-    @Column(name = "leave_start_datetime", nullable = false)
-    private LocalDateTime leaveStartDateTime; // 휴가 시작일 (DATETIME)
-
-    @Column(name = "leave_end_datetime", nullable = false)
-    private LocalDateTime leaveEndDateTime; // 휴가 종료일 (DATETIME)
-
-    @Column(name = "requested_hours", nullable = false)
-    private int requestedHours; // 신청한 총 시간
-
-    @Builder.Default
     @Enumerated(EnumType.STRING)
-    @Column(name = "STATUS", nullable = false)
-    private LeaveStatus status = LeaveStatus.REQUEST; // 기본값 REQUEST
+    @Column(name = "leave_type", nullable = false)
+    private LeaveType leaveType; // 신청 유형
 
-    @Column(name = "reason")
-    private String reason; // 휴가 사유
+    @Column(name = "request_date", nullable = false)
+    private LocalDate requestDate; // 신청 날짜
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "period_type", nullable = false)
+    private PeriodType periodType; // 기간 유형
+
+    @Column(name = "location", length = 200)
+    private String location; // 장소 (출장/외근의 경우)
+
+    @Column(name = "reason", columnDefinition = "TEXT", nullable = false)
+    private String reason; // 신청 사유
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private RequestStatus status = RequestStatus.REQUEST; // 상태
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "approver_id", nullable = true)
+    @JoinColumn(name = "approver_id")
+    @ToString.Exclude
     private Users approver; // 승인자
 
     @Column(name = "approved_at")
-    private LocalDateTime approvedAt; // 승인 시간
+    private LocalDateTime approvedAt; // 승인 일시
 
-    public enum LeaveStatus {
-        REQUEST, APPROVE, REJECT
+    public enum LeaveType {
+        ANNUAL_LEAVE,  // 연차
+        BUSINESS_TRIP, // 출장
+        FIELD_WORK     // 외근
+    }
+
+    public enum PeriodType {
+        ALL_DAY,   // 종일
+        MORNING,   // 오전
+        AFTERNOON  // 오후
+    }
+
+    public enum RequestStatus {
+        REQUEST,  // 신청
+        APPROVE,  // 승인
+        REJECT    // 반려
     }
 }

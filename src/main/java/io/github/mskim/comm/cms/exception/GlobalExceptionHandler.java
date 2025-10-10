@@ -11,6 +11,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -49,6 +50,27 @@ public class GlobalExceptionHandler {
         String errorMessage = errors.values().iterator().next(); // 첫 번째 에러 메시지 사용
         return ResponseEntity.badRequest()
                 .body(ApiResponse.of(ApiStatus.BAD_REQUEST, errorMessage, errors));
+    }
+
+    /**
+     * 정적 리소스를 찾을 수 없는 경우 처리
+     * Chrome DevTools 등 브라우저가 자동으로 요청하는 리소스는 WARN 레벨로 로깅
+     */
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<ApiResponse> handleNoResourceFoundException(NoResourceFoundException ex) {
+        String resourcePath = ex.getResourcePath();
+
+        // Chrome DevTools, favicon 등 브라우저 자동 요청은 WARN 레벨로만 로깅
+        if (resourcePath.contains(".well-known") ||
+            resourcePath.contains("favicon") ||
+            resourcePath.contains("robots.txt")) {
+            log.warn("Static resource not found (browser auto-request): {}", resourcePath);
+        } else {
+            log.error("Static resource not found: {}", resourcePath);
+        }
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(ApiResponse.of(ApiStatus.NOT_FOUND, "요청한 리소스를 찾을 수 없습니다."));
     }
 
     @ExceptionHandler(Exception.class)

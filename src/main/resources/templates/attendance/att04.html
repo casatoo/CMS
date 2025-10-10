@@ -1,15 +1,25 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/default}">
 <head>
-    <title>근태신청관리</title>
+    <title>출/퇴근 조정 관리</title>
     <!-- js -->
     <script src="/js/domain/attendance/att04.js"></script>
 </head>
 <div layout:fragment="content">
     <div class="container p-t-20">
+        <!-- 페이지 타이틀 -->
+        <div class="page-title dark">
+            <i class="bi bi-clipboard-data"></i>
+            <span>출/퇴근 조정 관리</span>
+        </div>
+
         <div class="row">
             <div class="col-md-12">
-                <div id="myGrid" class="ag-theme-alpine" style="width: 100%; height: 90vh;"></div>
+                <!-- 검색 폼 영역 -->
+                <div id="attendanceRequestSearchContainer" class="mb-3 m-t-15"></div>
+
+                <!-- 그리드 영역 -->
+                <div id="attendanceRequestGrid" class="ag-theme-alpine m-b-30" style="width: 100%; height: 600px;"></div>
             </div>
         </div>
     </div>

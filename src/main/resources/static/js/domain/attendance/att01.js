@@ -9,20 +9,8 @@ $(document).ready(function() {
 });
 
 let initCalendar = () => {
-    let calendarEl = $('#attendanceCalendar')[0];
-
-    calendar = new FullCalendar.Calendar(calendarEl, {
-        locale: 'ko',
-        initialView: 'dayGridMonth',
-        aspectRatio: 1.8,
-        headerToolbar: {
-            left: 'today',
-            center: 'title',
-            right: 'prev,next'
-        },
-        buttonText: {
-            today: '이번달'
-        },
+    // apps.js의 공통 함수 사용
+    calendar = initFullCalendar('attendanceCalendar', {
         events: function(fetchInfo, successCallback, failureCallback) {
             let startDate = fetchInfo.startStr.substring(0,10);
             let endDate = fetchInfo.endStr.substring(0,10);
@@ -53,18 +41,14 @@ let initCalendar = () => {
             });
         },
         dateClick: function(info) {
-
             const clickedDate = info.dateStr;
-            const clicked = new Date(clickedDate);
-            const today = new Date();
-
             selectedDate = clickedDate;
 
-            clicked.setHours(0, 0, 0, 0);
-            today.setHours(0, 0, 0, 0);
+            // apps.js의 공통 함수 사용 - 날짜 비교
+            const comparison = compareDateWithToday(clickedDate);
 
             // 오늘보다 같거나 미래 날짜는 신청 불가
-            if (clicked >= today) {
+            if (comparison >= 0) {
                 customAlert("출퇴근조정신청", "오늘보다 이전 날짜만 신청할 수 있습니다.", "warning");
                 return;
             }
@@ -92,24 +76,6 @@ let initCalendar = () => {
             initTimePicker('endTime', checkOutTime);
 
             $('#dateModal').modal('show');
-        },
-        eventDidMount: function(info) {
-            $(info.el).closest('.fc-daygrid-day').css({
-                height: '120px'
-            });
-            $(info.el).find('.fc-event-title').css('color', 'black');
-            $(info.el).find('.fc-event-time').css('color', 'black');
-        },
-        datesSet: function() {
-            $('.fc-col-header-cell a').css({
-                'color': 'black',
-                'text-decoration': 'none'
-            });
-            $('.fc-daygrid-day-number').css({
-                'color': 'black',
-                'text-decoration': 'none'
-            });
         }
     });
-    calendar.render();
 }

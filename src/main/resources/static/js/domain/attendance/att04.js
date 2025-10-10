@@ -1,103 +1,116 @@
 const apiUri = "/api/v1/attendance"
-let attendanceGrid = null;
-const searchParams = {};
+let attendanceRequestGridApi = null;
 
 $(document).ready(function() {
+    initSearchForm();
     initAttendanceRequestGrid();
 });
 
-let initAttendanceRequestGrid = () => {
-    const gridOptions = {
-        rowData: [], // 초기엔 빈 값
-        columnDefs: [
-            {
-                field: "status",
-                headerName: "신청상태",
-                width: 120,
-                cellRenderer: params => {
-                    let label = '';
-                    let color = '';
-
-                    switch (params.value) {
-                        case 'REQUEST':
-                            label = '신청';
-                            color = '#0d6efd';
-                            break;
-                        case 'APPROVE':
-                            label = '승인';
-                            color = '#198754';
-                            break;
-                        case 'REJECT':
-                            label = '반려';
-                            color = '#dc3545';
-                            break;
-                        default:
-                            label = params.value;
-                            color = '#6c757d';
-                    }
-
-                    return `<span style="
-                        background-color: ${color};
-                        color: white;
-                        padding: 4px 8px;
-                        border-radius: 4px;
-                        font-size: 12px;
-                        font-weight: 500;
-                    ">${label}</span>`;
-                }
-            },
-            {
-                field: "userName",
-                headerName: "신청자",
-                width: 120,
-                valueGetter: params => params.data?.userName || params.data?.userLoginId || '-'
-            },
-            {
-                field: "createdAt",
-                headerName: "신청일시",
-                width: 180,
-                valueFormatter: params => {
-                    if (!params.value) return '-';
-                    return params.value.replace('T', ' ').substring(0, 19);
-                }
-            },
-            {
-                field: "requestedCheckInTime",
-                headerName: "변경 출근시간",
-                width: 180,
-                valueFormatter: params => {
-                    if (!params.value) return '-';
-                    return params.value.replace('T', ' ').substring(0, 19);
-                }
-            },
-            {
-                field: "requestedCheckOutTime",
-                headerName: "변경 퇴근시간",
-                width: 180,
-                valueFormatter: params => {
-                    if (!params.value) return '-';
-                    return params.value.replace('T', ' ').substring(0, 19);
-                }
-            }
-        ],
-        pagination: true,
-        paginationPageSize: 20,
-        defaultColDef: {
-            sortable: true,
-            filter: true,
-            resizable: true
+// 검색 폼 초기화
+let initSearchForm = () => {
+    const searchFields = [
+        {
+            name: 'status',
+            label: '신청상태',
+            type: 'select',
+            colSize: 1,
+            options: [
+                { value: 'REQUEST', label: '신청' },
+                { value: 'APPROVE', label: '승인' },
+                { value: 'REJECT', label: '반려' }
+            ]
+        },
+        {
+            name: 'userName',
+            label: '신청자',
+            type: 'text',
+            colSize: 2,
+            placeholder: '신청자명'
         }
-    };
+    ];
 
-    const myGridElement = document.querySelector('#myGrid');
-    attendanceGrid = agGrid.createGrid(myGridElement, gridOptions);
+    // apps.js의 공통 함수 사용
+    createSearchForm(
+        'attendanceRequestSearchContainer',
+        searchFields,
+        function(searchParams) {
+            // 검색 버튼 클릭 시
+            loadAttendanceRequests(searchParams);
+        },
+        function() {
+            // 초기화 버튼 클릭 시
+            loadAttendanceRequests({});
+        }
+    );
+};
 
-    // API 호출 후 데이터 주입
-    $.get(apiUri + "/request/all", function (res) {
-        console.log('API Response:', res);
-        attendanceGrid.setGridOption('rowData', res || []);
+let initAttendanceRequestGrid = () => {
+    const columnDefs = [
+        {
+            field: "status",
+            headerName: "신청상태",
+            flex: 1,
+            minWidth: 100,
+            cellRenderer: statusCellRenderer // apps.js의 공통 함수 사용
+        },
+        {
+            field: "userName",
+            headerName: "신청자",
+            flex: 1,
+            minWidth: 100,
+            valueGetter: params => params.data?.userName || params.data?.userLoginId || '-'
+        },
+        {
+            field: "workDate",
+            headerName: "근무일",
+            flex: 1.2,
+            minWidth: 120,
+            valueFormatter: params => params.value || '-'
+        },
+        {
+            field: "createdAt",
+            headerName: "신청일시",
+            flex: 1.5,
+            minWidth: 150,
+            valueFormatter: params => {
+                if (!params.value) return '-';
+                return params.value.replace('T', ' ').substring(0, 19);
+            }
+        },
+        {
+            field: "requestedCheckInTime",
+            headerName: "변경 출근시간",
+            flex: 1.5,
+            minWidth: 150,
+            valueFormatter: params => {
+                if (!params.value) return '-';
+                return params.value.replace('T', ' ').substring(0, 19);
+            }
+        },
+        {
+            field: "requestedCheckOutTime",
+            headerName: "변경 퇴근시간",
+            flex: 1.5,
+            minWidth: 150,
+            valueFormatter: params => {
+                if (!params.value) return '-';
+                return params.value.replace('T', ' ').substring(0, 19);
+            }
+        }
+    ];
+
+    // apps.js의 공통 함수 사용
+    attendanceRequestGridApi = initAgGrid('attendanceRequestGrid', columnDefs);
+
+    // 초기 데이터 로드
+    loadAttendanceRequests({});
+};
+
+// 데이터 로드 함수
+let loadAttendanceRequests = (searchParams) => {
+    $.get(apiUri + "/request/search", searchParams, function (res) {
+        attendanceRequestGridApi.setGridOption('rowData', res || []);
     }).fail(function(xhr, status, error) {
-        console.error('API Error:', error);
         customAlert("조회 실패", "근태 신청 목록을 불러오는데 실패했습니다.", "error");
     });
 };

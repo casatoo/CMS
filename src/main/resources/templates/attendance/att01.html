@@ -1,13 +1,19 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/default}">
 <head>
-    <title>근태조정신청</title>
+    <title>출/퇴근 조정 신청</title>
     <!-- js -->
     <script src="/js/domain/attendance/att01.js"></script>
     <script src="/js/domain/attendance/att01-m01.js"></script>
 </head>
 <div layout:fragment="content">
     <div class="container p-t-20">
+        <!-- 페이지 타이틀 -->
+        <div class="page-title dark">
+            <i class="bi bi-calendar-check"></i>
+            <span>출/퇴근 조정 신청</span>
+        </div>
+
         <div class="row">
             <div class="col-md-12 data-table">
                 <div id="calendar-container">

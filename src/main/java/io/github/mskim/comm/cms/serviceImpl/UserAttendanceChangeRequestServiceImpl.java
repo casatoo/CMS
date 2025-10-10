@@ -73,6 +73,7 @@ public class UserAttendanceChangeRequestServiceImpl implements UserAttendanceCha
                 .attendance(userAttendance) // userAttendance 자체도 null일 수 있음
                 .approvedAt(LocalDateTime.now())
                 .user(user)
+                .workDate(request.getAttendance().getWorkDate())
                 .originalCheckInTime(originalCheckInTime)
                 .originalCheckOutTime(originalCheckOutTime)
                 .reason(request.getReason())
@@ -98,6 +99,28 @@ public class UserAttendanceChangeRequestServiceImpl implements UserAttendanceCha
                     }
                     if (request.getApprover() != null) {
                         request.getApprover().getName();
+                    }
+                    return UserAttendanceChangeRequestResponseDTO.from(request);
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<UserAttendanceChangeRequestResponseDTO> searchAttendanceChangeRequests(UserAttendanceChangeRequestSP sp) {
+        List<UserAttendanceChangeRequest> requests = userAttendanceChangeRequestRepository.searchAttendanceChangeRequests(sp);
+
+        return requests.stream()
+                .map(request -> {
+                    // Lazy loading 강제 초기화
+                    if (request.getUser() != null) {
+                        request.getUser().getName();
+                    }
+                    if (request.getApprover() != null) {
+                        request.getApprover().getName();
+                    }
+                    if (request.getAttendance() != null) {
+                        request.getAttendance().getWorkDate();
                     }
                     return UserAttendanceChangeRequestResponseDTO.from(request);
                 })

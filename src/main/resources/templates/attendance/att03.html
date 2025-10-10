@@ -1,17 +1,25 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/default}">
 <head>
-    <title>외근신청</title>
+    <title>연차/외근/출장 신청 관리</title>
     <!-- js -->
     <script src="/js/domain/attendance/att03.js"></script>
 </head>
 <div layout:fragment="content">
     <div class="container p-t-20">
+        <!-- 페이지 타이틀 -->
+        <div class="page-title dark">
+            <i class="bi bi-list-check"></i>
+            <span>연차/외근/출장 신청 관리</span>
+        </div>
+
         <div class="row">
-            <div class="col-md-12 data-table">
-                <div id="calendar-container">
-                    <div id="outsideWorkingCalendar" class="m-t-10 m-b-10"></div>
-                </div>
+            <div class="col-md-12">
+                <!-- 검색 폼 영역 -->
+                <div id="leaveRequestSearchContainer" class="mb-3 m-t-15"></div>
+
+                <!-- 그리드 영역 -->
+                <div id="leaveRequestGrid" style="width: 100%; height: 600px;" class="ag-theme-alpine m-b-30"></div>
             </div>
         </div>
     </div>
