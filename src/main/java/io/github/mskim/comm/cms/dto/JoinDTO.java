@@ -29,5 +29,5 @@ public class JoinDTO {
     private String role;
 
     @Size(max = 20, message = "직급은 20자 이하로 입력해주세요")
-    private String rank;
+    private String position;
 }

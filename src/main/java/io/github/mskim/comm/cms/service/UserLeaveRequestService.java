@@ -14,4 +14,8 @@ public interface UserLeaveRequestService {
     List<UserLeaveRequestResponseDTO> findAllLeaveRequests();
 
     List<UserLeaveRequestResponseDTO> searchLeaveRequests(UserLeaveRequestSP sp);
+
+    ApiResponse approveRequest(String requestId);
+
+    ApiResponse rejectRequest(String requestId, String rejectReason);
 }

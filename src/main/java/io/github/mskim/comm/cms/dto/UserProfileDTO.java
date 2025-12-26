@@ -15,7 +15,7 @@ public class UserProfileDTO {
     private String userId;
     private String loginId; // 로그인 ID (수정 불가)
     private String name; // 이름
-    private String rank; // 직급
+    private String position; // 직급
     private int annualLeaveDays; // 연차 일수
     private String role; // 권한
 
@@ -31,7 +31,7 @@ public class UserProfileDTO {
                 .userId(user.getId())
                 .loginId(user.getLoginId())
                 .name(user.getName())
-                .rank(user.getRank())
+                .position(user.getPosition())
                 .annualLeaveDays(user.getAnnualLeaveDays())
                 .role(user.getRole());
 

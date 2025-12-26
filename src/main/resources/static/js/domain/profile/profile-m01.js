@@ -46,7 +46,7 @@ $(document).ready(function() {
         $('#userId').val(data.userId);
         $('#loginId').text(data.loginId || '-');
         $('#name').text(data.name || '-');
-        $('#rank').text(data.rank || '-');
+        $('#position').text(data.position || '-');
         $('#annualLeaveDays').text(data.annualLeaveDays || '0');
         $('#role').text(getRoleText(data.role));
 

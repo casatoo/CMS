@@ -44,7 +44,7 @@ let applySideBarStatus = function (status) {
 
 let profileSetting = function () {
   $("#profileName").html(loginUser);
-  $("#rank").html(rank);
+  $("#position").html(position);
 };
 
 let menuActiveFunction = function () {

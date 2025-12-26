@@ -77,8 +77,6 @@ let initTimePicker = function(id, defaultTime) {
     $input.timepicker({
       timeFormat: 'HH:mm',
       interval: 30,
-      minTime: '06:00',
-      maxTime: '22:00',
       defaultTime: defaultTime,
       dynamic: false,
       dropdown: true,
@@ -471,7 +469,7 @@ let resetSearchForm = function(formId, callback) {
  */
 let createSearchForm = function(containerId, searchFields, onSearch, onReset) {
   const formId = `${containerId}Form`;
-  let formHtml = `<form id="${formId}" class="search-form mb-3">
+  let formHtml = `<form id="${formId}" class="search-form mb-1">
     <div class="search-form-container">
       <div class="search-fields">`;
 

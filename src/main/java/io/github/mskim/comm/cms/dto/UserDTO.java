@@ -11,5 +11,5 @@ public class UserDTO extends BaseDTO{
     private String name;            // 이름
     private int annualLeaveDays;    // 연차
     private String role;            // 권한
-    private String rank;            // 직급
+    private String position;            // 직급
 }

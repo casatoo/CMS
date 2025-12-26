@@ -127,7 +127,14 @@ let initLeaveRequestGrid = () => {
     ];
 
     // apps.js의 공통 함수 사용
-    leaveRequestGridApi = initAgGrid('leaveRequestGrid', columnDefs);
+    leaveRequestGridApi = initAgGrid('leaveRequestGrid', columnDefs, {
+        onRowClicked: function(event) {
+            // row 클릭 시 상세 모달 열기
+            if (event.data && typeof openLeaveRequestDetailModal === 'function') {
+                openLeaveRequestDetailModal(event.data);
+            }
+        }
+    });
 
     // 초기 데이터 로드
     loadLeaveRequests({});

@@ -25,7 +25,7 @@ public class Users extends BaseEntity {
     private String role;
 
     @Column(nullable = false)
-    private String rank;
+    private String position;
 
     public Users() {}
 

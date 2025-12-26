@@ -3,6 +3,7 @@ package io.github.mskim.comm.cms.controller.api;
 import io.github.mskim.comm.cms.api.ApiPaths;
 import io.github.mskim.comm.cms.api.ApiResponse;
 import io.github.mskim.comm.cms.api.ApiStatus;
+import io.github.mskim.comm.cms.dto.ApprovalRequestDTO;
 import io.github.mskim.comm.cms.dto.UserAttendanceChangeRequestDTO;
 import io.github.mskim.comm.cms.dto.UserAttendanceChangeRequestResponseDTO;
 import io.github.mskim.comm.cms.entity.UserAttendanceChangeRequest;
@@ -102,5 +103,15 @@ public class AttendanceApiController {
         sp.setCreatedAtEnd(createdAtEnd);
 
         return userAttendanceChangeRequestService.searchAttendanceChangeRequests(sp);
+    }
+
+    @PostMapping("/request/approve")
+    public ApiResponse approveAttendanceChangeRequest(@Valid @RequestBody ApprovalRequestDTO request) {
+        return userAttendanceChangeRequestService.approveRequest(request.getRequestId());
+    }
+
+    @PostMapping("/request/reject")
+    public ApiResponse rejectAttendanceChangeRequest(@Valid @RequestBody ApprovalRequestDTO request) {
+        return userAttendanceChangeRequestService.rejectRequest(request.getRequestId(), request.getRejectReason());
     }
 }

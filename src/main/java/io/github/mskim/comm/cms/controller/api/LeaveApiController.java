@@ -2,6 +2,7 @@ package io.github.mskim.comm.cms.controller.api;
 
 import io.github.mskim.comm.cms.api.ApiPaths;
 import io.github.mskim.comm.cms.api.ApiResponse;
+import io.github.mskim.comm.cms.dto.LeaveApprovalRequestDTO;
 import io.github.mskim.comm.cms.dto.UserLeaveRequestDTO;
 import io.github.mskim.comm.cms.dto.UserLeaveRequestResponseDTO;
 import io.github.mskim.comm.cms.entity.UserLeaveRequest;
@@ -56,5 +57,15 @@ public class LeaveApiController {
         sp.setCreatedAtEnd(createdAtEnd);
 
         return userLeaveRequestService.searchLeaveRequests(sp);
+    }
+
+    @PostMapping("/request/approve")
+    public ApiResponse approveLeaveRequest(@Valid @RequestBody LeaveApprovalRequestDTO request) {
+        return userLeaveRequestService.approveRequest(request.getRequestId());
+    }
+
+    @PostMapping("/request/reject")
+    public ApiResponse rejectLeaveRequest(@Valid @RequestBody LeaveApprovalRequestDTO request) {
+        return userLeaveRequestService.rejectRequest(request.getRequestId(), request.getRejectReason());
     }
 }

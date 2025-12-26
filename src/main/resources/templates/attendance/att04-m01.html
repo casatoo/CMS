@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>근태 조정 신청 상세</title>
+</head>
+<body>
+<!-- 근태 조정 신청 상세 모달 -->
+<div class="modal fade" id="attendanceRequestDetailModal" tabindex="-1" aria-labelledby="attendanceRequestDetailModalLabel" aria-modal="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="attendanceRequestDetailModalLabel">
+                    <i class="bi bi-clipboard-data"></i> 근태 조정 신청 상세
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- 신청 정보 테이블 -->
+                <table class="table table-bordered">
+                    <colgroup>
+                        <col style="width: 25%;">
+                        <col style="width: 75%;">
+                    </colgroup>
+                    <tbody>
+                    <tr>
+                        <th class="table-active">신청상태</th>
+                        <td>
+                            <span id="detailStatus" class="badge"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="table-active">신청자</th>
+                        <td id="detailUserName"></td>
+                    </tr>
+                    <tr>
+                        <th class="table-active">근무일</th>
+                        <td id="detailWorkDate"></td>
+                    </tr>
+                    <tr>
+                        <th class="table-active">원래 출근시간</th>
+                        <td id="detailOriginalCheckInTime"></td>
+                    </tr>
+                    <tr>
+                        <th class="table-active">원래 퇴근시간</th>
+                        <td id="detailOriginalCheckOutTime"></td>
+                    </tr>
+                    <tr>
+                        <th class="table-active">변경 출근시간</th>
+                        <td id="detailRequestedCheckInTime" class="fw-bold text-primary"></td>
+                    </tr>
+                    <tr>
+                        <th class="table-active">변경 퇴근시간</th>
+                        <td id="detailRequestedCheckOutTime" class="fw-bold text-primary"></td>
+                    </tr>
+                    <tr>
+                        <th class="table-active">신청 사유</th>
+                        <td id="detailReason"></td>
+                    </tr>
+                    <tr>
+                        <th class="table-active">신청일시</th>
+                        <td id="detailCreatedAt"></td>
+                    </tr>
+                    <tr id="detailApproverRow" style="display: none;">
+                        <th class="table-active">승인자</th>
+                        <td id="detailApproverName"></td>
+                    </tr>
+                    <tr id="detailApprovedAtRow" style="display: none;">
+                        <th class="table-active">승인일시</th>
+                        <td id="detailApprovedAt"></td>
+                    </tr>
+                    <tr id="detailRejectReasonRow" style="display: none;">
+                        <th class="table-active">반려 사유</th>
+                        <td>
+                            <textarea id="detailRejectReason" class="form-control" rows="3" placeholder="반려 사유를 입력하세요"></textarea>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                <button type="button" id="btnApprove" class="btn btn-success" style="display: none;">
+                    <i class="bi bi-check-circle"></i> 승인
+                </button>
+                <button type="button" id="btnReject" class="btn btn-danger" style="display: none;">
+                    <i class="bi bi-x-circle"></i> 반려
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 모달 스크립트 -->
+<script src="/js/domain/attendance/att04-m01.js"></script>
+</body>
+</html>

@@ -14,4 +14,8 @@ public interface UserAttendanceChangeRequestService {
     List<UserAttendanceChangeRequestResponseDTO> findAllChangeRequests();
 
     List<UserAttendanceChangeRequestResponseDTO> searchAttendanceChangeRequests(UserAttendanceChangeRequestSP sp);
+
+    ApiResponse approveRequest(String requestId);
+
+    ApiResponse rejectRequest(String requestId, String rejectReason);
 }

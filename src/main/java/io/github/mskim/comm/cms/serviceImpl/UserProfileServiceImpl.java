@@ -6,11 +6,10 @@ import io.github.mskim.comm.cms.entity.Users;
 import io.github.mskim.comm.cms.repository.UserProfileRepository;
 import io.github.mskim.comm.cms.repository.UserRepository;
 import io.github.mskim.comm.cms.service.UserProfileService;
+import io.github.mskim.comm.cms.util.SecurityContextUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,10 +24,12 @@ import java.util.UUID;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class UserProfileServiceImpl implements UserProfileService {
 
     private final UserRepository userRepository;
     private final UserProfileRepository userProfileRepository;
+    private final SecurityContextUtil securityContextUtil;
 
     @Value("${file.upload.path:uploads/profiles}")
     private String uploadPath;
@@ -47,11 +48,7 @@ public class UserProfileServiceImpl implements UserProfileService {
     @Override
     @Transactional(readOnly = true)
     public UserProfileDTO getMyProfile() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String loginId = authentication.getName();
-
-        Users user = userRepository.findByLoginId(loginId)
-                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+        Users user = securityContextUtil.getCurrentUser();
 
         UserProfile profile = userProfileRepository.findByUserId(user.getId()).orElse(null);
 
@@ -66,7 +63,7 @@ public class UserProfileServiceImpl implements UserProfileService {
 
         // 이름, 직급, 연차 수정
         user.setName(profileDTO.getName());
-        user.setRank(profileDTO.getRank());
+        user.setPosition(profileDTO.getPosition());
         user.setAnnualLeaveDays(profileDTO.getAnnualLeaveDays());
 
         userRepository.save(user);

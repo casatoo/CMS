@@ -100,7 +100,14 @@ let initAttendanceRequestGrid = () => {
     ];
 
     // apps.js의 공통 함수 사용
-    attendanceRequestGridApi = initAgGrid('attendanceRequestGrid', columnDefs);
+    attendanceRequestGridApi = initAgGrid('attendanceRequestGrid', columnDefs, {
+        onRowClicked: function(event) {
+            // row 클릭 시 상세 모달 열기
+            if (event.data && typeof openAttendanceRequestDetailModal === 'function') {
+                openAttendanceRequestDetailModal(event.data);
+            }
+        }
+    });
 
     // 초기 데이터 로드
     loadAttendanceRequests({});

@@ -27,7 +27,7 @@ public class GlobalControllerAdvice {
             String loginId = auth.getName();
             Users user = userService.findByLoginId(loginId);
             model.addAttribute("loginUser", user.getName());
-            model.addAttribute("rank", user.getRank());
+            model.addAttribute("position", user.getPosition());
         }
     }
 }

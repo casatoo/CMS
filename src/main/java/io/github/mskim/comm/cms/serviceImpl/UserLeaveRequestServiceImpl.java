@@ -7,36 +7,32 @@ import io.github.mskim.comm.cms.dto.UserLeaveRequestResponseDTO;
 import io.github.mskim.comm.cms.entity.UserLeaveRequest;
 import io.github.mskim.comm.cms.entity.Users;
 import io.github.mskim.comm.cms.repository.UserLeaveRequestRepository;
+import io.github.mskim.comm.cms.repository.UserRepository;
 import io.github.mskim.comm.cms.service.UserLeaveRequestService;
-import io.github.mskim.comm.cms.service.UserService;
 import io.github.mskim.comm.cms.sp.UserLeaveRequestSP;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import io.github.mskim.comm.cms.util.SecurityContextUtil;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class UserLeaveRequestServiceImpl implements UserLeaveRequestService {
 
     private final UserLeaveRequestRepository userLeaveRequestRepository;
-    private final UserService userService;
-
-    public UserLeaveRequestServiceImpl(UserLeaveRequestRepository userLeaveRequestRepository,
-                                       UserService userService) {
-        this.userLeaveRequestRepository = userLeaveRequestRepository;
-        this.userService = userService;
-    }
+    private final SecurityContextUtil securityContextUtil;
+    private final UserRepository userRepository;
 
     @Override
     @Transactional
     public ApiResponse createLeaveRequest(UserLeaveRequestDTO request) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String loginId = authentication.getName();
-        Users user = userService.findByLoginId(loginId);
+        Users user = securityContextUtil.getCurrentUser();
 
         // 동일 날짜에 신청중인 건이 있는지 확인
         Optional<UserLeaveRequest> existingRequest = userLeaveRequestRepository
@@ -111,5 +107,90 @@ public class UserLeaveRequestServiceImpl implements UserLeaveRequestService {
                     return UserLeaveRequestResponseDTO.from(request);
                 })
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public ApiResponse approveRequest(String requestId) {
+        // 현재 로그인한 사용자 정보
+        Users approver = securityContextUtil.getCurrentUser();
+
+        // 신청 내역 조회
+        Optional<UserLeaveRequest> optionalRequest = userLeaveRequestRepository.findById(requestId);
+        if (optionalRequest.isEmpty()) {
+            return ApiResponse.of(ApiStatus.NOT_FOUND, "신청 내역을 찾을 수 없습니다.", false);
+        }
+
+        UserLeaveRequest request = optionalRequest.get();
+
+        // 이미 처리된 신청인지 확인
+        if (request.getStatus() != UserLeaveRequest.RequestStatus.REQUEST) {
+            return ApiResponse.of(ApiStatus.BAD_REQUEST, "이미 처리된 신청입니다.", false);
+        }
+
+        // 승인 처리
+        request.setStatus(UserLeaveRequest.RequestStatus.APPROVE);
+        request.setApprover(approver);
+        request.setApprovedAt(LocalDateTime.now());
+        userLeaveRequestRepository.save(request);
+
+        // 연차인 경우 사용자의 연차 차감
+        if (request.getLeaveType() == UserLeaveRequest.LeaveType.ANNUAL_LEAVE) {
+            Users user = request.getUser();
+            double deductDays = 0;
+
+            // 기간에 따라 차감일 계산
+            switch (request.getPeriodType()) {
+                case ALL_DAY:
+                    deductDays = 1.0;
+                    break;
+                case MORNING:
+                case AFTERNOON:
+                    deductDays = 0.5;
+                    break;
+            }
+
+            // 연차 차감
+            int currentLeaveDays = user.getAnnualLeaveDays();
+            int newLeaveDays = (int) Math.floor(currentLeaveDays - deductDays);
+            user.setAnnualLeaveDays(newLeaveDays);
+            userRepository.save(user);
+        }
+
+        return ApiResponse.of(ApiStatus.OK, "승인되었습니다.", true);
+    }
+
+    @Override
+    @Transactional
+    public ApiResponse rejectRequest(String requestId, String rejectReason) {
+        // 현재 로그인한 사용자 정보
+        Users approver = securityContextUtil.getCurrentUser();
+
+        // 신청 내역 조회
+        Optional<UserLeaveRequest> optionalRequest = userLeaveRequestRepository.findById(requestId);
+        if (optionalRequest.isEmpty()) {
+            return ApiResponse.of(ApiStatus.NOT_FOUND, "신청 내역을 찾을 수 없습니다.", false);
+        }
+
+        UserLeaveRequest request = optionalRequest.get();
+
+        // 이미 처리된 신청인지 확인
+        if (request.getStatus() != UserLeaveRequest.RequestStatus.REQUEST) {
+            return ApiResponse.of(ApiStatus.BAD_REQUEST, "이미 처리된 신청입니다.", false);
+        }
+
+        // 반려 사유 확인
+        if (rejectReason == null || rejectReason.trim().isEmpty()) {
+            return ApiResponse.of(ApiStatus.BAD_REQUEST, "반려 사유를 입력해주세요.", false);
+        }
+
+        // 반려 처리
+        request.setStatus(UserLeaveRequest.RequestStatus.REJECT);
+        request.setApprover(approver);
+        request.setApprovedAt(LocalDateTime.now());
+        request.setReason(request.getReason() + "\n[반려 사유] " + rejectReason);
+        userLeaveRequestRepository.save(request);
+
+        return ApiResponse.of(ApiStatus.OK, "반려되었습니다.", true);
     }
 }
