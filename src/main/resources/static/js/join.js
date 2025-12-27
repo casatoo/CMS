@@ -50,7 +50,8 @@ let joinProc = function () {
       name: name
     };
 
-    $.post("/joinProc", JSON.stringify(joinData), function (res) {
+    // apps.js의 공통 함수 사용
+    postRequest("/joinProc", joinData, function (res) {
       // 요청이 성공했을 때의 처리
       if (res.status === 200) {
         customAlert("회원가입", res.message, "success").then(() => {

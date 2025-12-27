@@ -24,6 +24,11 @@ public class UserLeaveRequestSpecification {
         return (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
 
+            // 0. 사용자 ID 필터 (일반 사용자는 자신의 데이터만 조회)
+            if (sp.getUserId() != null && !sp.getUserId().isBlank()) {
+                predicates.add(cb.equal(root.get("user").get("id"), sp.getUserId()));
+            }
+
             // 1. 신청 상태 필터
             if (sp.getStatus() != null) {
                 predicates.add(cb.equal(root.get("status"), sp.getStatus()));

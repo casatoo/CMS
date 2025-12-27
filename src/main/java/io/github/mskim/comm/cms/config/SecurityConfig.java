@@ -55,11 +55,19 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/login", "/join", "/loginProc", "/joinProc").permitAll()
-                        .requestMatchers("/css/**", "/js/**", "/img/**", "/fonts/**").permitAll()
+                        .requestMatchers("/css/**", "/js/**", "/img/**", "/fonts/**", "/svg/**").permitAll()
+                        // 관리자 전용 페이지
+                        .requestMatchers("/view/attendance03", "/view/attendance04").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers("/view/chart", "/view/history").hasAuthority("ROLE_ADMIN")
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(exception -> exception
-                        .authenticationEntryPoint(authenticationEntryPoint))
+                        .authenticationEntryPoint(authenticationEntryPoint)
+                        .accessDeniedHandler((request, response, accessDeniedException) -> {
+                            // 403 Forbidden - 권한 없음
+                            response.sendRedirect("/main");
+                        })
+                )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessHandler((request, response, authentication) -> {

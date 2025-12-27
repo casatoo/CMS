@@ -45,6 +45,24 @@ let applySideBarStatus = function (status) {
 let profileSetting = function () {
   $("#profileName").html(loginUser);
   $("#position").html(position);
+
+  // 사용자 프로필 이미지 로드
+  $.ajax({
+    type: "GET",
+    url: "/api/v1/profile/me",
+    success: function (data) {
+      if (data && data.profileImageName) {
+        // 프로필 이미지가 있는 경우 실제 이미지로 변경
+        const imageUrl = "/api/v1/profile/image/" + data.profileImageName;
+        $("#profileImage").attr("src", imageUrl);
+      }
+      // 프로필 이미지가 없으면 기본 SVG 유지
+    },
+    error: function () {
+      // 에러 발생 시 기본 SVG 유지
+      console.log("프로필 정보를 불러올 수 없습니다.");
+    }
+  });
 };
 
 let menuActiveFunction = function () {

@@ -13,6 +13,11 @@ spring:
     location: classpath:/custom-banner.txt
   application:
     name: CMS
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB      # 단일 파일 최대 크기
+      max-request-size: 10MB   # 전체 요청 최대 크기
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://192.168.0.12:3306/cms?useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true

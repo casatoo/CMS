@@ -14,6 +14,8 @@ import io.github.mskim.comm.cms.service.UserLeaveRequestService;
 import io.github.mskim.comm.cms.sp.UserLeaveRequestSP;
 import io.github.mskim.comm.cms.util.SecurityContextUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -100,6 +102,14 @@ public class UserLeaveRequestServiceImpl implements UserLeaveRequestService {
     @Override
     @Transactional(readOnly = true)
     public List<UserLeaveRequestResponseDTO> searchLeaveRequests(UserLeaveRequestSP sp) {
+        // 현재 로그인한 사용자 확인
+        Users currentUser = securityContextUtil.getCurrentUser();
+
+        // 일반 사용자는 자신의 데이터만 조회 가능 (관리자는 모든 데이터 조회 가능)
+        if (!"ROLE_ADMIN".equals(currentUser.getRole())) {
+            sp.setUserId(currentUser.getId());
+        }
+
         List<UserLeaveRequest> requests = userLeaveRequestRepository.searchLeaveRequests(sp);
 
         return requests.stream()
@@ -125,6 +135,14 @@ public class UserLeaveRequestServiceImpl implements UserLeaveRequestService {
             String sortBy,
             String direction
     ) {
+        // 현재 로그인한 사용자 확인
+        Users currentUser = securityContextUtil.getCurrentUser();
+
+        // 일반 사용자는 자신의 데이터만 조회 가능 (관리자는 모든 데이터 조회 가능)
+        if (!"ROLE_ADMIN".equals(currentUser.getRole())) {
+            sp.setUserId(currentUser.getId());
+        }
+
         // 정렬 설정
         Sort.Direction sortDirection = "desc".equalsIgnoreCase(direction)
                 ? Sort.Direction.DESC
@@ -149,12 +167,17 @@ public class UserLeaveRequestServiceImpl implements UserLeaveRequestService {
 
     @Override
     @Transactional
+    @Caching(evict = {
+        @CacheEvict(value = "dailyAttendance", allEntries = true),
+        @CacheEvict(value = "attendanceSummary", allEntries = true),
+        @CacheEvict(value = "attendanceList", allEntries = true)
+    })
     public ApiResponse approveRequest(String requestId) {
         // 현재 로그인한 사용자 정보
         Users approver = securityContextUtil.getCurrentUser();
 
-        // 신청 내역 조회
-        Optional<UserLeaveRequest> optionalRequest = userLeaveRequestRepository.findById(requestId);
+        // 신청 내역 조회 (User와 함께 조회하여 Lazy Loading 방지)
+        Optional<UserLeaveRequest> optionalRequest = userLeaveRequestRepository.findByIdWithUser(requestId);
         if (optionalRequest.isEmpty()) {
             return ApiResponse.of(ApiStatus.NOT_FOUND, "신청 내역을 찾을 수 없습니다.", false);
         }
@@ -204,8 +227,8 @@ public class UserLeaveRequestServiceImpl implements UserLeaveRequestService {
         // 현재 로그인한 사용자 정보
         Users approver = securityContextUtil.getCurrentUser();
 
-        // 신청 내역 조회
-        Optional<UserLeaveRequest> optionalRequest = userLeaveRequestRepository.findById(requestId);
+        // 신청 내역 조회 (User와 함께 조회하여 Lazy Loading 방지)
+        Optional<UserLeaveRequest> optionalRequest = userLeaveRequestRepository.findByIdWithUser(requestId);
         if (optionalRequest.isEmpty()) {
             return ApiResponse.of(ApiStatus.NOT_FOUND, "신청 내역을 찾을 수 없습니다.", false);
         }
@@ -225,7 +248,7 @@ public class UserLeaveRequestServiceImpl implements UserLeaveRequestService {
         // 반려 처리
         request.setStatus(UserLeaveRequest.RequestStatus.REJECT);
         request.setApprover(approver);
-        request.setApprovedAt(LocalDateTime.now());
+        // 반려 시에는 승인일시를 설정하지 않음
         request.setReason(request.getReason() + "\n[반려 사유] " + rejectReason);
         userLeaveRequestRepository.save(request);
 

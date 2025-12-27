@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <header th:fragment="headerFragment">
     <div class="sidebar close">
         <div class="logo-details">
@@ -29,12 +29,14 @@
                     <li class="sub-menu-header">📝 나의 신청</li>
                     <li><a href="/view/attendance01">　출/퇴근 조정 신청</a></li>
                     <li><a href="/view/attendance02">　연차/출장 신청</a></li>
-                    <li class="sub-menu-header">📊 신청 관리</li>
-                    <li><a href="/view/attendance04">　출/퇴근 조정 관리</a></li>
-                    <li><a href="/view/attendance03">　연차/출장 관리</a></li>
+                    <!-- 관리자만 볼 수 있는 신청 관리 섹션 -->
+                    <li class="sub-menu-header" sec:authorize="hasAuthority('ROLE_ADMIN')">📊 신청 관리</li>
+                    <li sec:authorize="hasAuthority('ROLE_ADMIN')"><a href="/view/attendance04">　출/퇴근 조정 관리</a></li>
+                    <li sec:authorize="hasAuthority('ROLE_ADMIN')"><a href="/view/attendance03">　연차/출장 관리</a></li>
                 </ul>
             </li>
-            <li>
+            <!-- 관리자 전용 메뉴 -->
+            <li sec:authorize="hasAuthority('ROLE_ADMIN')">
                 <a href="/view/chart">
                     <i class='bx bx-line-chart' ></i>
                     <span class="link_name">차트</span>
@@ -43,7 +45,7 @@
                     <li><a class="link_name" href="/view/chart">차트</a></li>
                 </ul>
             </li>
-            <li>
+            <li sec:authorize="hasAuthority('ROLE_ADMIN')">
                 <a href="/view/history">
                     <i class='bx bx-history'></i>
                     <span class="link_name">이력</span>
@@ -64,7 +66,7 @@
             <li>
                 <div class="profile-details">
                     <div class="profile-content">
-                        <img class="bg-white" src="/svg/solid/bxs-user.svg" alt="profileImg">
+                        <img id="profileImage" class="bg-white" src="/svg/solid/bxs-user.svg" alt="profileImg">
                     </div>
                     <div class="name-job">
                         <div id="profileName" class="profile_name"></div>

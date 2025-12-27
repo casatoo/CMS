@@ -17,6 +17,8 @@ import io.github.mskim.comm.cms.service.UserAttendanceChangeRequestService;
 import io.github.mskim.comm.cms.sp.UserAttendanceSP;
 import io.github.mskim.comm.cms.util.SecurityContextUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -77,7 +79,6 @@ public class UserAttendanceChangeRequestServiceImpl implements UserAttendanceCha
 
         UserAttendanceChangeRequest data = UserAttendanceChangeRequest.builder()
                 .attendance(userAttendance) // userAttendance 자체도 null일 수 있음
-                .approvedAt(LocalDateTime.now())
                 .user(user)
                 .workDate(request.getAttendance().getWorkDate())
                 .originalCheckInTime(originalCheckInTime)
@@ -114,6 +115,14 @@ public class UserAttendanceChangeRequestServiceImpl implements UserAttendanceCha
     @Override
     @Transactional(readOnly = true)
     public List<UserAttendanceChangeRequestResponseDTO> searchAttendanceChangeRequests(UserAttendanceChangeRequestSP sp) {
+        // 현재 로그인한 사용자 확인
+        Users currentUser = securityContextUtil.getCurrentUser();
+
+        // 일반 사용자는 자신의 데이터만 조회 가능 (관리자는 모든 데이터 조회 가능)
+        if (!"ROLE_ADMIN".equals(currentUser.getRole())) {
+            sp.setUserId(currentUser.getId());
+        }
+
         List<UserAttendanceChangeRequest> requests = userAttendanceChangeRequestRepository.searchAttendanceChangeRequests(sp);
 
         return requests.stream()
@@ -142,6 +151,14 @@ public class UserAttendanceChangeRequestServiceImpl implements UserAttendanceCha
             String sortBy,
             String direction
     ) {
+        // 현재 로그인한 사용자 확인
+        Users currentUser = securityContextUtil.getCurrentUser();
+
+        // 일반 사용자는 자신의 데이터만 조회 가능 (관리자는 모든 데이터 조회 가능)
+        if (!"ROLE_ADMIN".equals(currentUser.getRole())) {
+            sp.setUserId(currentUser.getId());
+        }
+
         // 정렬 설정
         Sort.Direction sortDirection = "desc".equalsIgnoreCase(direction)
                 ? Sort.Direction.DESC
@@ -168,6 +185,11 @@ public class UserAttendanceChangeRequestServiceImpl implements UserAttendanceCha
 
     @Override
     @Transactional
+    @Caching(evict = {
+        @CacheEvict(value = "dailyAttendance", allEntries = true),
+        @CacheEvict(value = "attendanceSummary", allEntries = true),
+        @CacheEvict(value = "attendanceList", allEntries = true)
+    })
     public ApiResponse approveRequest(String requestId) {
         // 현재 로그인한 사용자 정보
         Users approver = securityContextUtil.getCurrentUser();
@@ -191,14 +213,30 @@ public class UserAttendanceChangeRequestServiceImpl implements UserAttendanceCha
         request.setApprovedAt(LocalDateTime.now());
         userAttendanceChangeRequestRepository.save(request);
 
-        // 근태 기록 업데이트
+        // 근태 기록 업데이트 또는 생성
+        UserAttendance attendance;
         if (request.getAttendance() != null) {
-            UserAttendance attendance = request.getAttendance();
+            // 기존 근태 기록이 있는 경우 업데이트
+            attendance = request.getAttendance();
             attendance.setCheckInTime(request.getRequestedCheckInTime());
             if (request.getRequestedCheckOutTime() != null) {
                 attendance.setCheckOutTime(request.getRequestedCheckOutTime());
             }
-            userAttendanceRepository.save(attendance);
+        } else {
+            // 근태 기록이 없는 경우 새로 생성
+            attendance = UserAttendance.builder()
+                    .user(request.getUser())
+                    .workDate(request.getWorkDate())
+                    .checkInTime(request.getRequestedCheckInTime())
+                    .checkOutTime(request.getRequestedCheckOutTime())
+                    .build();
+        }
+        userAttendanceRepository.save(attendance);
+
+        // 신청 내역에 생성된 근태 기록 연결
+        if (request.getAttendance() == null) {
+            request.setAttendance(attendance);
+            userAttendanceChangeRequestRepository.save(request);
         }
 
         return ApiResponse.of(ApiStatus.OK, "승인되었습니다.", true);
@@ -231,7 +269,7 @@ public class UserAttendanceChangeRequestServiceImpl implements UserAttendanceCha
         // 반려 처리
         request.setStatus(UserAttendanceChangeRequest.ChangeStatus.REJECT);
         request.setApprover(approver);
-        request.setApprovedAt(LocalDateTime.now());
+        // 반려 시에는 승인일시를 설정하지 않음
         request.setReason(request.getReason() + "\n[반려 사유] " + rejectReason);
         userAttendanceChangeRequestRepository.save(request);
 

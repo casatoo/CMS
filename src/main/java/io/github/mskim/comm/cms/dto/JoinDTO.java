@@ -24,7 +24,8 @@ public class JoinDTO {
     @Size(min = 2, max = 10, message = "이름은 2자 이상 10자 이하로 입력해주세요")
     private String name;
 
-    @NotBlank(message = "역할은 필수입니다")
+    // 역할은 선택사항 (기본값: USER)
+    // 관리자 외 회원가입 유저는 모두 일반회원 권한으로 설정됨
     @Pattern(regexp = "^(ADMIN|USER)$", message = "역할은 ADMIN 또는 USER만 가능합니다")
     private String role;
 

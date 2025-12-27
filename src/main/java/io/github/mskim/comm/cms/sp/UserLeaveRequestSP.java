@@ -10,6 +10,9 @@ import java.time.LocalDate;
 @EqualsAndHashCode(callSuper = true)
 public class UserLeaveRequestSP extends BaseSP {
 
+    // 사용자 ID (현재 로그인한 사용자 필터링용)
+    private String userId;
+
     // 신청상태
     private UserLeaveRequest.RequestStatus status;
 

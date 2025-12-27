@@ -26,7 +26,8 @@ public interface UserAttendanceChangeRequestRepository extends BaseRepository<Us
     @Query(value = """
            SELECT acr.* FROM USER_ATTENDANCE_CHANGE_REQUEST acr
            LEFT JOIN USERS u ON acr.user_id = u.id
-           WHERE (:#{#sp.status} IS NULL OR acr.status = :#{#sp.status})
+           WHERE (:#{#sp.userId} IS NULL OR acr.user_id = :#{#sp.userId})
+           AND (:#{#sp.status?.name()} IS NULL OR acr.status = :#{#sp.status?.name()})
            AND (:#{#sp.userName} IS NULL OR u.name LIKE CONCAT('%', :#{#sp.userName}, '%'))
            AND (:#{#sp.workDateStart} IS NULL OR acr.work_date >= :#{#sp.workDateStart})
            AND (:#{#sp.workDateEnd} IS NULL OR acr.work_date <= :#{#sp.workDateEnd})

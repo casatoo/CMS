@@ -18,6 +18,20 @@ import java.util.Optional;
 public interface UserLeaveRequestRepository extends BaseRepository<UserLeaveRequest, String> {
 
     /**
+     * ID로 휴가 요청 조회 (User와 Approver 함께 조회, N+1 방지)
+     *
+     * @param id 휴가 요청 ID
+     * @return 휴가 요청
+     */
+    @Query("""
+        SELECT lr FROM UserLeaveRequest lr
+        JOIN FETCH lr.user u
+        LEFT JOIN FETCH lr.approver a
+        WHERE lr.id = :id
+    """)
+    Optional<UserLeaveRequest> findByIdWithUser(@Param("id") String id);
+
+    /**
      * 사용자별 특정 날짜의 대기 중인 휴가 요청 조회 (N+1 방지)
      *
      * @param userId 사용자 ID
@@ -59,10 +73,11 @@ public interface UserLeaveRequestRepository extends BaseRepository<UserLeaveRequ
     @Query(value = """
         SELECT lr.* FROM USER_LEAVE_REQUEST lr
         LEFT JOIN USERS u ON lr.user_id = u.id
-        WHERE (:#{#sp.status} IS NULL OR lr.status = :#{#sp.status})
+        WHERE (:#{#sp.userId} IS NULL OR lr.user_id = :#{#sp.userId})
+        AND (:#{#sp.status?.name()} IS NULL OR lr.status = :#{#sp.status?.name()})
         AND (:#{#sp.userName} IS NULL OR u.name LIKE CONCAT('%', :#{#sp.userName}, '%'))
-        AND (:#{#sp.leaveType} IS NULL OR lr.leave_type = :#{#sp.leaveType})
-        AND (:#{#sp.periodType} IS NULL OR lr.period_type = :#{#sp.periodType})
+        AND (:#{#sp.leaveType?.name()} IS NULL OR lr.leave_type = :#{#sp.leaveType?.name()})
+        AND (:#{#sp.periodType?.name()} IS NULL OR lr.period_type = :#{#sp.periodType?.name()})
         AND (:#{#sp.requestDateStart} IS NULL OR lr.request_date >= :#{#sp.requestDateStart})
         AND (:#{#sp.requestDateEnd} IS NULL OR lr.request_date <= :#{#sp.requestDateEnd})
         AND (:#{#sp.createdAtStart} IS NULL OR DATE(lr.created_at) >= :#{#sp.createdAtStart})

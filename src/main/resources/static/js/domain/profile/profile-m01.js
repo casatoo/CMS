@@ -52,10 +52,10 @@ $(document).ready(function() {
 
         // 프로필 이미지 표시
         if (data.profileImageName) {
-            $('#profileImage').attr('src', '/api/v1/profile/image/' + data.profileImageName);
+            $('#profileModalImage').attr('src', '/api/v1/profile/image/' + data.profileImageName);
             $('#deleteImageBtn').show();
         } else {
-            $('#profileImage').attr('src', '/svg/solid/bxs-user.svg');
+            $('#profileModalImage').attr('src', '/svg/solid/bxs-user.svg');
             $('#deleteImageBtn').hide();
         }
     }
@@ -107,7 +107,7 @@ $(document).ready(function() {
         // 미리보기
         const reader = new FileReader();
         reader.onload = function(event) {
-            $('#profileImage').attr('src', event.target.result);
+            $('#profileModalImage').attr('src', event.target.result);
         };
         reader.readAsDataURL(file);
 
@@ -125,9 +125,9 @@ $(document).ready(function() {
             } else {
                 // 취소 시 원래 이미지로 복원
                 if (currentProfileData.profileImageName) {
-                    $('#profileImage').attr('src', '/api/v1/profile/image/' + currentProfileData.profileImageName);
+                    $('#profileModalImage').attr('src', '/api/v1/profile/image/' + currentProfileData.profileImageName);
                 } else {
-                    $('#profileImage').attr('src', '/svg/solid/bxs-user.svg');
+                    $('#profileModalImage').attr('src', '/svg/solid/bxs-user.svg');
                 }
                 $('#fileInput').val('');
             }
@@ -155,7 +155,10 @@ $(document).ready(function() {
                     text: response.message || '프로필 이미지가 업로드되었습니다.',
                     confirmButtonText: '확인'
                 }).then(() => {
+                    // 모달의 프로필 데이터 다시 로드
                     loadProfile();
+                    // 헤더의 프로필 이미지도 다시 로드
+                    loadHeaderProfileImage();
                     $('#fileInput').val('');
                 });
             },
@@ -163,9 +166,9 @@ $(document).ready(function() {
                 handleAjaxError(xhr, '이미지 업로드에 실패했습니다.');
                 // 실패 시 원래 이미지로 복원
                 if (currentProfileData.profileImageName) {
-                    $('#profileImage').attr('src', '/api/v1/profile/image/' + currentProfileData.profileImageName);
+                    $('#profileModalImage').attr('src', '/api/v1/profile/image/' + currentProfileData.profileImageName);
                 } else {
-                    $('#profileImage').attr('src', '/svg/solid/bxs-user.svg');
+                    $('#profileModalImage').attr('src', '/svg/solid/bxs-user.svg');
                 }
                 $('#fileInput').val('');
             }
@@ -208,12 +211,34 @@ $(document).ready(function() {
                             confirmButtonText: '확인'
                         }).then(() => {
                             loadProfile();
+                            // 헤더의 프로필 이미지도 기본 이미지로 변경
+                            loadHeaderProfileImage();
                         });
                     },
                     error: function(xhr) {
                         handleAjaxError(xhr, '이미지 삭제에 실패했습니다.');
                     }
                 });
+            }
+        });
+    }
+
+    /**
+     * 헤더의 프로필 이미지 다시 로드
+     */
+    function loadHeaderProfileImage() {
+        $.ajax({
+            url: '/api/v1/profile/me',
+            method: 'GET',
+            success: function(data) {
+                if (data && data.profileImageName) {
+                    $('#profileImage').attr('src', '/api/v1/profile/image/' + data.profileImageName);
+                } else {
+                    $('#profileImage').attr('src', '/svg/solid/bxs-user.svg');
+                }
+            },
+            error: function() {
+                console.log('헤더 프로필 이미지를 불러올 수 없습니다.');
             }
         });
     }

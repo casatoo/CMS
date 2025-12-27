@@ -535,4 +535,14 @@ let createSearchForm = function(containerId, searchFields, onSearch, onReset) {
   $(`#${containerId}ResetBtn`).on('click', function() {
     resetSearchForm(formId, onReset);
   });
+
+  // Form submit 이벤트 (엔터키 검색 시 페이지 리로드 방지)
+  $(`#${formId}`).on('submit', function(e) {
+    e.preventDefault(); // 기본 form submit 동작 막기
+    const searchParams = serializeSearchForm(formId);
+    if (onSearch) {
+      onSearch(searchParams);
+    }
+    return false;
+  });
 };
