@@ -2,11 +2,13 @@ package io.github.mskim.comm.cms.serviceImpl;
 
 import io.github.mskim.comm.cms.api.ApiResponse;
 import io.github.mskim.comm.cms.api.ApiStatus;
+import io.github.mskim.comm.cms.dto.PageResponse;
 import io.github.mskim.comm.cms.dto.UserAttendanceChangeRequestDTO;
 import io.github.mskim.comm.cms.dto.UserAttendanceChangeRequestResponseDTO;
 import io.github.mskim.comm.cms.entity.UserAttendance;
 import io.github.mskim.comm.cms.entity.Users;
 import io.github.mskim.comm.cms.repository.UserAttendanceRepository;
+import io.github.mskim.comm.cms.repository.specification.UserAttendanceChangeRequestSpecification;
 import io.github.mskim.comm.cms.service.UserAttendanceService;
 import io.github.mskim.comm.cms.sp.UserAttendanceChangeRequestSP;
 import io.github.mskim.comm.cms.entity.UserAttendanceChangeRequest;
@@ -15,6 +17,11 @@ import io.github.mskim.comm.cms.service.UserAttendanceChangeRequestService;
 import io.github.mskim.comm.cms.sp.UserAttendanceSP;
 import io.github.mskim.comm.cms.util.SecurityContextUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -124,6 +131,39 @@ public class UserAttendanceChangeRequestServiceImpl implements UserAttendanceCha
                     return UserAttendanceChangeRequestResponseDTO.from(request);
                 })
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PageResponse<UserAttendanceChangeRequestResponseDTO> searchAttendanceChangeRequestsWithPaging(
+            UserAttendanceChangeRequestSP sp,
+            int page,
+            int size,
+            String sortBy,
+            String direction
+    ) {
+        // 정렬 설정
+        Sort.Direction sortDirection = "desc".equalsIgnoreCase(direction)
+                ? Sort.Direction.DESC
+                : Sort.Direction.ASC;
+        Sort sort = Sort.by(sortDirection, sortBy != null ? sortBy : "createdAt");
+
+        // 페이지 요청 생성
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        // Specification 생성
+        Specification<UserAttendanceChangeRequest> spec =
+                UserAttendanceChangeRequestSpecification.createSpecification(sp);
+
+        // 페이징 조회
+        Page<UserAttendanceChangeRequest> entityPage = userAttendanceChangeRequestRepository.findAll(spec, pageable);
+
+        // DTO 변환
+        Page<UserAttendanceChangeRequestResponseDTO> dtoPage =
+                entityPage.map(UserAttendanceChangeRequestResponseDTO::from);
+
+        // PageResponse 변환
+        return PageResponse.from(dtoPage);
     }
 
     @Override

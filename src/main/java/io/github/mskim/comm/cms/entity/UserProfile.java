@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "USER_PROFILE")
+@Table(name = "USER_PROFILE", indexes = {
+    @Index(name = "idx_user", columnList = "user_id", unique = true)
+})
 @Data
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor

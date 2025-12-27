@@ -17,11 +17,44 @@ import java.util.Optional;
  */
 public interface UserLeaveRequestRepository extends BaseRepository<UserLeaveRequest, String> {
 
-    @Query("SELECT lr FROM UserLeaveRequest lr WHERE lr.user.id = :userId AND lr.requestDate = :requestDate AND lr.status = 'REQUEST'")
-    Optional<UserLeaveRequest> findPendingRequestByUserIdAndDate(@Param("userId") String userId, @Param("requestDate") LocalDate requestDate);
+    /**
+     * 사용자별 특정 날짜의 대기 중인 휴가 요청 조회 (N+1 방지)
+     *
+     * @param userId 사용자 ID
+     * @param requestDate 요청 날짜
+     * @return 대기 중인 휴가 요청
+     */
+    @Query("""
+        SELECT lr FROM UserLeaveRequest lr
+        JOIN FETCH lr.user u
+        LEFT JOIN FETCH lr.approver a
+        WHERE lr.user.id = :userId
+        AND lr.requestDate = :requestDate
+        AND lr.status = 'REQUEST'
+    """)
+    Optional<UserLeaveRequest> findPendingRequestByUserIdAndDate(
+        @Param("userId") String userId,
+        @Param("requestDate") LocalDate requestDate
+    );
 
-    @Query("SELECT lr FROM UserLeaveRequest lr WHERE lr.requestDate BETWEEN :startDate AND :endDate ORDER BY lr.requestDate DESC")
-    List<UserLeaveRequest> findAllByDateRange(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
+    /**
+     * 기간별 전체 휴가 요청 조회 (N+1 방지)
+     *
+     * @param startDate 시작 날짜
+     * @param endDate 종료 날짜
+     * @return 휴가 요청 목록
+     */
+    @Query("""
+        SELECT lr FROM UserLeaveRequest lr
+        JOIN FETCH lr.user u
+        LEFT JOIN FETCH lr.approver a
+        WHERE lr.requestDate BETWEEN :startDate AND :endDate
+        ORDER BY lr.requestDate DESC
+    """)
+    List<UserLeaveRequest> findAllByDateRange(
+        @Param("startDate") LocalDate startDate,
+        @Param("endDate") LocalDate endDate
+    );
 
     @Query(value = """
         SELECT lr.* FROM USER_LEAVE_REQUEST lr

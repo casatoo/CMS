@@ -6,7 +6,10 @@ import lombok.EqualsAndHashCode;
 
 @Entity @Data
 @EqualsAndHashCode(callSuper = true)
-@Table(name = "USERS")
+@Table(name = "USERS", indexes = {
+    @Index(name = "idx_users_name", columnList = "name"),
+    @Index(name = "idx_users_role", columnList = "role")
+})
 public class Users extends BaseEntity {
 
     @Column(unique = true, nullable = false)

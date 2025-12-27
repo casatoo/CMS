@@ -2,16 +2,23 @@ package io.github.mskim.comm.cms.serviceImpl;
 
 import io.github.mskim.comm.cms.api.ApiResponse;
 import io.github.mskim.comm.cms.api.ApiStatus;
+import io.github.mskim.comm.cms.dto.PageResponse;
 import io.github.mskim.comm.cms.dto.UserLeaveRequestDTO;
 import io.github.mskim.comm.cms.dto.UserLeaveRequestResponseDTO;
 import io.github.mskim.comm.cms.entity.UserLeaveRequest;
 import io.github.mskim.comm.cms.entity.Users;
 import io.github.mskim.comm.cms.repository.UserLeaveRequestRepository;
 import io.github.mskim.comm.cms.repository.UserRepository;
+import io.github.mskim.comm.cms.repository.specification.UserLeaveRequestSpecification;
 import io.github.mskim.comm.cms.service.UserLeaveRequestService;
 import io.github.mskim.comm.cms.sp.UserLeaveRequestSP;
 import io.github.mskim.comm.cms.util.SecurityContextUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -107,6 +114,37 @@ public class UserLeaveRequestServiceImpl implements UserLeaveRequestService {
                     return UserLeaveRequestResponseDTO.from(request);
                 })
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PageResponse<UserLeaveRequestResponseDTO> searchLeaveRequestsWithPaging(
+            UserLeaveRequestSP sp,
+            int page,
+            int size,
+            String sortBy,
+            String direction
+    ) {
+        // 정렬 설정
+        Sort.Direction sortDirection = "desc".equalsIgnoreCase(direction)
+                ? Sort.Direction.DESC
+                : Sort.Direction.ASC;
+        Sort sort = Sort.by(sortDirection, sortBy != null ? sortBy : "createdAt");
+
+        // 페이지 요청 생성
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        // Specification 생성
+        Specification<UserLeaveRequest> spec = UserLeaveRequestSpecification.createSpecification(sp);
+
+        // 페이징 조회
+        Page<UserLeaveRequest> entityPage = userLeaveRequestRepository.findAll(spec, pageable);
+
+        // DTO 변환
+        Page<UserLeaveRequestResponseDTO> dtoPage = entityPage.map(UserLeaveRequestResponseDTO::from);
+
+        // PageResponse 변환
+        return PageResponse.from(dtoPage);
     }
 
     @Override

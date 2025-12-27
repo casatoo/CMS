@@ -5,7 +5,13 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Entity @Builder @Table(name = "USER_ATTENDANCE_CHANGE_REQUEST")
+@Entity @Builder
+@Table(name = "USER_ATTENDANCE_CHANGE_REQUEST", indexes = {
+    @Index(name = "idx_user_status", columnList = "user_id, status"),
+    @Index(name = "idx_status_created", columnList = "status, created_at"),
+    @Index(name = "idx_work_date", columnList = "work_date"),
+    @Index(name = "idx_attendance", columnList = "attendance_id")
+})
 @Data @EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor @NoArgsConstructor
 public class UserAttendanceChangeRequest extends BaseEntity {

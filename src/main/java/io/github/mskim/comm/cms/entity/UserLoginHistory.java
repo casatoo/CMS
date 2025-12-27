@@ -8,7 +8,10 @@ import java.time.LocalDateTime;
 
 @Entity @Builder @Data @EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor @NoArgsConstructor
-@Table(name = "USER_LOGIN_HISTORY")
+@Table(name = "USER_LOGIN_HISTORY", indexes = {
+    @Index(name = "idx_user_login_time", columnList = "user_id, login_time"),
+    @Index(name = "idx_login_time", columnList = "login_time")
+})
 public class UserLoginHistory extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)

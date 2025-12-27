@@ -16,9 +16,11 @@ import java.util.concurrent.TimeUnit;
  *
  * <p>캐시 종류:</p>
  * <ul>
- *   <li><b>users</b>: 사용자 정보 (최대 100개, 30분 유지)</li>
- *   <li><b>attendanceSummary</b>: 근태 요약 정보 (최대 500개, 10분 유지)</li>
- *   <li><b>leaveDays</b>: 휴가일수 정보 (최대 200개, 15분 유지)</li>
+ *   <li><b>users</b>: 사용자 정보 (최대 1000개, 30분 유지)</li>
+ *   <li><b>attendanceSummary</b>: 월별 근무일수 집계 (최대 1000개, 30분 유지)</li>
+ *   <li><b>dailyAttendance</b>: 일별 근태 기록 (최대 1000개, 30분 유지)</li>
+ *   <li><b>attendanceList</b>: 월별 근태 목록 (최대 1000개, 30분 유지)</li>
+ *   <li><b>leaveDays</b>: 휴가일수 정보 (최대 1000개, 30분 유지)</li>
  * </ul>
  *
  * @author CMS Team
@@ -29,9 +31,10 @@ import java.util.concurrent.TimeUnit;
 public class CacheConfig {
 
     /**
-     * 기본 캐시 매니저
+     * 캐시 매니저
      *
-     * <p>모든 캐시의 기본 설정을 제공합니다.</p>
+     * <p>모든 캐시의 설정을 제공합니다.</p>
+     * <p>사용자 정보는 접근 시간 기준으로 30분간 유지됩니다.</p>
      *
      * @return CacheManager
      */
@@ -40,30 +43,14 @@ public class CacheConfig {
         CaffeineCacheManager cacheManager = new CaffeineCacheManager(
             "users",
             "attendanceSummary",
+            "dailyAttendance",
+            "attendanceList",
             "leaveDays"
         );
 
+        // 사용자 정보는 자주 조회되므로 접근 시간 기준으로 캐시 유지
         cacheManager.setCaffeine(Caffeine.newBuilder()
             .maximumSize(1000)
-            .expireAfterWrite(10, TimeUnit.MINUTES)
-            .recordStats());
-
-        return cacheManager;
-    }
-
-    /**
-     * 사용자 정보 전용 캐시 매니저
-     *
-     * <p>사용자 정보는 자주 조회되지만 크기가 작으므로 별도 관리합니다.</p>
-     * <p>접근 시간 기준으로 만료되어 자주 사용되는 사용자는 계속 캐시됩니다.</p>
-     *
-     * @return CacheManager
-     */
-    @Bean
-    public CacheManager userCacheManager() {
-        CaffeineCacheManager cacheManager = new CaffeineCacheManager("users");
-        cacheManager.setCaffeine(Caffeine.newBuilder()
-            .maximumSize(100)
             .expireAfterAccess(30, TimeUnit.MINUTES)
             .recordStats());
 

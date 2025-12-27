@@ -25,12 +25,26 @@ spring:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     properties:
-      dialect: org.hibernate.dialect.MariaDBDialect
+      hibernate:
+        dialect: org.hibernate.dialect.MariaDBDialect
+        # N+1 쿼리 방지를 위한 Batch Fetch Size 설정
+        default_batch_fetch_size: 100
+        # 배치 INSERT/UPDATE 최적화
+        order_inserts: true
+        order_updates: true
+        jdbc:
+          batch_size: 50
+        # 쿼리 로깅 (개발 환경)
+        show_sql: false
+        format_sql: true
+        use_sql_comments: true
   cache:
     type: caffeine
     cache-names:
       - users
       - attendanceSummary
+      - dailyAttendance
+      - attendanceList
       - leaveDays
     caffeine:
       spec: maximumSize=1000,expireAfterWrite=10m
@@ -112,3 +126,18 @@ cors:
 file:
   upload:
     path: "/Users/kimminsik/workspace/CMS/uploads/profiles"
+
+# 로깅 설정
+logging:
+  level:
+    root: INFO
+    io.github.mskim.comm.cms: DEBUG
+    # Hibernate SQL 로깅
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.hibernate.stat: DEBUG
+    # JPA 쿼리 파라미터 로깅
+    org.hibernate.type: TRACE
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"

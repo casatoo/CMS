@@ -7,7 +7,12 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity @Builder
-@Table(name = "USER_LEAVE_REQUEST")
+@Table(name = "USER_LEAVE_REQUEST", indexes = {
+    @Index(name = "idx_user_status", columnList = "user_id, status"),
+    @Index(name = "idx_request_date", columnList = "request_date"),
+    @Index(name = "idx_status_created", columnList = "status, created_at"),
+    @Index(name = "idx_leave_type", columnList = "leave_type")
+})
 @Data @EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor @NoArgsConstructor
 public class UserLeaveRequest extends BaseEntity {

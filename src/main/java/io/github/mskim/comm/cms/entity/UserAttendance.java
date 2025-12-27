@@ -8,7 +8,13 @@ import java.time.LocalDateTime;
 
 @Entity @Builder @Data @EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor @NoArgsConstructor
-@Table(name = "USER_ATTENDANCE", uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "work_date"}))
+@Table(name = "USER_ATTENDANCE",
+    uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "work_date"}),
+    indexes = {
+        @Index(name = "idx_work_date", columnList = "work_date"),
+        @Index(name = "idx_created_at", columnList = "created_at")
+    }
+)
 public class UserAttendance extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
