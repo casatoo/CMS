@@ -104,17 +104,66 @@ src/
 - Gradle 8.7 (또는 래퍼 사용)
 
 ### 환경 변수 설정
+
+**방법 1: .env 파일 사용 (권장)**
+
+1. `.env.example` 파일을 `.env`로 복사:
+   ```bash
+   cp .env.example .env
+   ```
+
+2. `.env` 파일을 열고 실제 값으로 수정:
+   ```bash
+   # 데이터베이스
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_NAME=cms
+   DB_USERNAME=your_database_username
+   DB_PASSWORD=your_secure_database_password
+
+   # JWT (openssl rand -base64 64로 생성 권장)
+   JWT_SECRET=your_strong_jwt_secret_key
+
+   # JPA DDL (프로덕션: validate)
+   DDL_AUTO=update
+
+   # CORS (콤마로 구분)
+   CORS_ALLOWED_ORIGINS=http://localhost:3000,http://yourdomain.com
+
+   # 파일 업로드 경로
+   FILE_UPLOAD_PATH=/path/to/upload/directory
+
+   # 서버 포트
+   SERVER_PORT=8080
+
+   # 로깅 레벨
+   LOG_LEVEL_ROOT=INFO
+   LOG_LEVEL_APP=DEBUG
+   ```
+
+**방법 2: 시스템 환경 변수 설정**
+
 ```bash
-# 데이터베이스
+# Linux/Mac
+export DB_HOST=127.0.0.11
+export DB_PORT=3306
+export DB_NAME=cms
 export DB_USERNAME=your_database_username
 export DB_PASSWORD=your_secure_database_password
-
-# JWT
 export JWT_SECRET=your_strong_jwt_secret_key
+export DDL_AUTO=update
+export CORS_ALLOWED_ORIGINS=http://localhost:3000,http://yourdomain.com
+export FILE_UPLOAD_PATH=/var/app/uploads/profiles
+export SERVER_PORT=8080
 
-# JPA DDL
-export DDL_AUTO=update  # 프로덕션: validate
+# Windows (PowerShell)
+$env:DB_HOST="127.0.0.1"
+$env:DB_PORT="3306"
+$env:DB_NAME="cms"
+# ... (동일하게 설정)
 ```
+
+**중요**: `.env` 파일은 `.gitignore`에 포함되어 있어 Git에 커밋되지 않습니다. 민감한 정보를 절대 커밋하지 마세요.
 
 ### 실행
 ```bash
@@ -176,6 +225,18 @@ export DDL_AUTO=update  # 프로덕션: validate
   - 캐시 키에 위치 인자 참조 방식 적용 (#p0)
   - SecurityConfig에 CacheManager 주입
   - 관리자 전용 API 엔드포인트 보호
+
+- **환경변수 관리 개선**:
+  - `.env.example` 파일 추가 (템플릿)
+  - `application.yml`의 하드코딩된 설정값 환경변수화
+    - DB 연결 정보 (DB_HOST, DB_PORT, DB_NAME)
+    - CORS 허용 출처 (CORS_ALLOWED_ORIGINS)
+    - 파일 업로드 경로 (FILE_UPLOAD_PATH)
+    - 서버 포트 (SERVER_PORT)
+    - 로깅 레벨 (LOG_LEVEL_ROOT, LOG_LEVEL_APP)
+  - `CorsProperties` 클래스 개선 (콤마 구분 문자열 → List 자동 변환)
+  - `.gitignore`에 `.env` 파일 추가 (보안 강화)
+  - 환경변수 설정 가이드 문서화
 
 ### 2025-12-27: 아키텍처 대규모 리팩토링
 - **MyBatis → JPA 완전 마이그레이션**: 단일 ORM 패턴 확립

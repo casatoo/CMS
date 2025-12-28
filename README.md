@@ -193,7 +193,7 @@ cd CMS
 `.env.example` 파일을 복사하여 `.env` 파일을 생성하고 값을 설정하세요:
 
 ```bash
-cp .env.example .env
+cp .env
 # .env 파일을 편집하여 실제 값 입력
 ```
 
@@ -250,7 +250,6 @@ MySQL/MariaDB에서 `cms` 데이터베이스를 생성하세요.
 
 - **[CLAUDE.md](CLAUDE.md)** - 전체 프로젝트 문서 (기술 스택, 아키텍처, 보안, 기능 상세)
 - **[NAMING_CONVENTIONS.md](NAMING_CONVENTIONS.md)** - 코드 명명 규칙 가이드
-- **[.env.example](.env.example)** - 환경 변수 설정 예시
 
 ### 주요 문서 섹션
 

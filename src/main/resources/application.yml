@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: ${SERVER_PORT:8080}
   servlet:
     session:
       timeout: 30m
@@ -20,9 +20,9 @@ spring:
       max-request-size: 10MB   # 전체 요청 최대 크기
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://192.168.0.12:3306/cms?useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
-    username: ${DB_USERNAME:admin}
-    password: ${DB_PASSWORD:admin01}
+    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:cms}?useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
   jpa:
     open-in-view: false
     hibernate:
@@ -54,7 +54,7 @@ spring:
     caffeine:
       spec: maximumSize=1000,expireAfterWrite=10m
   jwt:
-    secret: ${JWT_SECRET:c2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQtc2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQK}
+    secret: ${JWT_SECRET:secretKey}
 
 resilience4j:
   bulkhead:     # 동시요청 수 제한하는 설정 - 세마포어 방식
@@ -122,21 +122,17 @@ management:
       enabled: true
 
 cors:
-  allowed:
-    - "http://localhost"
-    - "http://127.0.0.1"
-    - "http://192.168.1.100"
-    - "http://localhost:3000"
+  allowed: ${CORS_ALLOWED_ORIGINS:http://localhost,http://127.0.0.1,http://localhost:3000}
 
 file:
   upload:
-    path: "/Users/kimminsik/workspace/CMS/uploads/profiles"
+    path: ${FILE_UPLOAD_PATH:/tmp/cms/uploads/profiles}
 
 # 로깅 설정
 logging:
   level:
-    root: INFO
-    io.github.mskim.comm.cms: DEBUG
+    root: ${LOG_LEVEL_ROOT:INFO}
+    io.github.mskim.comm.cms: ${LOG_LEVEL_APP:DEBUG}
     # Hibernate SQL 로깅
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
