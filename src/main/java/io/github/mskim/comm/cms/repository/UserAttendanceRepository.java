@@ -198,4 +198,18 @@ public interface UserAttendanceRepository extends BaseRepository<UserAttendance,
         ORDER BY ua.workDate DESC
     """)
     List<UserAttendance> findByUserNameContaining(@Param("userName") String userName);
+
+    /**
+     * 특정 날짜의 출근 인원 수 조회 (대시보드용)
+     *
+     * <p>관리자 대시보드에서 오늘 출근 인원 수를 조회할 때 사용</p>
+     *
+     * @param workDate 근무일
+     * @return 출근 인원 수
+     */
+    @Query("""
+        SELECT COUNT(ua) FROM UserAttendance ua
+        WHERE ua.workDate = :workDate
+    """)
+    Long countByWorkDate(@Param("workDate") LocalDate workDate);
 }

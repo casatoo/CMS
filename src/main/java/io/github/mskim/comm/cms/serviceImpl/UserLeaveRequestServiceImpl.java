@@ -170,7 +170,8 @@ public class UserLeaveRequestServiceImpl implements UserLeaveRequestService {
     @Caching(evict = {
         @CacheEvict(value = "dailyAttendance", allEntries = true),
         @CacheEvict(value = "attendanceSummary", allEntries = true),
-        @CacheEvict(value = "attendanceList", allEntries = true)
+        @CacheEvict(value = "attendanceList", allEntries = true),
+        @CacheEvict(value = "dashboardStats", allEntries = true)
     })
     public ApiResponse approveRequest(String requestId) {
         // 현재 로그인한 사용자 정보
@@ -223,6 +224,7 @@ public class UserLeaveRequestServiceImpl implements UserLeaveRequestService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "dashboardStats", allEntries = true)
     public ApiResponse rejectRequest(String requestId, String rejectReason) {
         // 현재 로그인한 사용자 정보
         Users approver = securityContextUtil.getCurrentUser();

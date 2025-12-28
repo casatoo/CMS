@@ -112,7 +112,8 @@ public class UserAttendanceServiceImpl implements UserAttendanceService {
     @Caching(evict = {
         @CacheEvict(value = "dailyAttendance", allEntries = true),
         @CacheEvict(value = "attendanceSummary", allEntries = true),
-        @CacheEvict(value = "attendanceList", allEntries = true)
+        @CacheEvict(value = "attendanceList", allEntries = true),
+        @CacheEvict(value = "dashboardStats", allEntries = true)
     })
     public void checkIn() {
         Users user = securityContextUtil.getCurrentUser();
@@ -149,7 +150,8 @@ public class UserAttendanceServiceImpl implements UserAttendanceService {
     @Caching(evict = {
         @CacheEvict(value = "dailyAttendance", allEntries = true),
         @CacheEvict(value = "attendanceSummary", allEntries = true),
-        @CacheEvict(value = "attendanceList", allEntries = true)
+        @CacheEvict(value = "attendanceList", allEntries = true),
+        @CacheEvict(value = "dashboardStats", allEntries = true)
     })
     public void checkOut() {
         Users user = securityContextUtil.getCurrentUser();

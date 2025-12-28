@@ -38,9 +38,9 @@
                 </a>
             </li>
             <li sec:authorize="hasAuthority('ROLE_ADMIN')">
-                <a href="/view/chart">
+                <a href="/view/dashboard">
                     <i class='bx bx-line-chart' ></i>
-                    <span class="link_name">차트</span>
+                    <span class="link_name">관리자 대시보드</span>
                 </a>
             </li>
             <li sec:authorize="hasAuthority('ROLE_ADMIN')">
@@ -49,12 +49,12 @@
                     <span class="link_name">출퇴근 기록</span>
                 </a>
             </li>
-            <li>
-                <a href="/view/setting">
-                    <i class='bx bx-cog' ></i>
-                    <span class="link_name">세팅</span>
-                </a>
-            </li>
+<!--            <li>-->
+<!--                <a href="/view/setting">-->
+<!--                    <i class='bx bx-cog' ></i>-->
+<!--                    <span class="link_name">세팅</span>-->
+<!--                </a>-->
+<!--            </li>-->
             <li>
                 <div class="profile-details">
                     <div class="profile-content">

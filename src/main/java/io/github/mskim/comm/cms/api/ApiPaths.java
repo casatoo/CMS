@@ -8,4 +8,5 @@ public class ApiPaths {
     public static final String LEAVE = BASE_API + "/leave";
     public static final String LOGIN_HISTORY = BASE_API + "/login-history";
     public static final String USER = BASE_API + "/user";
+    public static final String DASHBOARD = BASE_API + "/dashboard";
 }

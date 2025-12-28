@@ -6,6 +6,7 @@ import io.github.mskim.comm.cms.jwt.LoginFilter;
 import io.github.mskim.comm.cms.service.UserLoginHistoryService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -31,12 +32,14 @@ public class SecurityConfig {
     private final AuthenticationConfiguration authenticationConfiguration;
     private final UserLoginHistoryService userLoginHistoryService;
     private final JWTUtil jwtUtil;
+    private final CacheManager cacheManager;
 
-    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, CustomAuthenticationEntryPoint authenticationEntryPoint, UserLoginHistoryService userLoginHistoryService, JWTUtil jwtUtil) {
+    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, CustomAuthenticationEntryPoint authenticationEntryPoint, UserLoginHistoryService userLoginHistoryService, JWTUtil jwtUtil, CacheManager cacheManager) {
         this.authenticationEntryPoint = authenticationEntryPoint;
         this.authenticationConfiguration = authenticationConfiguration;
         this.userLoginHistoryService = userLoginHistoryService;
         this.jwtUtil = jwtUtil;
+        this.cacheManager = cacheManager;
     }
     // AuthenticationManager Bean 생성
     @Bean
@@ -59,6 +62,7 @@ public class SecurityConfig {
                         // 관리자 전용 페이지
                         .requestMatchers("/view/attendance03", "/view/attendance04").hasAuthority("ROLE_ADMIN")
                         .requestMatchers("/view/chart", "/view/history").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers("/view/dashboard").hasAuthority("ROLE_ADMIN")
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(exception -> exception
@@ -73,6 +77,7 @@ public class SecurityConfig {
                         .logoutSuccessHandler((request, response, authentication) -> {
                             // 세션 무효화 (JSESSIONID 삭제)
                             request.getSession().invalidate();
+
                             // "Authorization" 쿠키 삭제
                             Cookie cookie = new Cookie("Authorization", null);
                             cookie.setHttpOnly(true);
@@ -80,6 +85,14 @@ public class SecurityConfig {
                             cookie.setPath("/");
                             cookie.setMaxAge(0); // 즉시 삭제
                             response.addCookie(cookie);
+
+                            // 모든 캐시 클리어 (사용자 전환 시 이전 사용자 데이터 방지)
+                            cacheManager.getCacheNames().forEach(cacheName -> {
+                                var cache = cacheManager.getCache(cacheName);
+                                if (cache != null) {
+                                    cache.clear();
+                                }
+                            });
 
                             response.setStatus(HttpServletResponse.SC_OK);
                         })

@@ -45,7 +45,8 @@ public class CacheConfig {
             "attendanceSummary",
             "dailyAttendance",
             "attendanceList",
-            "leaveDays"
+            "leaveDays",
+            "dashboardStats"
         );
 
         // 사용자 정보는 자주 조회되므로 접근 시간 기준으로 캐시 유지

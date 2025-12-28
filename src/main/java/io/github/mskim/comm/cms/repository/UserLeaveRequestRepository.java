@@ -103,4 +103,14 @@ public interface UserLeaveRequestRepository extends BaseRepository<UserLeaveRequ
         @Param("requestDate") LocalDate requestDate,
         @Param("status") UserLeaveRequest.RequestStatus status
     );
+
+    /**
+     * 상태별 휴가 요청 개수 조회 (대시보드용)
+     *
+     * <p>관리자 대시보드에서 승인 대기 건수를 조회할 때 사용</p>
+     *
+     * @param status 요청 상태
+     * @return 요청 개수
+     */
+    Long countByStatus(UserLeaveRequest.RequestStatus status);
 }

@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService {
      * @throws BusinessException 사용자를 찾을 수 없는 경우
      */
     @Override
-    @Cacheable(value = "users", key = "#loginId")
+    @Cacheable(value = "users", key = "#p0")
     public Users findByLoginId(String loginId) {
         return userRepository.findByLoginId(loginId)
             .orElseThrow(() -> new BusinessException(

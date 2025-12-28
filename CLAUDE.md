@@ -25,6 +25,7 @@
 - **FullCalendar** - 캘린더 컴포넌트
 - **Flatpickr** - 날짜 선택기 (한국어 지원)
 - **SweetAlert2** - 팝업 알림
+- **ApexCharts** - 인터랙티브 차트 라이브러리
 
 ## 프로젝트 구조
 
@@ -79,8 +80,18 @@ src/
 - 다중 조건 검색 및 필터링
 - 서버사이드 페이지네이션
 
+### 관리자 대시보드
+- 실시간 출근 현황 모니터링 (출근/미출근/출근율)
+- 승인 대기 현황 (근태 수정 요청, 휴가 신청)
+- ApexCharts 기반 시각화 (도넛 차트, 막대 차트)
+- 자동 갱신 (5분 간격)
+- 관리자 전용 접근 (ROLE_ADMIN)
+
 ### 성능 최적화
 - Caffeine 기반 인메모리 캐싱
+  - 사용자별 캐시 분리 (loginId, userId 기반 키)
+  - 로그아웃 시 전체 캐시 자동 클리어
+  - 브라우저 캐시 방지 헤더 설정
 - JOIN FETCH를 통한 N+1 쿼리 해결
 - 데이터베이스 인덱스 최적화
 - AOP 기반 쿼리 성능 모니터링
@@ -148,6 +159,24 @@ export DDL_AUTO=update  # 프로덕션: validate
 
 ## 최근 주요 변경 사항
 
+### 2025-12-28: 관리자 대시보드 및 캐시 개선
+- **관리자 대시보드 구현**:
+  - 실시간 출근 현황 및 승인 대기 통계
+  - ApexCharts 기반 시각화 (도넛 차트, 막대 차트)
+  - 자동 갱신 기능 (5분 간격)
+  - ROLE_ADMIN 권한 기반 접근 제어
+
+- **캐시 전략 개선**:
+  - 로그아웃 시 모든 캐시 자동 클리어
+  - 브라우저 캐시 방지 헤더 추가
+  - 사용자 전환 시 이전 사용자 데이터 표시 방지
+  - 대시보드 통계 캐싱 (30분 TTL)
+
+- **보안 강화**:
+  - 캐시 키에 위치 인자 참조 방식 적용 (#p0)
+  - SecurityConfig에 CacheManager 주입
+  - 관리자 전용 API 엔드포인트 보호
+
 ### 2025-12-27: 아키텍처 대규모 리팩토링
 - **MyBatis → JPA 완전 마이그레이션**: 단일 ORM 패턴 확립
   - [상세 내용: MIGRATION_HISTORY.md](./docs/MIGRATION_HISTORY.md)
@@ -192,6 +221,7 @@ export DDL_AUTO=update  # 프로덕션: validate
 ### 기능 문서
 - [검색 기능](./docs/features/SEARCH.md)
 - [페이지네이션](./docs/features/PAGINATION.md)
+- [관리자 대시보드](./docs/features/ADMIN_DASHBOARD.md) (생성 예정)
 
 ### 성능 및 보안
 - [쿼리 최적화](./docs/performance/QUERY_OPTIMIZATION.md) (생성 예정)

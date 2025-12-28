@@ -4,6 +4,7 @@ import io.github.mskim.comm.cms.dto.UserAttendanceDTO;
 import io.github.mskim.comm.cms.entity.Users;
 import io.github.mskim.comm.cms.service.UserAttendanceService;
 import io.github.mskim.comm.cms.service.UserService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -32,7 +33,11 @@ public class MainViewController {
     }
 
     @RequestMapping("/main")
-    public String mainPage (Model model) {
+    public String mainPage (Model model, HttpServletResponse response) {
+        // 브라우저 캐시 방지 헤더 설정
+        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+        response.setHeader("Pragma", "no-cache");
+        response.setHeader("Expires", "0");
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String loginId = authentication.getName();
