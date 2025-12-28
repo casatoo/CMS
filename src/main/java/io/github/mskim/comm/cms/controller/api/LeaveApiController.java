@@ -114,4 +114,14 @@ public class LeaveApiController {
     public ApiResponse rejectLeaveRequest(@Valid @RequestBody LeaveApprovalRequestDTO request) {
         return userLeaveRequestService.rejectRequest(request.getRequestId(), request.getRejectReason());
     }
+
+    /**
+     * 현재 로그인한 사용자의 연차/외근/출장 요청 조회
+     *
+     * @return 사용자의 휴가 요청 목록
+     */
+    @GetMapping("/request/my")
+    public List<UserLeaveRequestResponseDTO> getMyLeaveRequests() {
+        return userLeaveRequestService.findMyLeaveRequests();
+    }
 }

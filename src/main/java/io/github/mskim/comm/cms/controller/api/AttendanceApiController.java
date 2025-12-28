@@ -4,6 +4,7 @@ import io.github.mskim.comm.cms.api.ApiPaths;
 import io.github.mskim.comm.cms.api.ApiResponse;
 import io.github.mskim.comm.cms.api.ApiStatus;
 import io.github.mskim.comm.cms.dto.ApprovalRequestDTO;
+import io.github.mskim.comm.cms.dto.AttendanceHistoryDTO;
 import io.github.mskim.comm.cms.dto.PageResponse;
 import io.github.mskim.comm.cms.dto.UserAttendanceChangeRequestDTO;
 import io.github.mskim.comm.cms.dto.UserAttendanceChangeRequestResponseDTO;
@@ -153,5 +154,37 @@ public class AttendanceApiController {
     @PostMapping("/request/reject")
     public ApiResponse rejectAttendanceChangeRequest(@Valid @RequestBody ApprovalRequestDTO request) {
         return userAttendanceChangeRequestService.rejectRequest(request.getRequestId(), request.getRejectReason());
+    }
+
+    /**
+     * 현재 로그인한 사용자의 근태 변경 요청 조회
+     *
+     * @return 사용자의 근태 변경 요청 목록
+     */
+    @GetMapping("/request/my")
+    public List<UserAttendanceChangeRequestResponseDTO> getMyChangeRequests() {
+        return userAttendanceChangeRequestService.findMyChangeRequests();
+    }
+
+    /**
+     * 출퇴근 기록 조회 (휴가 상태 포함)
+     *
+     * <p>날짜 또는 사용자명 중 하나는 필수입니다.</p>
+     * <ul>
+     *   <li>날짜만 입력: 해당 날짜의 전체 사용자 출퇴근 기록 조회</li>
+     *   <li>날짜 + 사용자명: 해당 날짜의 특정 사용자 출퇴근 기록 조회</li>
+     *   <li>사용자명만 입력: 해당 사용자의 전체 출퇴근 기록을 최신순으로 조회</li>
+     * </ul>
+     *
+     * @param workDate 근무일자 (선택)
+     * @param userName 사용자명 (선택)
+     * @return 출퇴근 기록 목록 (휴가 상태 포함)
+     */
+    @GetMapping("/history")
+    public List<AttendanceHistoryDTO> getAttendanceHistory(
+            @RequestParam(value = "workDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate workDate,
+            @RequestParam(value = "userName", required = false) String userName
+    ) {
+        return userAttendanceService.findAttendanceHistory(workDate, userName);
     }
 }

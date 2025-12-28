@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/default}">
+<head>
+    <title>출퇴근 기록</title>
+    <!-- js -->
+    <script src="/js/domain/main/history01.js"></script>
+</head>
+<div layout:fragment="content">
+    <div class="container p-t-20">
+        <!-- 페이지 타이틀 -->
+        <div class="page-title dark">
+            <i class="bi bi-clock-history"></i>
+            <span>출퇴근 기록</span>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <!-- 검색 폼 영역 -->
+                <div id="attendanceHistorySearchContainer" class="mb-1 m-t-5"></div>
+
+                <!-- 그리드 영역 -->
+                <div id="attendanceHistoryGrid" style="width: 100%; height: 600px;" class="ag-theme-alpine m-b-30"></div>
+            </div>
+        </div>
+    </div>
+</div>
+</html>

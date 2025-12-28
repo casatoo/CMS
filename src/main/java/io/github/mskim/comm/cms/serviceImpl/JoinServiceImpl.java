@@ -36,7 +36,7 @@ public class JoinServiceImpl implements JoinService {
         data.setRole(EnumCode.ROLE_USER.getCode());
         data.setPosition(EnumCode.MANAGER.getCode());
         data.setName(joinDTO.getName());
-        data.setAnnualLeaveDays(15); // 최초 연차 일수
+        data.setAnnualLeaveDays(15.0); // 최초 연차 일수
 
         userRepository.save(data);
 

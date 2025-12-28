@@ -3,10 +3,19 @@ let initDateModal = function () {
 
     });
     $('#dateModal').on('hide.bs.modal', function () {
-        $(document.activeElement).blur();
+        // 모달 내부에 포커스가 있는 요소의 포커스 제거
+        const focusedElement = $(this).find(':focus');
+        if (focusedElement.length > 0) {
+            focusedElement.blur();
+        }
         $('#startTime').val('');
         $('#endTime').val('');
         $('#reason').val('');
+    });
+
+    // 모달이 완전히 숨겨진 후 포커스 정리
+    $('#dateModal').on('hidden.bs.modal', function () {
+        $(document.activeElement).blur();
     });
 }
 

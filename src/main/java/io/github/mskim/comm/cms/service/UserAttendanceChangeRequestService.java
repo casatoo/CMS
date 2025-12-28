@@ -37,4 +37,11 @@ public interface UserAttendanceChangeRequestService {
     ApiResponse approveRequest(String requestId);
 
     ApiResponse rejectRequest(String requestId, String rejectReason);
+
+    /**
+     * 현재 로그인한 사용자의 근태 변경 요청 조회
+     *
+     * @return 사용자의 근태 변경 요청 목록
+     */
+    List<UserAttendanceChangeRequestResponseDTO> findMyChangeRequests();
 }

@@ -275,4 +275,14 @@ public class UserAttendanceChangeRequestServiceImpl implements UserAttendanceCha
 
         return ApiResponse.of(ApiStatus.OK, "반려되었습니다.", true);
     }
+
+    @Override
+    public List<UserAttendanceChangeRequestResponseDTO> findMyChangeRequests() {
+        Users user = securityContextUtil.getCurrentUser();
+        List<UserAttendanceChangeRequest> requests = userAttendanceChangeRequestRepository.findAllByUserId(user.getId());
+
+        return requests.stream()
+                .map(UserAttendanceChangeRequestResponseDTO::from)
+                .collect(Collectors.toList());
+    }
 }

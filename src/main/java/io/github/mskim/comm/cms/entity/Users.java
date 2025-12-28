@@ -22,7 +22,7 @@ public class Users extends BaseEntity {
     private String name;
 
     @Column(name = "annual_leave_days", nullable = false)
-    private int annualLeaveDays;
+    private Double annualLeaveDays;
 
     @Column(nullable = false)
     private String role;

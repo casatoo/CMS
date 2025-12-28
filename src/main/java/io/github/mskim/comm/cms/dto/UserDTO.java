@@ -9,7 +9,7 @@ public class UserDTO extends BaseDTO{
     private String loginId;         // 로그인 아이디
     private String password;        // 비밀번호
     private String name;            // 이름
-    private int annualLeaveDays;    // 연차
+    private Double annualLeaveDays;    // 연차
     private String role;            // 권한
     private String position;            // 직급
 }

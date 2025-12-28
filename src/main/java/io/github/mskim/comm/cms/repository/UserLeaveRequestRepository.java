@@ -85,4 +85,22 @@ public interface UserLeaveRequestRepository extends BaseRepository<UserLeaveRequ
         ORDER BY lr.created_at DESC
         """, nativeQuery = true)
     List<UserLeaveRequest> searchLeaveRequests(@Param("sp") UserLeaveRequestSP sp);
+
+    /**
+     * 특정 날짜와 상태로 휴가 요청 조회
+     *
+     * @param requestDate 요청 날짜
+     * @param status 요청 상태
+     * @return 휴가 요청 목록
+     */
+    @Query("""
+        SELECT lr FROM UserLeaveRequest lr
+        JOIN FETCH lr.user
+        WHERE lr.requestDate = :requestDate
+        AND lr.status = :status
+    """)
+    List<UserLeaveRequest> findByRequestDateAndStatus(
+        @Param("requestDate") LocalDate requestDate,
+        @Param("status") UserLeaveRequest.RequestStatus status
+    );
 }

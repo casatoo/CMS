@@ -481,19 +481,20 @@ let createSearchForm = function(containerId, searchFields, onSearch, onReset) {
 
     if (field.type === 'select') {
       formHtml += `
-          <select class="search-input search-select" name="${field.name}">
+          <select class="search-input search-select" name="${field.name}" id="${field.name}">
             <option value="">전체</option>`;
       field.options.forEach(opt => {
         formHtml += `<option value="${opt.value}">${opt.label}</option>`;
       });
       formHtml += `</select>`;
     } else if (field.type === 'date') {
+      const defaultValue = field.defaultValue || '';
       formHtml += `
           <input type="text" class="search-input" name="${field.name}" id="${field.name}"
-                 placeholder="${field.placeholder || 'YYYY-MM-DD'}">`;
+                 placeholder="${field.placeholder || 'YYYY-MM-DD'}" value="${defaultValue}">`;
     } else {
       formHtml += `
-          <input type="text" class="search-input" name="${field.name}"
+          <input type="text" class="search-input" name="${field.name}" id="${field.name}"
                  placeholder="${field.placeholder || ''}">`;
     }
 
@@ -520,7 +521,15 @@ let createSearchForm = function(containerId, searchFields, onSearch, onReset) {
   // DatePicker 초기화
   searchFields.forEach(field => {
     if (field.type === 'date') {
-      initDatePicker(field.name);
+      const pickerOptions = {};
+      if (field.defaultValue) {
+        pickerOptions.defaultDate = field.defaultValue;
+      }
+      // maxDate 옵션이 있으면 적용 (미래 날짜 선택 방지)
+      if (field.maxDate !== undefined) {
+        pickerOptions.maxDate = field.maxDate;
+      }
+      initDatePicker(field.name, pickerOptions);
     }
   });
 
@@ -544,5 +553,16 @@ let createSearchForm = function(containerId, searchFields, onSearch, onReset) {
       onSearch(searchParams);
     }
     return false;
+  });
+
+  // 모든 input 필드에서 엔터 키 누르면 조회
+  $(`#${formId}`).find('input[type="text"]').on('keypress', function(e) {
+    if (e.key === 'Enter' || e.keyCode === 13) {
+      e.preventDefault();
+      const searchParams = serializeSearchForm(formId);
+      if (onSearch) {
+        onSearch(searchParams);
+      }
+    }
   });
 };

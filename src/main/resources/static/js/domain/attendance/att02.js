@@ -5,6 +5,7 @@ let selectedDate = "";
 $(document).ready(function() {
     initCalendar();
     initLeaveRequestModal();
+    initLeaveDetailModal();
     onClickLeaveRequestBtn();
 });
 
@@ -95,6 +96,21 @@ let initCalendar = () => {
             const clickedDate = info.dateStr;
             selectedDate = clickedDate;
 
+            // 클릭한 날짜에 이벤트가 있는지 확인
+            const events = calendar.getEvents();
+            const existingEvent = events.find(event => {
+                // 이벤트의 시작 날짜를 YYYY-MM-DD 형식으로 변환
+                const eventDate = event.startStr.substring(0, 10);
+                return eventDate === clickedDate;
+            });
+
+            // 이벤트가 있으면 상세정보 모달 표시
+            if (existingEvent) {
+                showLeaveDetailModal(existingEvent);
+                return;
+            }
+
+            // 이벤트가 없으면 신청 모달 표시
             // apps.js의 공통 함수 사용 - 날짜 비교
             const comparison = compareDateWithToday(clickedDate);
 
@@ -106,6 +122,11 @@ let initCalendar = () => {
 
             $("#leaveFormTitle").html(`<p>선택한 날짜: ${info.dateStr}</p>`);
             $('#leaveModal').modal('show');
+        },
+        eventClick: function(info) {
+            // 이벤트 클릭 시 상세정보 모달 표시
+            info.jsEvent.preventDefault(); // 브라우저 기본 동작 방지
+            showLeaveDetailModal(info.event);
         }
     });
 }

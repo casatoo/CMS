@@ -12,6 +12,18 @@ function initAttendanceRequestDetailModal() {
     $('#btnReject').off('click').on('click', function() {
         rejectAttendanceRequest();
     });
+
+    // 모달 닫힐 때 포커스 정리
+    $('#attendanceRequestDetailModal').on('hide.bs.modal', function () {
+        const focusedElement = $(this).find(':focus');
+        if (focusedElement.length > 0) {
+            focusedElement.blur();
+        }
+    });
+
+    $('#attendanceRequestDetailModal').on('hidden.bs.modal', function () {
+        $(document.activeElement).blur();
+    });
 }
 
 // 모달 열기

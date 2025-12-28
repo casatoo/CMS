@@ -4,12 +4,21 @@ let initLeaveRequestModal = function () {
     });
 
     $('#leaveModal').on('hide.bs.modal', function () {
-        $(document.activeElement).blur();
+        // 모달 내부에 포커스가 있는 요소의 포커스 제거
+        const focusedElement = $(this).find(':focus');
+        if (focusedElement.length > 0) {
+            focusedElement.blur();
+        }
         $('#leaveType').val('');
         $('#periodType').val('');
         $('#location').val('');
         $('#reason').val('');
         $('#locationGroup').hide();
+    });
+
+    // 모달이 완전히 숨겨진 후 포커스 정리
+    $('#leaveModal').on('hidden.bs.modal', function () {
+        $(document.activeElement).blur();
     });
 
     // 신청 유형에 따라 장소 입력란 표시/숨김

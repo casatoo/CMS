@@ -212,8 +212,8 @@ public class UserLeaveRequestServiceImpl implements UserLeaveRequestService {
             }
 
             // 연차 차감
-            int currentLeaveDays = user.getAnnualLeaveDays();
-            int newLeaveDays = (int) Math.floor(currentLeaveDays - deductDays);
+            Double currentLeaveDays = user.getAnnualLeaveDays();
+            Double newLeaveDays = currentLeaveDays - deductDays;
             user.setAnnualLeaveDays(newLeaveDays);
             userRepository.save(user);
         }
@@ -253,5 +253,24 @@ public class UserLeaveRequestServiceImpl implements UserLeaveRequestService {
         userLeaveRequestRepository.save(request);
 
         return ApiResponse.of(ApiStatus.OK, "반려되었습니다.", true);
+    }
+
+    @Override
+    public List<UserLeaveRequestResponseDTO> findMyLeaveRequests() {
+        Users user = securityContextUtil.getCurrentUser();
+        UserLeaveRequestSP sp = new UserLeaveRequestSP();
+        sp.setUserId(user.getId());
+        List<UserLeaveRequest> requests = userLeaveRequestRepository.searchLeaveRequests(sp);
+
+        return requests.stream()
+                .map(request -> {
+                    // Lazy Loading 초기화
+                    request.getUser().getName();
+                    if (request.getApprover() != null) {
+                        request.getApprover().getName();
+                    }
+                    return UserLeaveRequestResponseDTO.from(request);
+                })
+                .collect(Collectors.toList());
     }
 }

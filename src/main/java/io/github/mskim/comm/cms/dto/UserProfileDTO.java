@@ -16,7 +16,7 @@ public class UserProfileDTO {
     private String loginId; // 로그인 ID (수정 불가)
     private String name; // 이름
     private String position; // 직급
-    private int annualLeaveDays; // 연차 일수
+    private Double annualLeaveDays; // 연차 일수
     private String role; // 권한
 
     // 프로필 이미지 정보

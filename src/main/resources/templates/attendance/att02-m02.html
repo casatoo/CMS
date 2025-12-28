@@ -1,0 +1,45 @@
+<div class="modal fade" id="leaveDetailModal" tabindex="-1" aria-labelledby="leaveDetailModalLabel" aria-modal="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="leaveDetailModalLabel">연차/외근/출장 상세정보</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="detail-info">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">신청 상태</label>
+                        <div id="detailStatus"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">신청자</label>
+                        <div id="detailUserName"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">신청 날짜</label>
+                        <div id="detailRequestDate"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">신청 유형</label>
+                        <div id="detailLeaveType"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">기간</label>
+                        <div id="detailPeriodType"></div>
+                    </div>
+                    <div class="mb-3" id="detailLocationGroup" style="display: none;">
+                        <label class="form-label fw-bold">장소</label>
+                        <div id="detailLocation"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">신청사유</label>
+                        <div id="detailReason" style="white-space: pre-wrap;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -182,4 +182,20 @@ public interface UserAttendanceRepository extends BaseRepository<UserAttendance,
         @Param("startOfMonth") LocalDate startOfMonth,
         @Param("endOfMonth") LocalDate endOfMonth
     );
+
+    /**
+     * 사용자명으로 근태 기록 조회 (최신순)
+     *
+     * <p>출퇴근 기록 화면에서 사용자명만으로 조회 시 사용</p>
+     *
+     * @param userName 사용자명 (부분 일치)
+     * @return 근태 기록 목록 (최신순 정렬)
+     */
+    @Query("""
+        SELECT ua FROM UserAttendance ua
+        JOIN FETCH ua.user u
+        WHERE u.name LIKE %:userName%
+        ORDER BY ua.workDate DESC
+    """)
+    List<UserAttendance> findByUserNameContaining(@Param("userName") String userName);
 }

@@ -38,4 +38,11 @@ public interface UserLeaveRequestService {
     ApiResponse approveRequest(String requestId);
 
     ApiResponse rejectRequest(String requestId, String rejectReason);
+
+    /**
+     * 현재 로그인한 사용자의 연차/외근/출장 요청 조회
+     *
+     * @return 사용자의 휴가 요청 목록
+     */
+    List<UserLeaveRequestResponseDTO> findMyLeaveRequests();
 }

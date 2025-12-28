@@ -79,4 +79,12 @@ public class MainViewController {
 
         return "/main/mainView";
     }
+
+    /**
+     * 출퇴근 기록 페이지
+     */
+    @RequestMapping("/view/history01")
+    public String attendanceHistoryPage() {
+        return "/main/history01";
+    }
 }

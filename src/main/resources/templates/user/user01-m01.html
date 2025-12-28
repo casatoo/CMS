@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>사용자 정보 상세</title>
+</head>
+<body>
+<!-- 사용자 정보 상세 모달 -->
+<div class="modal fade" id="userDetailModal" tabindex="-1" aria-labelledby="userDetailModalLabel" aria-modal="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="userDetailModalLabel">
+                    <i class="bi bi-person-circle"></i> 사용자 정보 상세
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- 사용자 정보 폼 -->
+                <form id="userDetailForm">
+                    <input type="hidden" id="userId" name="id">
+
+                    <table class="table table-bordered">
+                        <colgroup>
+                            <col style="width: 25%;">
+                            <col style="width: 75%;">
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th class="table-active">
+                                <i class="bi bi-key"></i> 로그인 ID
+                            </th>
+                            <td id="detailLoginId" class="fw-semibold text-primary"></td>
+                        </tr>
+                        <tr>
+                            <th class="table-active">
+                                <i class="bi bi-person"></i> 이름
+                            </th>
+                            <td id="detailName" class="fw-semibold"></td>
+                        </tr>
+                        <tr>
+                            <th class="table-active">
+                                <i class="bi bi-briefcase"></i> 직급
+                                <span class="text-danger">*</span>
+                            </th>
+                            <td>
+                                <input type="text" class="form-control" id="detailPosition" name="position"
+                                       placeholder="직급을 입력하세요" maxlength="50">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="table-active">
+                                <i class="bi bi-shield-check"></i> 권한
+                                <span class="text-danger">*</span>
+                            </th>
+                            <td>
+                                <select class="form-select" id="detailRole" name="role">
+                                    <option value="ROLE_USER">사용자</option>
+                                    <option value="ROLE_ADMIN">관리자</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="table-active">
+                                <i class="bi bi-calendar-check"></i> 남은 연차
+                                <span class="text-danger">*</span>
+                            </th>
+                            <td>
+                                <div class="input-group" style="max-width: 200px;">
+                                    <input type="number" class="form-control" id="detailAnnualLeaveDays"
+                                           name="annualLeaveDays" min="0" max="100" step="0.5"
+                                           placeholder="연차 일수">
+                                    <span class="input-group-text">일</span>
+                                </div>
+                                <small class="text-muted">0.5 단위로 입력 가능합니다 (예: 5, 5.5, 10)</small>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="table-active">
+                                <i class="bi bi-clock-history"></i> 생성일시
+                            </th>
+                            <td id="detailCreatedAt" class="text-muted"></td>
+                        </tr>
+                        <tr>
+                            <th class="table-active">
+                                <i class="bi bi-pencil-square"></i> 수정일시
+                            </th>
+                            <td id="detailUpdatedAt" class="text-muted"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="alert alert-info mt-3" role="alert">
+                        <i class="bi bi-info-circle"></i>
+                        <strong>수정 안내:</strong> 직급, 권한, 남은 연차는 관리자 권한으로 수정할 수 있습니다.
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-x-circle"></i> 닫기
+                </button>
+                <button type="button" id="btnSaveUser" class="btn btn-primary">
+                    <i class="bi bi-save"></i> 저장
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 모달 스크립트 -->
+<script src="/js/domain/user/user01-m01.js"></script>
+</body>
+</html>
