@@ -44,3 +44,6 @@ out/
 ### Uploads ###
 uploads/
 /src/main/resources/static/uploads/
+
+# macOS metadata
+.DS_Store
