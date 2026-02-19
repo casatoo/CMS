@@ -9,6 +9,8 @@ server:
     path: /error
 
 spring:
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
   banner:
     location: classpath:/custom-banner.txt
   application:
@@ -16,8 +18,8 @@ spring:
   servlet:
     multipart:
       enabled: true
-      max-file-size: 10MB      # 단일 파일 최대 크기
-      max-request-size: 10MB   # 전체 요청 최대 크기
+      max-file-size: 10MB
+      max-request-size: 10MB
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:cms}?useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
@@ -26,20 +28,17 @@ spring:
   jpa:
     open-in-view: false
     hibernate:
-      ddl-auto: ${DDL_AUTO:update} # 생성한 엔티티 기반으로 테이블이 생성됨
+      ddl-auto: ${DDL_AUTO:validate}
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MariaDBDialect
-        # N+1 쿼리 방지를 위한 Batch Fetch Size 설정
         default_batch_fetch_size: 100
-        # 배치 INSERT/UPDATE 최적화
         order_inserts: true
         order_updates: true
         jdbc:
           batch_size: 50
-        # 쿼리 로깅 (개발 환경)
         show_sql: false
         format_sql: true
         use_sql_comments: true
@@ -54,66 +53,65 @@ spring:
     caffeine:
       spec: maximumSize=1000,expireAfterWrite=10m
   jwt:
-    secret: ${JWT_SECRET:secretKey}
+    secret: ${JWT_SECRET}
 
 resilience4j:
-  bulkhead:     # 동시요청 수 제한하는 설정 - 세마포어 방식
+  bulkhead:
     instances:
-      MainController_Method3: # MainController_Method3 여기서 벌크해드 설정
+      MainController_Method3:
         base-config: default
     configs:
       default:
-        max-concurrent-calls: 1 # 최대 요청 카운터 수
-        max-wait-duration: 1000ms # 동시요청 초과 시 웨이팅 시간
-  thread-pool-bulkhead: # 스레드 풀 방식
+        max-concurrent-calls: 1
+        max-wait-duration: 1000ms
+  thread-pool-bulkhead:
     instances:
-      MainController_Method4: # MainController_Method4 여기서 스레드 풀 설정
+      MainController_Method4:
         base-config: default
     configs:
       default:
-        max-thread-pool-size: 10 # 최대 스레드 풀
-        core-thread-pool-size: 5 # 기본 스레드 풀
-        queue-capacity: 50 # 스레드 풀 초과 시 요청이 기다릴 대기 큐 크기
+        max-thread-pool-size: 10
+        core-thread-pool-size: 5
+        queue-capacity: 50
   retry:
     instances:
-      MainController_Method2: # MainController_Method2 에서 요청이 실패하면 재시도
+      MainController_Method2:
         base-config: default
     configs:
       default:
-        max-attempts: 3 # 재요청 시도 횟수
-        wait-duration: 10000ms # 재요청 간격
-        retry-exception: # 예외처리 포함
+        max-attempts: 3
+        wait-duration: 10000ms
+        retry-exception:
           - java.io.IOException
-        ignore-exceptions: # 예외처리 미 포함
+        ignore-exceptions:
 
-  circuitbreaker: # 서킷 브레이커 설정 : 일정비율 이상 오류 발생 시 요청 차단
+  circuitbreaker:
     configs:
       default:
-        sliding-window-type: count_based # 실패 및 지연을 체크할 슬라이딩 윈도우 타입
-        sliding-window-size: 10 # 슬라이딩 윈도우 크기
-        failure-rate-threshold: 20 # 서킷을 오픈할 실패 비율 (실패 수 / 슬라이딩 윈도우 크기)
-        minimum-number-of-calls: 5 # 서킷을 오픈하기 위해 최소 실패 수 (슬라이딩 윈도우를 다 채우지 못했지만 최소값을 설정 가능)
-        slow-call-rate-threshold: 10 # 서킷을 오픈할 지연 비율 (지연 수 / 슬라이딩 윈도우 크기)
-        slow-call-duration-threshold: 30000ms # 지연으로 판단할 시간
-        permitted-number-of-calls-in-half-open-state: 10 # half open 상태에서 다른 상태로 전환하기 위한 판단 수
-        max-wait-duration-in-half-open-state: 0 # half open 상태 유지 시간 (만약 0이면 위에서 설정한 값 만큼 수행 후 다음 상태로 전환)
-        wait-duration-in-open-state: 600000ms # open 상태에서 half open으로 전환까지 기다리는 시간
-        automatic-transition-from-open-to-half-open-enabled: true # open 상태에서 half open 으로 자동 전환 (true시 일정 시간이 지난 후 자동 전환)
-        register-health-indicator: true # 상태 체크 표시 (actuator용)
+        sliding-window-type: count_based
+        sliding-window-size: 10
+        failure-rate-threshold: 20
+        minimum-number-of-calls: 5
+        slow-call-rate-threshold: 10
+        slow-call-duration-threshold: 30000ms
+        permitted-number-of-calls-in-half-open-state: 10
+        max-wait-duration-in-half-open-state: 0
+        wait-duration-in-open-state: 600000ms
+        automatic-transition-from-open-to-half-open-enabled: true
+        register-health-indicator: true
         ignore-exceptions:
           - java.io.IOException
           - java.util.concurrent.TimeoutException
           - org.springframework.web.client.HttpServerErrorException
     instances:
-      MainController_Method1: # MainController_Method1 여기서 위 설정을 사용
+      MainController_Method1:
         base-config: default
 
-# 상태체크 actuator 설정
 management:
   endpoints:
     web:
       exposure:
-        include: '*'
+        include: health,info
   endpoint:
     health:
       show-details: always
@@ -128,17 +126,10 @@ file:
   upload:
     path: ${FILE_UPLOAD_PATH:/tmp/cms/uploads/profiles}
 
-# 로깅 설정
 logging:
   level:
     root: ${LOG_LEVEL_ROOT:INFO}
-    io.github.mskim.comm.cms: ${LOG_LEVEL_APP:DEBUG}
-    # Hibernate SQL 로깅
-    org.hibernate.SQL: DEBUG
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
-    org.hibernate.stat: DEBUG
-    # JPA 쿼리 파라미터 로깅
-    org.hibernate.type: TRACE
+    io.github.mskim.comm.cms: ${LOG_LEVEL_APP:INFO}
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
     file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
